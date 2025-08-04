@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  aipm-n8n:
+    image: n8nio/n8n:latest
+    container_name: aipm-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=false
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=UTC
+    volumes:
+      - aipm_n8n_data:/home/node/.n8n
+    networks:
+      - aipm_workflow_network
+    labels:
+      - "ai-pm-toolkit.service=n8n"
+      - "ai-pm-toolkit.description=Visual workflow automation"
+      - "ai-pm-toolkit.url=http://localhost:5678"
+
+volumes:
+  aipm_n8n_data:
+    driver: local
+
+networks:
+  aipm_workflow_network:
+    driver: bridge
+    name: aipm_workflow_network

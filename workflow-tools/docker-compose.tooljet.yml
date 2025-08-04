@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  aipm-tooljet:
+    image: tooljet/tooljet:latest
+    container_name: aipm-tooljet
+    restart: unless-stopped
+    ports:
+      - "8082:3000"
+    environment:
+      - TOOLJET_HOST=http://localhost:8082
+      - PG_HOST=aipm-tooljet-postgres
+      - PG_DB=tooljet_production
+      - PG_USER=postgres
+      - PG_PASS=postgres
+      - SECRET_KEY_BASE=replace-with-secret-key-base
+      - LOCKBOX_MASTER_KEY=replace-with-lockbox-master-key
+    depends_on:
+      - aipm-tooljet-postgres
+    networks:
+      - aipm_workflow_network
+    labels:
+      - "ai-pm-toolkit.service=tooljet"
+      - "ai-pm-toolkit.description=Low-code app builder"
+      - "ai-pm-toolkit.url=http://localhost:8082"
+
+  aipm-tooljet-postgres:
+    image: postgres:13
+    container_name: aipm-tooljet-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=tooljet_production
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - aipm_tooljet_postgres_data:/var/lib/postgresql/data
+    networks:
+      - aipm_workflow_network
+
+volumes:
+  aipm_tooljet_postgres_data:
+    driver: local
+
+networks:
+  aipm_workflow_network:
+    external: true

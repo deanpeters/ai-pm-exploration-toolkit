@@ -1,0 +1,358 @@
+manifest_version: 1.0
+
+tools:
+  # ========================================
+  # TIER 1: ESSENTIALS - Core PoL Probes
+  # ========================================
+  
+  # AI Infrastructure (Tier 1 - Core)
+  - name: "ollama"
+    description: "Local LLM server for secure AI prototyping."
+    category: "AI Infrastructure"
+    tier: 1
+    optional: false
+    platforms:
+      macos: { installer: "brew", package_name: "ollama", check_command: "ollama --version" }
+      linux: { installer: "curl", install_script: "curl -fsSL https://ollama.ai/install.sh | sh", check_command: "ollama --version" }
+      windows: { installer: "manual", url: "https://ollama.ai/download/windows", check_command: "ollama --version" }
+
+  # Core Dependencies (Tier 1)
+  - name: "docker"
+    description: "Containerization platform required for workflow tools."
+    category: "Core Dependencies"
+    tier: 1
+    optional: false
+    platforms:
+      macos: { installer: "brew-cask", package_name: "docker", check_command: "docker --version" }
+      linux: { installer: "apt", package_name: "docker.io", check_command: "docker --version" }
+      windows: { installer: "manual", url: "https://docs.docker.com/desktop/windows/install/", check_command: "docker --version" }
+
+  - name: "python3"
+    description: "Python 3 runtime for AI tools and data processing."
+    category: "Core Dependencies"
+    tier: 1
+    optional: false
+    platforms:
+      macos: { installer: "brew", package_name: "python@3.11", check_command: "python3 --version" }
+      linux: { installer: "apt", package_name: "python3", check_command: "python3 --version" }
+      windows: { installer: "manual", url: "https://www.python.org/downloads/windows/", check_command: "python --version" }
+
+  - name: "node"
+    description: "Node.js runtime for JavaScript-based tools."
+    category: "Core Dependencies"
+    tier: 1
+    optional: false
+    platforms:
+      macos: { installer: "brew", package_name: "node", check_command: "node --version" }
+      linux: { installer: "apt", package_name: "nodejs", check_command: "node --version" }
+      windows: { installer: "manual", url: "https://nodejs.org/en/download/", check_command: "node --version" }
+
+  # Development Tools (Tier 1)
+  - name: "vscode"
+    description: "Essential editor for building prototypes."
+    category: "Development"
+    tier: 1
+    optional: false
+    platforms:
+      macos: { installer: "brew-cask", package_name: "visual-studio-code", check_command: "code --version" }
+      linux: { installer: "snap", package_name: "code", check_command: "code --version" }
+      windows: { installer: "manual", url: "https://code.visualstudio.com/download", check_command: "code --version" }
+
+  - name: "continue-extension"
+    description: "AI assistant extension for VS Code."
+    category: "Development"
+    tier: 1
+    optional: false
+    depends_on: ["vscode"]
+    platforms:
+      macos: &vscode_continue { installer: "vscode-extension", extension_id: "Continue.continue", check_command: "code --list-extensions | grep Continue.continue" }
+      linux: *vscode_continue
+      windows: *vscode_continue
+
+  - name: "aider"
+    description: "Primary command-line interface for AI-assisted coding."
+    category: "Development"
+    tier: 1
+    optional: false
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_aider { installer: "pip", package_name: "aider-chat", check_command: "aider --version" }
+      linux: *pip_aider
+      windows: *pip_aider
+
+  # Workflow Tools (Tier 1)
+  - name: "n8n"
+    description: "Visual workflow automation - simplest Docker setup."
+    category: "Workflow Tools"
+    tier: 1
+    optional: false
+    depends_on: ["docker"]
+    platforms:
+      macos: &docker_n8n { installer: "docker-compose", config_file: "workflow-tools/docker-compose.n8n.yml", check_command: "docker ps --filter name=aipm-n8n --format '{{.Names}}'" }
+      linux: *docker_n8n
+      windows: *docker_n8n
+
+  # Knowledge Management (Tier 1)
+  - name: "obsidian"
+    description: "Core to the toolkit's philosophy of linked thinking and documentation."
+    category: "Knowledge Management"
+    tier: 1
+    optional: false
+    platforms:
+      macos: { installer: "brew-cask", package_name: "obsidian", check_command: "ls /Applications/Obsidian.app" }
+      linux: { installer: "flatpak", package_name: "md.obsidian.Obsidian", check_command: "flatpak list | grep obsidian" }
+      windows: { installer: "manual", url: "https://obsidian.md/download", check_command: "where obsidian" }
+
+  # Basic Data Tools (Tier 1)
+  - name: "faker"
+    description: "Essential for basic data simulation."
+    category: "Experimentation"
+    tier: 1
+    optional: false
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_faker { installer: "pip", package_name: "faker", check_command: "python3 -c 'import faker; print(faker.__version__)'" }
+      linux: *pip_faker
+      windows: *pip_faker
+
+  - name: "jupyter"
+    description: "Data exploration and hands-on learning playground."
+    category: "Experimentation"
+    tier: 1
+    optional: false
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_jupyter { installer: "pip", package_name: "jupyter", check_command: "jupyter --version" }
+      linux: *pip_jupyter
+      windows: *pip_jupyter
+
+  # Design Tools (Tier 1)
+  - name: "excalidraw"
+    description: "Zero-install web tool for core diagramming needs."
+    category: "Design"
+    tier: 1
+    optional: false
+    platforms:
+      macos: &web_excalidraw { installer: "web", url: "https://excalidraw.com", check_command: "echo 'Web-based tool available at https://excalidraw.com'" }
+      linux: *web_excalidraw
+      windows: *web_excalidraw
+
+  # ========================================
+  # TIER 2: ADVANCED - Deeper Capabilities
+  # ========================================
+
+  # Workflow Tools (Tier 2)
+  - name: "tooljet"
+    description: "More complex Docker setup involving multiple containers and databases."
+    category: "Workflow Tools"
+    tier: 2
+    optional: true
+    depends_on: ["docker"]
+    platforms:
+      macos: &docker_tooljet { installer: "docker-compose", config_file: "workflow-tools/docker-compose.tooljet.yml", check_command: "docker ps --filter name=aipm-tooljet --format '{{.Names}}'" }
+      linux: *docker_tooljet
+      windows: *docker_tooljet
+
+  - name: "typebot"
+    description: "Conversational form builder with database requirements."
+    category: "Workflow Tools"
+    tier: 2
+    optional: true
+    depends_on: ["docker"]
+    platforms:
+      macos: &docker_typebot { installer: "docker-compose", config_file: "workflow-tools/docker-compose.typebot.yml", check_command: "docker ps --filter name=aipm-typebot --format '{{.Names}}'" }
+      linux: *docker_typebot
+      windows: *docker_typebot
+
+  - name: "langflow"
+    description: "Visual but more abstract way of building LLM applications."
+    category: "Workflow Tools"
+    tier: 2
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_langflow { installer: "pip", package_name: "langflow", check_command: "langflow --version" }
+      linux: *pip_langflow
+      windows: *pip_langflow
+
+  # Prompt Engineering (Tier 2)
+  - name: "promptfoo"
+    description: "LLM evaluation framework for systematic testing, an intermediate skill."
+    category: "Experimentation"
+    tier: 2
+    optional: true
+    depends_on: ["node"]
+    platforms:
+      macos: &npm_promptfoo { installer: "npm", package_name: "promptfoo", check_command: "promptfoo --version" }
+      linux: *npm_promptfoo
+      windows: *npm_promptfoo
+
+  - name: "prompttools"
+    description: "Python-based prompt experimentation toolkit."
+    category: "Experimentation"
+    tier: 2
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_prompttools { installer: "pip", package_name: "prompttools", check_command: "python3 -c 'import prompttools; print(prompttools.__version__)'" }
+      linux: *pip_prompttools
+      windows: *pip_prompttools
+
+  # Market Research (Tier 2)
+  - name: "openbb"
+    description: "Powerful financial and market research platform requiring domain knowledge."
+    category: "Market Research"
+    tier: 2
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_openbb { installer: "pip", package_name: "openbb", check_command: "python3 -c 'import openbb; print(openbb.__version__)'" }
+      linux: *pip_openbb
+      windows: *pip_openbb
+
+  # Advanced Data Tools (Tier 2)
+  - name: "mimesis"
+    description: "Advanced synthetic data with localization."
+    category: "Experimentation"
+    tier: 2
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_mimesis { installer: "pip", package_name: "mimesis", check_command: "python3 -c 'import mimesis; print(mimesis.__version__)'" }
+      linux: *pip_mimesis
+      windows: *pip_mimesis
+
+  # Explanation Tools (Tier 2)
+  - name: "gradio"
+    description: "An intermediate step for building custom interactive demos."
+    category: "Explanation"
+    tier: 2
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_gradio { installer: "pip", package_name: "gradio", check_command: "python3 -c 'import gradio; print(gradio.__version__)'" }
+      linux: *pip_gradio
+      windows: *pip_gradio
+
+  - name: "ffmpeg"
+    description: "Powerful audio/video tools for narrative prototype use cases."
+    category: "Explanation"
+    tier: 2
+    optional: true
+    platforms:
+      macos: { installer: "brew", package_name: "ffmpeg", check_command: "ffmpeg -version" }
+      linux: { installer: "apt", package_name: "ffmpeg", check_command: "ffmpeg -version" }
+      windows: { installer: "manual", url: "https://ffmpeg.org/download.html#build-windows", check_command: "ffmpeg -version" }
+
+  - name: "whisper"
+    description: "Speech-to-text for transcribing PM meetings and demos."
+    category: "Explanation"
+    tier: 2
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_whisper { installer: "pip", package_name: "openai-whisper", check_command: "whisper --help" }
+      linux: *pip_whisper
+      windows: *pip_whisper
+
+  # ========================================
+  # TIER 3: FULL - Expert Advanced Tools
+  # ========================================
+
+  # AI Infrastructure (Tier 3)
+  - name: "localai"
+    description: "Complex, self-hosted alternative to Ollama for advanced users."
+    category: "AI Infrastructure"
+    tier: 3
+    optional: true
+    depends_on: ["docker"]
+    platforms:
+      macos: &docker_localai { installer: "docker", image: "localai/localai:latest", check_command: "docker images | grep localai" }
+      linux: *docker_localai
+      windows: *docker_localai
+
+  # AI Observability (Tier 3)
+  - name: "phoenix-arize"
+    description: "Expert tools for deep model monitoring."
+    category: "Experimentation"
+    tier: 3
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_phoenix { installer: "pip", package_name: "arize-phoenix", check_command: "python3 -c 'import phoenix; print(phoenix.__version__)'" }
+      linux: *pip_phoenix
+      windows: *pip_phoenix
+
+  - name: "langsmith"
+    description: "Advanced LLM application development and monitoring."
+    category: "Experimentation"
+    tier: 3
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_langsmith { installer: "pip", package_name: "langsmith", check_command: "python3 -c 'import langsmith; print(langsmith.__version__)'" }
+      linux: *pip_langsmith
+      windows: *pip_langsmith
+
+  # AI Agents (Tier 3)
+  - name: "devon-agent"
+    description: "Cutting-edge agent development."
+    category: "Development"
+    tier: 3
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_devon { installer: "pip", package_name: "devon-agent", check_command: "python3 -c 'import devon; print(devon.__version__)'" }
+      linux: *pip_devon
+      windows: *pip_devon
+
+  # Design Tools (Tier 3)
+  - name: "penpot"
+    description: "Full, self-hosted design suite; a heavy lift compared to web-based tools."
+    category: "Design"
+    tier: 3
+    optional: true
+    depends_on: ["docker"]
+    platforms:
+      macos: &docker_penpot { installer: "docker-compose", config_file: "workflow-tools/docker-compose.penpot.yml", check_command: "docker ps --filter name=aipm-penpot --format '{{.Names}}'" }
+      linux: *docker_penpot
+      windows: *docker_penpot
+
+  # Advanced Research (Tier 3)
+  - name: "gretel"
+    description: "AI-powered synthetic data platform for complex scenarios."
+    category: "Experimentation"
+    tier: 3
+    optional: true
+    depends_on: ["python3"]
+    platforms:
+      macos: &pip_gretel { installer: "pip", package_name: "gretel-client", check_command: "python3 -c 'import gretel_client; print(gretel_client.__version__)'" }
+      linux: *pip_gretel
+      windows: *pip_gretel
+
+# Category definitions for organization
+categories:
+  "AI Infrastructure": "Core AI servers and runtimes"
+  "Core Dependencies": "System requirements and runtime environments"
+  "Development": "Code editors, AI assistants, and development tools"
+  "Workflow Tools": "Visual builders and automation platforms"
+  "Knowledge Management": "Documentation and idea organization"
+  "Experimentation": "Data generation, testing, and validation tools"
+  "Design": "Diagramming, visual design, and storytelling tools"
+  "Explanation": "Demo building, video creation, and presentation tools"
+  "Market Research": "Competitive intelligence and market analysis"
+
+# Tier definitions
+tiers:
+  1:
+    name: "Essentials"
+    description: "Core PoL Probe capabilities - fundamental local AI engine and basic prototyping"
+    install_time: "15-20 minutes"
+  2:
+    name: "Advanced"
+    description: "Deeper capabilities - systematic testing, market research, advanced workflows"
+    install_time: "30-45 minutes"
+  3:
+    name: "Full"
+    description: "Expert tools - AI observability, agent development, self-hosted platforms"
+    install_time: "60-90 minutes"

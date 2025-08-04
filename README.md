@@ -48,28 +48,92 @@ These four words perfectly capture the core value loop of the AI PM Exploration 
 * **Problem Solved:** The antidote to being "sandbagged" in meetings and losing control of the narrative
 * **How the Toolkit Helps:** Create artifacts of great explanation. `aipm prototype` builds narrative prototypes like walkthrough videos. `aipm_story` creates storyboards. Armed with tangible proofs, explain your vision with self-generated evidence.
 
-## Quick Start
+## Get Started in 3 Steps
 
+**Ready to turn product ideas into evidence? Let's get you set up.**
+
+### Step 1: Download the Toolkit
+**Copy these two lines** and paste them into Terminal (Mac/Linux) or PowerShell (Windows):
+
+**Mac/Linux:**
 ```bash
 git clone https://github.com/deanpeters/ai-pm-exploration-toolkit.git
 cd ai-pm-exploration-toolkit
-chmod +x setup.sh configure-apis.sh
-./configure-apis.sh  # Configure API keys (optional but recommended)
-./setup.sh           # Install all tools (~15-20 minutes)
 ```
 
-**🚨 CRITICAL NEXT STEPS:** After setup completes:
+**Windows:**
+```powershell
+git clone https://github.com/deanpeters/ai-pm-exploration-toolkit.git
+cd ai-pm-exploration-toolkit
+```
+
+### Step 2: Choose Your Adventure
+Pick what matches your comfort level:
+
+**🎯 Just Getting Started? (15-20 minutes)**
 ```bash
-# 1. Follow the complete first-run guide
-cat ~/ai-pm-toolkit/FIRST_RUN_GUIDE.md
+./install.sh essentials
+```
+*Gets you: AI brainstorming, visual workflows, competitive research*
 
-# 2. Setup GitHub CLI for maximum toolkit power
-gh auth login
+**🚀 Ready for More Power? (30-45 minutes)**  
+```bash
+./install.sh advanced
+```
+*Everything above + advanced automation, financial data, interactive demos*
+
+**🔬 Want Everything? (60-90 minutes)**
+```bash
+./install.sh full
+```
+*Complete AI-powered product management laboratory*
+
+### Step 3: Start Your First Project
+**Restart your terminal**, then:
+```bash
+aipm_help
 ```
 
-**Done.** You now have a comprehensive AI toolkit with 40+ tools optimized for rapid PoL Probes, market research, and competitive intelligence - offline-first and cost-contained.
+**🎉 You're ready!** Follow the [PM First Steps Guide](PM_FIRST_STEPS.md) for your first wins.
 
-> 🆕 **Recent Updates**: Added market research capabilities (OpenBB Terminal, Deep Researcher, Gemini CLI), enhanced with 15+ new tools for workflow automation, prompt testing, synthetic data, AI monitoring, design tools, and comprehensive uninstall support.
+## Installation Tiers
+
+The new production-ready installer uses a **tiered approach** to provide the right level of complexity for your needs:
+
+### 🎯 Tier 1: Essentials (15-20 minutes)
+**Core PoL Probe capabilities** - fundamental local AI engine and basic prototyping
+- **Ollama** - Local AI server for secure prototyping
+- **VS Code + Continue** - Essential editor with AI assistance  
+- **Aider** - Command-line AI coding assistant
+- **n8n** - Simple workflow automation (single Docker container)
+- **Obsidian** - Knowledge management and linked thinking
+- **Faker + Jupyter** - Basic data simulation and exploration
+- **Excalidraw** - Zero-install diagramming
+
+### 🚀 Tier 2: Advanced (30-45 minutes)
+**Deeper capabilities** - systematic testing, market research, advanced workflows
+- All Tier 1 tools, plus:
+- **ToolJet + Typebot** - Complex multi-container workflow builders
+- **Promptfoo + Prompttools** - Systematic prompt engineering
+- **Langflow** - Visual LLM application builder
+- **OpenBB** - Financial and market research platform
+- **Gradio** - Interactive demo creation
+- **Whisper + ffmpeg** - Audio/video processing for narratives
+- **Mimesis** - Advanced synthetic data with localization
+
+### 🔬 Tier 3: Full (60-90 minutes)
+**Expert tools** - AI observability, agent development, self-hosted platforms
+- All Tier 1 & 2 tools, plus:
+- **LocalAI** - Self-hosted AI alternative to Ollama
+- **Phoenix, Arize, LangSmith** - AI observability and monitoring
+- **Devon Agent** - Cutting-edge AI agent development
+- **Penpot** - Full self-hosted design suite
+- **Gretel** - AI-powered synthetic data platform
+- **Deep Researcher** - Advanced research automation
+
+**Done.** You now have a comprehensive AI toolkit optimized for rapid PoL Probes, market research, and competitive intelligence - offline-first and cost-contained.
+
+> 🆕 **Production Release**: Complete refactor from prototype to production-ready installer with cross-platform support, dependency management, isolated environments, and comprehensive error handling.
 
 ## First Experiments to Try
 

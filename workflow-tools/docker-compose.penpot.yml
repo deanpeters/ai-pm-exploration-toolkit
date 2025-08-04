@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  aipm-penpot-frontend:
+    image: penpotapp/frontend:latest
+    container_name: aipm-penpot-frontend
+    restart: unless-stopped
+    ports:
+      - "8085:80"
+    environment:
+      - PENPOT_FLAGS=enable-registration enable-login-with-password
+    depends_on:
+      - aipm-penpot-backend
+      - aipm-penpot-exporter
+    networks:
+      - aipm_workflow_network
+    labels:
+      - "ai-pm-toolkit.service=penpot"
+      - "ai-pm-toolkit.description=Open-source design platform"
+      - "ai-pm-toolkit.url=http://localhost:8085"
+
+  aipm-penpot-backend:
+    image: penpotapp/backend:latest
+    container_name: aipm-penpot-backend
+    restart: unless-stopped
+    environment:
+      - PENPOT_FLAGS=enable-registration enable-login-with-password disable-email-verification
+      - PENPOT_PUBLIC_URI=http://localhost:8085
+      - PENPOT_DATABASE_URI=postgresql://aipm-penpot-postgres/penpot
+      - PENPOT_DATABASE_USERNAME=penpot
+      - PENPOT_DATABASE_PASSWORD=penpot
+      - PENPOT_REDIS_URI=redis://aipm-penpot-redis/0
+      - PENPOT_ASSETS_STORAGE_BACKEND=assets-fs
+      - PENPOT_STORAGE_ASSETS_FS_DIRECTORY=/opt/data/assets
+      - PENPOT_TELEMETRY_ENABLED=false
+    depends_on:
+      - aipm-penpot-postgres
+      - aipm-penpot-redis
+    networks:
+      - aipm_workflow_network
+    volumes:
+      - aipm_penpot_assets_data:/opt/data/assets
+
+  aipm-penpot-exporter:
+    image: penpotapp/exporter:latest
+    container_name: aipm-penpot-exporter
+    restart: unless-stopped
+    environment:
+      - PENPOT_PUBLIC_URI=http://aipm-penpot-frontend
+      - PENPOT_REDIS_URI=redis://aipm-penpot-redis/0
+    networks:
+      - aipm_workflow_network
+
+  aipm-penpot-postgres:
+    image: postgres:15
+    container_name: aipm-penpot-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_INITDB_ARGS=--data-checksums
+      - POSTGRES_DB=penpot
+      - POSTGRES_USER=penpot
+      - POSTGRES_PASSWORD=penpot
+    volumes:
+      - aipm_penpot_postgres_data:/var/lib/postgresql/data
+    networks:
+      - aipm_workflow_network
+
+  aipm-penpot-redis:
+    image: redis:7
+    container_name: aipm-penpot-redis
+    restart: unless-stopped
+    networks:
+      - aipm_workflow_network
+
+volumes:
+  aipm_penpot_postgres_data:
+    driver: local
+  aipm_penpot_assets_data:
+    driver: local
+
+networks:
+  aipm_workflow_network:
+    external: true
