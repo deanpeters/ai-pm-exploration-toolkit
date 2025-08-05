@@ -1,34 +1,33 @@
-# AI PM Exploration Toolkit 🧪
+# AI PM Exploration Toolkit 🎓
 
-> **Proof-of-Life Probes for product managers**
-> Show before Tell, Touch before Sell. Prototype product ideas at the speed of thought.
+> **The AI Skills Learning Platform for Product Managers**  
+> Close your AI PM skills gap through hands-on exploration and practical application. Transform from AI-curious to AI-confident.
 
 ## Philosophy
 
-*"The most expensive way to test your idea is to build production-quality software."* — Jeff Patton
+**Primary Mission:** Bridge the AI skills gap that's leaving product managers behind.
 
-Every prototype tells a story. Some whisper feasibility. Others lie beautifully and confidently. As a strategic PM, you need **Proof-of-Life (PoL) Probes** — lightweight, disposable, narrow in scope, and brutally honest.
+As AI transforms product development, strategic PMs need hands-on fluency with AI tools, not just conceptual understanding. This toolkit provides a **safe learning environment** where you can experiment, fail fast, and build confidence with AI-powered product management techniques.
 
-**The Rule:** *Use the cheapest prototype that tells the harshest truth. If it doesn't sting, it's probably just theater.*
+**The Learning Journey:**
+- **🎓 Education**: Personal AI classroom for skill building
+- **🔍 Exploration**: Discover what's possible through guided experimentation  
+- **🧪 Experimentation**: Learn by doing with real product management scenarios
+- **📊 Explanation**: Apply new skills to create compelling product narratives
 
-**Five Flavors of PoL Probes:**
-- **Feasibility Checks** — 1–2 day spike-and-delete tests with AI assistance
-- **Task-Focused Tests** — Validate make-or-break user moments without friction
-- **Narrative Prototypes** — Loom-style walkthroughs and explainer videos that earn "hell yes"
-- **Synthetic Data Simulations** — Model system behavior without burning prod
-- **Vibe-Coded Probes** — Fake frontend + semi-plausible backend for real user signals
+**Secondary Benefit:** Once you've learned the tools, use them for **Proof-of-Life (PoL) Probes** — lightweight, disposable tests that de-risk product decisions without burning engineering resources.
 
-*Vibe First. Validate Fast. Verify Fit.*
+*Learn First. Apply Second. Lead Confidently.*
 
 ## The Four Pillars: Education → Experimentation → Exploration → Explanation
 
 These four words perfectly capture the core value loop of the AI PM Exploration Toolkit. It's a journey that starts with a need for **Education** and ends with the ability to provide a powerful **Explanation**.
 
-### 🎓 1. Education
-**Your Personal AI Classroom**: This is the primary goal of the toolkit - to serve as a personal, private classroom for the strategic PM who feels they are falling behind the AI curve. 
+### 🎓 1. Education  
+**Your Personal AI Classroom**: The primary goal - bridge the AI PM skills gap through hands-on learning. Combat "AI illiteracy" and transform overwhelming jargon into practical fluency.
 
-* **Problem Solved:** Directly combats the feeling of being "AI illiterate" and bewildered by jargon like 'evals' or 'langchain'
-* **How the Toolkit Helps:** Provides a safe, local-first sandbox to learn by doing, free from fear of high API costs or exposing sensitive ideas. Built around learning through action with structured guidance and hands-on scenarios.
+* **Problem Solved:** Strategic PMs feeling left behind by AI transformation, lacking practical experience with AI tools
+* **How the Toolkit Helps:** Safe, local-first learning environment where you can experiment without high API costs or exposing sensitive company data. Learn by doing with structured guidance, not abstract theory.
 
 ### 🧪 2. Experimentation  
 **Evidence Over Opinion**: The practical method for learning. The toolkit provides a controlled environment where a product manager can form a hypothesis and test it rigorously with data, moving beyond opinion to evidence.

@@ -1,22 +1,22 @@
-# Welcome, Product Manager! 🎯
+# Welcome, Product Manager! 🎓
 
-**You just installed the most powerful AI toolkit for product managers. Let's get you from "What did I just install?" to "This is amazing" in 10 minutes.**
+**You just installed your personal AI learning laboratory. Let's get you from "I'm falling behind on AI" to "I'm confidently leading with AI" in 10 minutes.**
 
 ## Why You're Here
 
-As a product manager, you need to **de-risk decisions fast** without burning engineering time. This toolkit lets you:
-- **Validate assumptions** with synthetic data instead of building features
-- **Create compelling demos** that earn stakeholder buy-in
-- **Research competitors** with AI-powered intelligence gathering
-- **Prototype workflows** visually without writing code
+As a product manager, you're watching AI transform the industry while feeling left behind by technical jargon and overwhelming tools. This toolkit provides a **safe learning environment** where you can:
+- **Build AI fluency** through hands-on experimentation  
+- **Learn practical AI applications** for product management
+- **Gain confidence** with AI tools at your own pace
+- **Apply new skills** to real product challenges
 
-**The goal:** Use the cheapest proof that tells you the harshest truth about your ideas.
+**The goal:** Transform from AI-curious to AI-confident through guided, practical learning experiences.
 
 ---
 
-## Your First Win: 5-Minute AI Brainstorming Session
+## Your First Learning Win: 5-Minute AI Collaboration
 
-Let's start with something you do every day: **thinking through a product idea**. We'll use your new AI assistant to help you structure your thoughts.
+Let's start with something familiar: **thinking through a product idea**. You'll learn how to collaborate with AI as a thinking partner, not just a tool.
 
 ### Step 1: Open Your AI Assistant
 The toolkit installed an AI assistant called `aider`. Think of it as **ChatGPT that can create files for you**.

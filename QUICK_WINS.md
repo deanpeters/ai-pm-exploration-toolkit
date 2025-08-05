@@ -1,8 +1,8 @@
-# 5-Minute Quick Wins: Immediate Value from Your AI Toolkit
+# 5-Minute Learning Wins: Build AI Confidence Fast  
 
-**Just installed the toolkit?** Let's get you from "What did I just install?" to "This is incredibly useful" in 5 minutes or less.
+**Ready to close your AI skills gap?** Let's get you from "I don't understand AI tools" to "I can confidently use AI for product management" in 5 minutes or less.
 
-**Each win takes 1-2 minutes and solves a real PM problem.**
+**Each win teaches a practical AI skill you'll use daily as a PM.**
 
 ---
 
