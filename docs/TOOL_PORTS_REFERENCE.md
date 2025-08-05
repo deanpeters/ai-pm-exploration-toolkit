@@ -89,9 +89,12 @@ which [tool-name]
 
 ## 📝 Quick Access Commands
 
-### Start All Visual Tools
+### Start All Visual Tools (NEW - Actually Starts Containers!)
 ```bash
-aipm_workflows  # Shows all tool URLs
+aipm_workflows              # Start all tools and wait for them to be ready
+aipm_workflows_status       # Check which tools are running  
+aipm_workflows_fix          # Fix common startup issues
+aipm_workflows_restart      # Stop and restart all tools
 ```
 
 ### Individual Tool Launches

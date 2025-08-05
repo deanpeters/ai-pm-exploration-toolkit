@@ -2,6 +2,24 @@
 
 This directory contains Docker Compose configurations for the AI PM Toolkit's workflow automation tools.
 
+## 🚀 Quick Start (Most Users)
+
+**The easy way - just run this command:**
+```bash
+aipm_workflows
+```
+This will start all essential workflow tools and wait for them to be ready with health checks.
+
+**Check if everything is running:**
+```bash
+aipm_workflows_status
+```
+
+**Having issues? Fix them automatically:**
+```bash
+aipm_workflows_fix
+```
+
 ## Available Services
 
 ### Tier 1: n8n (Essential)
@@ -80,9 +98,95 @@ docker-compose -f docker-compose.typebot.yml down
 docker-compose -f docker-compose.penpot.yml down
 ```
 
-## Troubleshooting
+## 🚨 Common Issues & Solutions
 
-### Port Conflicts
+### "The tools are never ready when I try to access them!"
+**Problem:** You ran `aipm_workflows` but the URLs don't work.
+**Solution:** The new `aipm_workflows` command actually starts the containers and waits for them to be ready. If it's still not working:
+
+```bash
+# Check what's actually running
+aipm_workflows_status
+
+# Fix common issues automatically  
+aipm_workflows_fix
+
+# Nuclear option - reset everything
+aipm_workflows_stop
+aipm_workflows_fix  # Choose option 6 for full reset
+aipm_workflows
+```
+
+### Port Conflicts (Port already in use)
+**Problem:** Error like "Port 5678 is already in use"
+**Solution:** 
+```bash
+aipm_workflows_fix  # Choose option 1 to kill port conflicts
+```
+
+Or manually:
+```bash
+# See what's using the port
+sudo lsof -i :5678
+
+# Kill it
+sudo lsof -ti:5678 | xargs kill
+```
+
+### Docker Not Responding
+**Problem:** Docker containers won't start or behave weirdly
+**Solution:**
+```bash
+aipm_workflows_fix  # Choose option 6 for nuclear reset
+```
+
+Or manually:
+```bash
+# Clean everything
+docker system prune -f
+docker volume prune -f
+docker network create aipm_workflow_network
+
+# Try again
+aipm_workflows
+```
+
+### Containers Start But URLs Don't Work
+**Problem:** Docker says containers are running but http://localhost:5678 doesn't load
+**Solutions:**
+1. **Wait longer** - Some tools take 30-60 seconds to fully initialize
+2. **Check the logs**: `docker-compose -f docker-compose.n8n.yml logs`
+3. **Restart the specific service**: `docker-compose -f docker-compose.n8n.yml restart`
+
+## 🛠️ Advanced Management Commands
+
+### Workflow Management
+```bash
+aipm_workflows              # Start all workflow tools (with health checks)
+aipm_workflows_status       # Check which tools are running
+aipm_workflows_stop         # Stop all workflow tools
+aipm_workflows_restart      # Stop and restart all tools
+aipm_workflows_fix          # Interactive troubleshooting menu
+```
+
+### Individual Service Control
+```bash
+# n8n workflow automation
+docker-compose -f docker-compose.n8n.yml up -d
+docker-compose -f docker-compose.n8n.yml logs
+docker-compose -f docker-compose.n8n.yml restart
+
+# ToolJet dashboard builder
+docker-compose -f docker-compose.tooljet.yml up -d
+docker-compose -f docker-compose.tooljet.yml logs
+
+# Stop individual services
+docker-compose -f docker-compose.n8n.yml down
+```
+
+## Legacy Troubleshooting
+
+### Port Conflicts (Manual Method)
 If ports are already in use, modify the port mappings in the compose files:
 ```yaml
 ports:
