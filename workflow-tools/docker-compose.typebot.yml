@@ -1,4 +1,4 @@
-version: '3.8'
+# Docker Compose for Typebot conversational forms
 
 services:
   aipm-typebot-builder:
@@ -11,16 +11,23 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@aipm-typebot-postgres:5432/typebot
       - NEXTAUTH_URL=http://localhost:8083
       - NEXT_PUBLIC_VIEWER_URL=http://localhost:8084
-      - ENCRYPTION_SECRET=replace-with-encryption-secret
+      - ENCRYPTION_SECRET=aipm-typebot-secret-$(date +%s)
       - ADMIN_EMAIL=admin@aipm-toolkit.local
     depends_on:
-      - aipm-typebot-postgres
+      aipm-typebot-postgres:
+        condition: service_healthy
     networks:
       - aipm_workflow_network
     labels:
       - "ai-pm-toolkit.service=typebot-builder"
       - "ai-pm-toolkit.description=Conversational form builder"
       - "ai-pm-toolkit.url=http://localhost:8083"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   aipm-typebot-viewer:
     image: baptistearno/typebot-viewer:latest
@@ -30,17 +37,24 @@ services:
       - "8084:3000"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@aipm-typebot-postgres:5432/typebot
-      - ENCRYPTION_SECRET=replace-with-encryption-secret
+      - ENCRYPTION_SECRET=aipm-typebot-secret-$(date +%s)
     depends_on:
-      - aipm-typebot-postgres
+      aipm-typebot-postgres:
+        condition: service_healthy
     networks:
       - aipm_workflow_network
     labels:
       - "ai-pm-toolkit.service=typebot-viewer"
       - "ai-pm-toolkit.description=Typebot viewer interface"
       - "ai-pm-toolkit.url=http://localhost:8084"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
-  aimp-typebot-postgres:
+  aipm-typebot-postgres:
     image: postgres:13
     container_name: aipm-typebot-postgres
     restart: unless-stopped
@@ -48,10 +62,17 @@ services:
       - POSTGRES_DB=typebot
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
     volumes:
       - aipm_typebot_postgres_data:/var/lib/postgresql/data
     networks:
       - aipm_workflow_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d typebot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   aipm_typebot_postgres_data:
@@ -60,3 +81,4 @@ volumes:
 networks:
   aipm_workflow_network:
     external: true
+    name: aipm_workflow_network

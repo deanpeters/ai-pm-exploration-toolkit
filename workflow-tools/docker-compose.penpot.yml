@@ -1,4 +1,4 @@
-version: '3.8'
+# Docker Compose for Penpot design platform
 
 services:
   aipm-penpot-frontend:
@@ -10,14 +10,22 @@ services:
     environment:
       - PENPOT_FLAGS=enable-registration enable-login-with-password
     depends_on:
-      - aipm-penpot-backend
-      - aipm-penpot-exporter
+      aipm-penpot-backend:
+        condition: service_healthy
+      aipm-penpot-exporter:
+        condition: service_started
     networks:
       - aipm_workflow_network
     labels:
       - "ai-pm-toolkit.service=penpot"
       - "ai-pm-toolkit.description=Open-source design platform"
       - "ai-pm-toolkit.url=http://localhost:8085"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   aipm-penpot-backend:
     image: penpotapp/backend:latest
@@ -26,7 +34,7 @@ services:
     environment:
       - PENPOT_FLAGS=enable-registration enable-login-with-password disable-email-verification
       - PENPOT_PUBLIC_URI=http://localhost:8085
-      - PENPOT_DATABASE_URI=postgresql://aipm-penpot-postgres/penpot
+      - PENPOT_DATABASE_URI=postgresql://penpot:penpot@aipm-penpot-postgres/penpot
       - PENPOT_DATABASE_USERNAME=penpot
       - PENPOT_DATABASE_PASSWORD=penpot
       - PENPOT_REDIS_URI=redis://aipm-penpot-redis/0
@@ -34,12 +42,20 @@ services:
       - PENPOT_STORAGE_ASSETS_FS_DIRECTORY=/opt/data/assets
       - PENPOT_TELEMETRY_ENABLED=false
     depends_on:
-      - aipm-penpot-postgres
-      - aipm-penpot-redis
+      aipm-penpot-postgres:
+        condition: service_healthy
+      aipm-penpot-redis:
+        condition: service_healthy
     networks:
       - aipm_workflow_network
     volumes:
       - aipm_penpot_assets_data:/opt/data/assets
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6060/readiness"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   aipm-penpot-exporter:
     image: penpotapp/exporter:latest
@@ -56,7 +72,7 @@ services:
     container_name: aipm-penpot-postgres
     restart: unless-stopped
     environment:
-      - POSTGRES_INITDB_ARGS=--data-checksums
+      - POSTGRES_INITDB_ARGS=--data-checksums --auth-host=scram-sha-256
       - POSTGRES_DB=penpot
       - POSTGRES_USER=penpot
       - POSTGRES_PASSWORD=penpot
@@ -64,6 +80,12 @@ services:
       - aipm_penpot_postgres_data:/var/lib/postgresql/data
     networks:
       - aipm_workflow_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U penpot -d penpot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   aipm-penpot-redis:
     image: redis:7
@@ -71,6 +93,12 @@ services:
     restart: unless-stopped
     networks:
       - aipm_workflow_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
 volumes:
   aipm_penpot_postgres_data:
@@ -81,3 +109,4 @@ volumes:
 networks:
   aipm_workflow_network:
     external: true
+    name: aipm_workflow_network

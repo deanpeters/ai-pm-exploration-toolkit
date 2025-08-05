@@ -1,8 +1,8 @@
 #!/bin/bash
 # AI PM Toolkit - Workflow Tools Fix Script
-# Handles common issues and provides troubleshooting
+# Interactive troubleshooting and repair interface
 
-set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Colors for output
 RED='\033[0;31m'
@@ -11,8 +11,10 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}🔧 AI PM Toolkit - Workflow Tools Troubleshooter${NC}"
-echo "=============================================="
+echo -e "${BLUE}🔧 AI PM Toolkit - Workflow Tools Fix${NC}"
+echo "========================================"
+
+cd "$SCRIPT_DIR"
 
 # Function to kill processes on common ports
 kill_port_conflicts() {
@@ -108,55 +110,100 @@ check_resources() {
     fi
 }
 
+# Comprehensive auto-fix function
+auto_fix() {
+    echo -e "${BLUE}🔧 Running comprehensive auto-fix...${NC}"
+    
+    check_docker || return 1
+    
+    # Kill port conflicts automatically
+    echo -e "${YELLOW}🔫 Checking for port conflicts...${NC}"
+    for port in 5678 7860 8082 8083 8084 8085; do
+        if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
+            echo -e "${YELLOW}⚠️  Port $port is in use - killing process${NC}"
+            lsof -ti:$port | xargs kill 2>/dev/null || true
+            sleep 1
+        fi
+    done
+    
+    # Stop existing containers
+    echo -e "${YELLOW}🛑 Stopping existing workflow containers...${NC}"
+    "$SCRIPT_DIR/orchestrate-workflows.sh" stop >/dev/null 2>&1 || true
+    
+    # Clean Docker resources
+    echo -e "${YELLOW}🧹 Cleaning Docker resources...${NC}"
+    docker container prune -f >/dev/null 2>&1 || true
+    docker network prune -f >/dev/null 2>&1 || true
+    
+    # Recreate network
+    echo -e "${YELLOW}🔗 Recreating network...${NC}"
+    "$SCRIPT_DIR/manage-network.sh" remove >/dev/null 2>&1 || true
+    "$SCRIPT_DIR/manage-network.sh" create || return 1
+    
+    echo -e "${GREEN}✅ Auto-fix complete${NC}"
+    return 0
+}
+
 # Interactive menu
 show_menu() {
     echo
     echo -e "${BLUE}🛠  What would you like to fix?${NC}"
-    echo "1. Kill port conflicts"
-    echo "2. Clean Docker resources"
-    echo "3. Check Docker health"
-    echo "4. Recreate Docker network"
-    echo "5. Check system resources"
-    echo "6. Full nuclear reset (all of the above)"
-    echo "7. Exit"
+    echo "1. 🚀 Auto-fix everything (recommended)"
+    echo "2. Kill port conflicts"
+    echo "3. Clean Docker resources"
+    echo "4. Check Docker health"
+    echo "5. Recreate Docker network"
+    echo "6. Check system resources"
+    echo "7. ☢️  Nuclear cleanup (remove all data)"
+    echo "8. Exit"
     echo
-    read -p "Choose option (1-7): " choice
+    read -p "Choose option (1-8): " choice
     
     case $choice in
-        1) kill_port_conflicts ;;
-        2) clean_docker ;;
-        3) check_docker ;;
-        4) fix_network ;;
-        5) check_resources ;;
-        6) 
-            echo -e "${RED}☢️  FULL NUCLEAR RESET${NC}"
-            read -p "This will stop all containers and clean everything. Continue? (y/N): " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                kill_port_conflicts
-                clean_docker
-                fix_network
-                check_docker
-                echo -e "${GREEN}✅ Nuclear reset complete${NC}"
+        1) 
+            auto_fix
+            if [ $? -eq 0 ]; then
+                echo
+                echo -e "${BLUE}🚀 Ready to start workflows?${NC}"
+                read -p "Start workflow tools now? (y/N): " -n 1 -r
+                echo
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    "$SCRIPT_DIR/orchestrate-workflows.sh" start
+                fi
             fi
             ;;
-        7) echo "Exiting..."; exit 0 ;;
+        2) kill_port_conflicts ;;
+        3) clean_docker ;;
+        4) check_docker ;;
+        5) fix_network ;;
+        6) check_resources ;;
+        7) 
+            echo -e "${RED}☢️  NUCLEAR CLEANUP${NC}"
+            echo "This will remove all containers, networks, and volumes"
+            read -p "Continue? (y/N): " -n 1 -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                "$SCRIPT_DIR/orchestrate-workflows.sh" cleanup
+            fi
+            ;;
+        8) echo "Exiting..."; exit 0 ;;
         *) echo "Invalid option"; show_menu ;;
     esac
 }
 
 # Main execution
 main() {
-    check_docker
-    show_menu
+    local mode="${1:-interactive}"
     
-    echo
-    echo -e "${BLUE}🚀 Ready to try starting workflows again?${NC}"
-    read -p "Start workflow tools now? (y/N): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        ./start-workflows.sh
-    fi
+    case "$mode" in
+        auto|--auto)
+            auto_fix
+            ;;
+        interactive|*)
+            check_docker
+            show_menu
+            ;;
+    esac
 }
 
 main "$@"

@@ -1,4 +1,4 @@
-version: '3.8'
+# Docker Compose for n8n workflow automation
 
 services:
   aipm-n8n:
@@ -14,6 +14,12 @@ services:
       - N8N_PROTOCOL=http
       - WEBHOOK_URL=http://localhost:5678/
       - GENERIC_TIMEZONE=UTC
+      - N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN=true
+      - N8N_PERSONALIZATION_ENABLED=false
+      - N8N_VERSION_NOTIFICATIONS_ENABLED=false
+      - N8N_TEMPLATES_ENABLED=false
+      - N8N_ONBOARDING_FLOW_DISABLED=true
+      - N8N_USER_MANAGEMENT_DISABLED=true
     volumes:
       - aipm_n8n_data:/home/node/.n8n
     networks:
@@ -22,6 +28,12 @@ services:
       - "ai-pm-toolkit.service=n8n"
       - "ai-pm-toolkit.description=Visual workflow automation"
       - "ai-pm-toolkit.url=http://localhost:5678"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 5678 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   aipm_n8n_data:
@@ -29,5 +41,5 @@ volumes:
 
 networks:
   aipm_workflow_network:
-    driver: bridge
+    external: true
     name: aipm_workflow_network

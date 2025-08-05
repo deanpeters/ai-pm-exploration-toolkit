@@ -1,8 +1,9 @@
-version: '3.8'
+# Docker Compose for ToolJet low-code platform
 
 services:
   aipm-tooljet:
     image: tooljet/tooljet:latest
+    platform: linux/amd64
     container_name: aipm-tooljet
     restart: unless-stopped
     ports:
@@ -13,16 +14,23 @@ services:
       - PG_DB=tooljet_production
       - PG_USER=postgres
       - PG_PASS=postgres
-      - SECRET_KEY_BASE=replace-with-secret-key-base
-      - LOCKBOX_MASTER_KEY=replace-with-lockbox-master-key
+      - SECRET_KEY_BASE=aipm-secret-key-$(date +%s)
+      - LOCKBOX_MASTER_KEY=aipm-lockbox-key-$(date +%s)
     depends_on:
-      - aipm-tooljet-postgres
+      aipm-tooljet-postgres:
+        condition: service_healthy
     networks:
       - aipm_workflow_network
     labels:
       - "ai-pm-toolkit.service=tooljet"
       - "ai-pm-toolkit.description=Low-code app builder"
       - "ai-pm-toolkit.url=http://localhost:8082"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
   aipm-tooljet-postgres:
     image: postgres:13
@@ -32,10 +40,17 @@ services:
       - POSTGRES_DB=tooljet_production
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
     volumes:
       - aipm_tooljet_postgres_data:/var/lib/postgresql/data
     networks:
       - aipm_workflow_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tooljet_production"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
 volumes:
   aipm_tooljet_postgres_data:
@@ -44,3 +59,4 @@ volumes:
 networks:
   aipm_workflow_network:
     external: true
+    name: aipm_workflow_network
