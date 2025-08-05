@@ -360,7 +360,7 @@ alias aipm_compete='echo "🥊 Vibe-Coded Probe: Build convincing fake frontend 
 
 # Help & Status
 alias aipm_status='python3 "$AIPM_TOOLKIT_DIR/../installer.py" --status'
-alias aipm_help='echo "🧪 AI PM Toolkit Commands:" && echo "" && echo "🔍 RESEARCH:" && echo "  aipm_research_quick \"question\" - Instant AI analysis" && echo "  aipm_company_lookup TICKER - Financial intelligence" && echo "  aipm_market_research - Launch research tools" && echo "" && echo "✍️  CONTENT CREATION:" && echo "  aipm_brainstorm - Start AI writing partner" && echo "  aipm_write filename.md - Create documents with AI" && echo "  aipm_prototype_demo - Build visual demos" && echo "" && echo "🔧 BUILD & AUTOMATE:" && echo "  aipm_workflows - Visual workflow builder" && echo "  aipm_demo_builder - Create dashboards" && echo "  aipm_lab - Data analysis environment" && echo "" && echo "🎨 DESIGN & ORGANIZE:" && echo "  aipm_design - Create diagrams" && echo "  aipm_knowledge - Knowledge management" && echo "" && echo "📚 LEARN MORE:" && echo "  Read PM_FIRST_STEPS.md for guided tutorial" && echo "  Check playbooks/ directory for deep dives"'
+alias aipm_help='echo "🧪 AI PM Toolkit - Your AI-Powered Product Management Arsenal" && echo "" && echo "🎯 QUICK START:" && echo "  • Read PM_FIRST_STEPS.md - Your guided first experience" && echo "  • Visit learning-guide/index.html - Interactive learning tracks" && echo "  • Join the toolkit Slack community for tips & examples" && echo "" && echo "🔍 RESEARCH & INTELLIGENCE:" && echo "  aipm_research_quick \"question\" - Instant expert analysis" && echo "  aipm_company_lookup TICKER - Financial intelligence on any public company" && echo "  aipm_market_research - Launch comprehensive research tools" && echo "" && echo "✍️ AI COLLABORATION:" && echo "  aipm_brainstorm - Start AI pair programming session" && echo "  aipm_write filename.md - Co-create documents with AI" && echo "  aipm_prototype_demo - Build interactive demos with AI" && echo "" && echo "🔧 VISUAL BUILDERS (with direct links):" && echo "  aipm_workflows - Launch all workflow tools" && echo "    → n8n automation: http://localhost:5678" && echo "    → Langflow visual AI: http://localhost:7860" && echo "    → ToolJet dashboards: http://localhost:8082" && echo "    → Typebot chatbots: http://localhost:3001" && echo "" && echo "📊 DATA & ANALYSIS:" && echo "  aipm_lab - Jupyter Lab data environment (http://localhost:8888)" && echo "  aipm_data_generator - Create synthetic test data" && echo "  • OpenBB Terminal - Financial data (openbb-terminal)" && echo "" && echo "🎨 DESIGN & KNOWLEDGE:" && echo "  aipm_design - Create diagrams (opens Excalidraw)" && echo "  aipm_knowledge - Knowledge management (opens Obsidian vault)" && echo "" && echo "⚡ POL PROBE FRAMEWORK:" && echo "  aipm_learn - Feasibility checks (1-2 day technical spikes)" && echo "  aipm_fast - Task-focused tests (validate specific user friction)" && echo "  aipm_show - Narrative prototypes (stakeholder demo creation)" && echo "  aipm_experiment - Synthetic data simulations (wind tunnel testing)" && echo "  aipm_compete - Vibe-coded probes (fake frontend + backend)" && echo "" && echo "📚 LEARNING RESOURCES:" && echo "  • Interactive Guide: learning-guide/index.html" && echo "  • PM Playbooks: Check playbooks/ directory" && echo "  • Tool Documentation: Each tool has help flags (-h, --help)" && echo "  • Community: Slack workspace for sharing examples" && echo "" && echo "🚨 TROUBLESHOOTING:" && echo "  • Port conflicts? Kill processes: sudo lsof -ti:PORT | xargs kill" && echo "  • Tool not found? Check installation: aipm_status" && echo "  • Docker issues? Restart: docker system prune && docker-compose up" && echo "" && echo "💡 NEXT STEPS: Start with PM_FIRST_STEPS.md or learning-guide/index.html"'
 
 echo "🧪 AI PM Toolkit environment loaded"
 echo "Type 'aipm_help' for available commands"
@@ -493,7 +493,28 @@ echo "Type 'aipm_help' for available commands"
             for tool in failed_tools:
                 print(f"  • {tool['name']}: {tool['message']}")
         
-        print(f"\n{Colors.GREEN}✨ Installation complete! Restart your terminal to use the toolkit.{Colors.END}")
+        print(f"\n{Colors.GREEN}{Colors.BOLD}🎉 Welcome to the AI PM Toolkit!{Colors.END}")
+        print(f"{Colors.GREEN}{'=' * 50}{Colors.END}")
+        print(f"{Colors.CYAN}✨ Installation complete! Here's how to get started:{Colors.END}")
+        print()
+        print(f"{Colors.BOLD}1. Restart your terminal{Colors.END} or run: {Colors.YELLOW}source ~/.zshrc{Colors.END}")
+        print(f"{Colors.BOLD}2. Try your first command:{Colors.END} {Colors.YELLOW}aipm_help{Colors.END}")
+        print(f"{Colors.BOLD}3. Start learning:{Colors.END}")
+        print(f"   • {Colors.CYAN}Interactive Guide:{Colors.END} open learning-guide/index.html")
+        print(f"   • {Colors.CYAN}First Steps:{Colors.END} cat PM_FIRST_STEPS.md")
+        print()
+        print(f"{Colors.BOLD}🚀 Quick wins to try right now:{Colors.END}")
+        print(f"   • {Colors.YELLOW}aipm_research_quick \"AI trends in product management\"{Colors.END}")
+        print(f"   • {Colors.YELLOW}aipm_lab{Colors.END} - Launch data analysis environment")
+        print(f"   • {Colors.YELLOW}aipm_workflows{Colors.END} - Start visual workflow builders")
+        print()
+        print(f"{Colors.BOLD}🔗 Direct tool access:{Colors.END}")
+        print(f"   • Jupyter Lab: {Colors.BLUE}http://localhost:8888{Colors.END}")
+        print(f"   • n8n Workflows: {Colors.BLUE}http://localhost:5678{Colors.END}")
+        print(f"   • Langflow AI: {Colors.BLUE}http://localhost:7860{Colors.END}")
+        print(f"   • ToolJet Dashboards: {Colors.BLUE}http://localhost:8082{Colors.END}")
+        print()
+        print(f"{Colors.YELLOW}💡 Tip: Run {Colors.BOLD}aipm_help{Colors.END}{Colors.YELLOW} anytime for the complete command reference!{Colors.END}")
 
     def install(self) -> None:
         """Main installation process"""
