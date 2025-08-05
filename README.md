@@ -93,7 +93,7 @@ Pick what matches your comfort level:
 aipm_help
 ```
 
-**🎉 You're ready!** Follow the [PM First Steps Guide](PM_FIRST_STEPS.md) for your first wins.
+**🎉 You're ready!** Follow the [PM First Steps Guide](docs/PM_FIRST_STEPS.md) for your first wins.
 
 ## Installation Tiers
 
@@ -133,6 +133,50 @@ The new production-ready installer uses a **tiered approach** to provide the rig
 **Done.** You now have a comprehensive AI toolkit optimized for rapid PoL Probes, market research, and competitive intelligence - offline-first and cost-contained.
 
 > 🆕 **Production Release**: Complete refactor from prototype to production-ready installer with cross-platform support, dependency management, isolated environments, and comprehensive error handling.
+
+## Repository Structure
+
+The toolkit is organized for different audiences and use cases:
+
+```
+ai-pm-exploration-toolkit/
+├── README.md                    # Project overview (you are here)
+├── CLAUDE.md                    # Project instructions & context
+├── installer.py                 # Production installer
+├── toolkit.yaml                 # Tool manifest & configuration
+│
+├── 📚 docs/                     # User Documentation
+│   ├── PM_FIRST_STEPS.md        # Getting started guide
+│   ├── TOOL_PORTS_REFERENCE.md  # Direct tool access with ports
+│   ├── QUICK_WINS.md            # 15-minute high-impact tasks
+│   └── FIRST_RUN_GUIDE.md       # Detailed setup guide
+│
+├── 🎓 learning-guide/           # Interactive Learning Platform
+│   ├── index.html               # Web-based learning interface
+│   ├── tracks/                  # Learning tracks (collaboration, research, etc.)
+│   └── css/, js/, assets/       # PWA components
+│
+├── 📖 playbooks/                # Deep-Dive Tool Guides
+│   ├── AIDER_PLAYBOOK.md        # AI collaboration guide
+│   ├── MARKET_RESEARCH_PLAYBOOK.md # Research techniques
+│   └── WORKFLOW_PLAYBOOK.md     # Visual workflow builders
+│
+├── 🔧 workflow-tools/           # Docker Configurations
+│   ├── docker-compose.*.yml     # Container setups for workflow tools
+│   └── README.md                # Workflow tool documentation
+│
+└── 🔨 dev/                      # Development Documentation
+    ├── CONTRIBUTING.md          # Contribution guidelines
+    ├── DOCUMENTATION.md         # Documentation standards
+    └── completion-reports/      # Implementation history
+```
+
+### Quick Navigation
+
+- **New user?** Start with [docs/PM_FIRST_STEPS.md](docs/PM_FIRST_STEPS.md)
+- **Want hands-on learning?** Open [learning-guide/index.html](learning-guide/index.html)
+- **Need tool access?** Check [docs/TOOL_PORTS_REFERENCE.md](docs/TOOL_PORTS_REFERENCE.md)
+- **Want to contribute?** Read [dev/CONTRIBUTING.md](dev/CONTRIBUTING.md)
 
 ## First Experiments to Try
 
@@ -461,7 +505,7 @@ Have a tool that helps PMs with Education, Experimentation, Exploration, or Expl
 - 🔒 **Ethical**: AI bias/ethics statement for AI-related tools
 
 ### 📝 How to Contribute
-1. **Read our [Contributing Guide](CONTRIBUTING.md)** for detailed requirements
+1. **Read our [Contributing Guide](dev/CONTRIBUTING.md)** for detailed requirements
 2. **Use our evaluation template** to assess your tool against 4E framework  
 3. **Submit a GitHub issue** with our tool submission template
 4. **Engage in the review process** with maintainers and community
@@ -472,7 +516,7 @@ We recognize valuable contributors in our README and provide speaking opportunit
 ### 💡 Suggestions Welcome
 Not technical? No problem! Submit tool suggestions via GitHub issues and community members may help with integration.
 
-**See [CONTRIBUTING.md](CONTRIBUTING.md) for complete guidelines.**
+**See [CONTRIBUTING.md](dev/CONTRIBUTING.md) for complete guidelines.**
 
 ---
 

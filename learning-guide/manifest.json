@@ -1,0 +1,48 @@
+{
+  "name": "AI PM Learning Guide",
+  "short_name": "AI PM Guide",
+  "description": "Interactive learning platform for product managers to master AI tools and techniques",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "categories": ["education", "productivity", "business"],
+  "lang": "en-US",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Learning track selection"
+    },
+    {
+      "src": "assets/screenshot2.png", 
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile learning interface"
+    }
+  ],
+  "features": [
+    "offline-learning",
+    "progress-tracking",
+    "interactive-demos",
+    "search"
+  ]
+}

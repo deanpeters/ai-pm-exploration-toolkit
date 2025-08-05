@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PM Learning Guide - Close Your AI Skills Gap</title>
+    <meta name="description" content="Interactive learning guide for product managers to master AI tools and techniques">
+    
+    <!-- Preload key resources -->
+    <link rel="preload" href="css/styles.css" as="style">
+    <link rel="preload" href="js/learning-guide.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Progressive Web App -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>🎓 AI PM Learning Guide</h1>
+                    <p>Transform from AI-curious to AI-confident</p>
+                </div>
+                
+                <nav class="header-nav">
+                    <button class="search-btn" aria-label="Search">🔍</button>
+                    <button class="progress-btn" aria-label="View Progress">📊</button>
+                    <button class="menu-btn" aria-label="Menu">☰</button>
+                </nav>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <span class="progress-text">Get started to track your progress</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Modal -->
+    <div class="search-modal hidden">
+        <div class="search-content">
+            <input type="text" class="search-input" placeholder="Search topics, tools, or use cases...">
+            <div class="search-results"></div>
+        </div>
+        <button class="search-close">&times;</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2>What do you want to accomplish today?</h2>
+                <p>Choose your learning path based on your immediate product management needs</p>
+            </section>
+
+            <!-- Learning Tracks -->
+            <section class="learning-tracks">
+                <div class="track-grid">
+                    <!-- AI Collaboration Track -->
+                    <div class="track-card" data-track="collaboration">
+                        <div class="track-icon">✍️</div>
+                        <h3>Better Product Briefs</h3>
+                        <p>Learn AI collaboration for strategic thinking and document creation</p>
+                        <div class="track-meta">
+                            <span class="track-time">🕐 Start: 15 min</span>
+                            <span class="track-skill">🎯 Beginner friendly</span>
+                        </div>
+                        <div class="track-progress">
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>Not started</span>
+                        </div>
+                    </div>
+
+                    <!-- Research & Analysis Track -->
+                    <div class="track-card" data-track="research">
+                        <div class="track-icon">🔍</div>
+                        <h3>Competitive Intelligence Fast</h3>
+                        <p>Master AI-powered research and market analysis techniques</p>
+                        <div class="track-meta">
+                            <span class="track-time">🕐 Start: 5 min</span>
+                            <span class="track-skill">🚀 Quick wins</span>
+                        </div>
+                        <div class="track-progress">
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>Not started</span>
+                        </div>
+                    </div>
+
+                    <!-- Visual Building Track -->
+                    <div class="track-card" data-track="visual">
+                        <div class="track-icon">🎨</div>
+                        <h3>Demo Without Engineering</h3>
+                        <p>Build prototypes and workflows visually without coding</p>
+                        <div class="track-meta">
+                            <span class="track-time">🕐 Start: 20 min</span>
+                            <span class="track-skill">🔧 Hands-on</span>
+                        </div>
+                        <div class="track-progress">
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>Not started</span>
+                        </div>
+                    </div>
+
+                    <!-- Experimentation Track -->
+                    <div class="track-card" data-track="experimentation">
+                        <div class="track-icon">🧪</div>
+                        <h3>Validate With Data</h3>
+                        <p>Learn synthetic data generation and assumption testing</p>
+                        <div class="track-meta">
+                            <span class="track-time">🕐 Start: 30 min</span>
+                            <span class="track-skill">📊 Data-driven</span>
+                        </div>
+                        <div class="track-progress">
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>Not started</span>
+                        </div>
+                    </div>
+
+                    <!-- Storytelling Track -->
+                    <div class="track-card" data-track="storytelling">
+                        <div class="track-icon">🎬</div>
+                        <h3>Convince Stakeholders</h3>
+                        <p>Create compelling demos and presentations that earn buy-in</p>
+                        <div class="track-meta">
+                            <span class="track-time">🕐 Start: 45 min</span>
+                            <span class="track-skill">🎯 Advanced</span>
+                        </div>
+                        <div class="track-progress">
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span>Not started</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Access Section -->
+            <section class="quick-access">
+                <h2>Or jump to specific topics</h2>
+                <div class="quick-grid">
+                    <div class="quick-card" data-type="time">
+                        <h3>🕐 By Time Available</h3>
+                        <div class="quick-options">
+                            <button class="quick-btn" data-time="5">5 minutes</button>
+                            <button class="quick-btn" data-time="15">15 minutes</button>
+                            <button class="quick-btn" data-time="30">30 minutes</button>
+                            <button class="quick-btn" data-time="60">1+ hour</button>
+                        </div>
+                    </div>
+
+                    <div class="quick-card" data-type="tool">
+                        <h3>🛠️ By Tool</h3>
+                        <div class="quick-options">
+                            <button class="quick-btn" data-tool="aider">Aider (AI Writing)</button>
+                            <button class="quick-btn" data-tool="workflows">Visual Workflows</button>
+                            <button class="quick-btn" data-tool="research">Research Tools</button>
+                            <button class="quick-btn" data-tool="data">Data & Analysis</button>
+                        </div>
+                    </div>
+
+                    <div class="quick-card" data-type="skill">
+                        <h3>🎯 By Skill Level</h3>
+                        <div class="quick-options">
+                            <button class="quick-btn" data-skill="beginner">Complete Beginner</button>
+                            <button class="quick-btn" data-skill="intermediate">Some Experience</button>
+                            <button class="quick-btn" data-skill="advanced">Ready for Advanced</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="recent-activity">
+                <h2>Continue Learning</h2>
+                <div class="recent-list" id="recent-activity">
+                    <p class="empty-state">Start your first lesson to see your progress here</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 AI PM Exploration Toolkit - Learning Guide</p>
+            <p>Transform from AI-curious to AI-confident through hands-on practice</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/learning-guide.js"></script>
+</body>
+</html>
