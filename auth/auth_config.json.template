@@ -5,5 +5,5 @@
   "allow_registration": true,
   "default_role": "pm",
   "enable_guest_mode": true,
-  "secret_key": "dTZFmcHgq2bY6ViqxoiyXGrfXVts5vlGf3wN_t9pRaU"
+  "secret_key": "REPLACE_WITH_RANDOM_SECRET_KEY_GENERATED_AT_RUNTIME"
 }

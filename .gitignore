@@ -81,6 +81,11 @@ node_modules/
 auth/tokens/
 auth/keys/
 
+# Authentication files (contain secrets and session data)
+auth/auth_config.json
+auth/users.json
+auth/sessions.json
+
 # Archive directory (cleaned up old files)
 archive/
 
