@@ -110,61 +110,87 @@ Users need **Proof-of-Life Probes** - lightweight, disposable, narrow in scope, 
 4. **Synthetic Data Simulations** - Model system behavior without burning prod
 5. **Vibe-Coded Probes** - Fake frontend + semi-plausible backend for real user signals
 
-## Core Commands
+## Core Commands (Currently Implemented)
 
-The main interface maps to **Five Flavors of PoL Probes** within the **4E Framework**:
+The main interface supports the **4E Framework** through both web dashboard and command line:
 
 ### 🎓 Education Commands (Learn AI Through Practice)
-- `aipm learn` - Feasibility Checks: 1-2 day spike-and-delete tests with AI
-- `aipm_lab` - Jupyter Lab for data exploration and hands-on learning
-- `aipm_obsidian` - Knowledge management & idea linking for structured learning
+**Web Dashboard:** [http://localhost:3000](http://localhost:3000)
+- **Audio Intelligence** - Learn by processing real user interviews and meetings
+- **AI Chat Assistant** - Practice strategic thinking with AI conversation partner
+- **Data Generation** - Understand AI capabilities through synthetic data creation
+
+**Command Line:**
+- `python3 shared/audio_transcription.py --status` - Check audio processing capabilities
+- `python3 shared/ai_chat.py --mode pm_assistant --interactive` - Start AI learning session
+- `python3 web/app.py` - Launch learning dashboard
 
 ### 🔍 Exploration Commands (Discover What's Possible)  
-- `aipm_workflows` - Visual/low-code workflow builders (Langflow, n8n, ToolJet, Typebot)
-- `aipm_market` - Market research & competitive intelligence (OpenBB, Deep Researcher, Gemini)
-- `aipm_mcp` - AI integration & agent coordination
-- Visual tools for intuitive discovery and tinkering
+**Web Dashboard Tools:**
+- **Market Research** - Explore competitive intelligence capabilities
+- **Workflow Automation** - Discover Docker-based tool orchestration
+- **Audio Workflow Templates** - Explore 6 different PM use case templates
+
+**Command Line:**
+- `python3 shared/market_research.py --company "CompanyName"` - Explore research capabilities
+- `./orchestrate-workflows.sh status` - Discover workflow tool options
+- `python3 shared/pm_audio_workflows.py --list` - Explore PM workflow templates
 
 ### 🧪 Experimentation Commands (Test Hypotheses with Data)
-- `aipm experiment` - Synthetic Data Simulations: model without burning prod
-- `aipm_prompts` - Prompt engineering & testing (promptfoo, prompttools)
-- `aipm_data` - Synthetic data generation (Faker, Mimesis, Gretel)
-- `aipm_personas` - User persona creation and chat simulation
-- `aipm_monitor` - AI performance monitoring (LangSmith, Arize)
+**Data Generation & Testing:**
+- `python3 shared/data_generator.py --personas 50 --industry saas` - Generate test personas
+- `python3 shared/audio_transcription.py audio.mp3 --use-case user_interviews` - Test audio analysis
+- `python3 shared/ai_chat.py --mode analysis --model qwen2.5` - Test strategic analysis
+
+**System Testing:**
+- `./run_tests.sh --quick` - Test all systems in 2 minutes
+- `./run_tests.sh --new-user` - Test first-time user experience
+- `./run_tests.sh --full` - Complete system validation
 
 ### 📊 Explanation Commands (Show Before Tell, Touch Before Sell)
-- `aipm prototype` - Narrative Prototypes: explainer videos and storyboards
-- `aipm fast` - Task-Focused Tests: validate make-or-break user moments
-- `aipm compete` - Vibe-Coded Probes: fake frontend + semi-plausible backend
-- `aipm_design` - Diagram and design tools (Excalidraw, Storyboarder)
-- Create artifacts that turn skepticism into stakeholder buy-in
+**Create Compelling Artifacts:**
+- **Web Interface** - Generate professional outputs through dashboard
+- **Audio Insights Export** - Turn recordings into stakeholder-ready summaries
+- **Synthetic Data Export** - Create supporting evidence with generated personas
+- **AI Analysis Output** - Structured strategic frameworks for presentations
 
-## Exploration Commands
+**Command Line Output Formats:**
+- All tools support `--help` for usage guidance
+- Audio processing creates structured PM insight reports
+- Data generation exports CSV/JSON for existing presentation tools
+- AI chat saves conversations for documentation
 
-### 1. Learn (`aipm learn`) - Feasibility Checks
-**Purpose**: 1-2 day spike-and-delete tests to surface technical risk
-**AI Context**: Create working proof-of-concepts, GenAI prompt chains, LLM Evals, API sniff tests, tool fit evaluation - not building to impress
-**Typical Use**: "Spike whether GenAI content moderation is technically viable before roadmap commitment"
+## Real Working Examples: PoL Probes in Action
 
-### 2. Fast (`aipm fast`) - Task-Focused Tests
-**Purpose**: Validate make-or-break user moments without building full workflows
-**AI Context**: Test specific friction points, field labels, decision points, drop-off analysis - focus on single job completion
-**Typical Use**: "Test this checkout field label for conversion impact without building full flow"
+### 1. Audio Intelligence for User Research
+**Current Implementation**: `python3 shared/audio_transcription.py interview.mp3 --use-case user_interviews`
+**Purpose**: Extract structured insights from user interviews without manual transcription
+**What It Does**: Processes audio → Identifies pain points, feature requests, user goals automatically
+**Typical Use**: "Turn 1-hour user interview into structured insights in 2 minutes"
 
-### 3. Prototype (`aipm prototype`) - Narrative Prototypes
-**Purpose**: Create explainer videos, Loom walkthroughs, storyboards that earn "hell yes" from stakeholders
-**AI Context**: Tell the story through video narratives, slideware storyboards, workflow explanations - test the narrative before building
-**Typical Use**: "Create Loom-style walkthrough of smart notification workflow to validate stakeholder buy-in"
+### 2. AI Strategic Thinking Partner
+**Current Implementation**: `python3 shared/ai_chat.py --mode pm_assistant --interactive`
+**Purpose**: Get structured strategic guidance for product decisions
+**What It Does**: Interactive AI conversations → Strategic frameworks, investigation approaches, decision structures
+**Typical Use**: "Help me create a framework to investigate churn rate issues"
 
-### 4. Experiment (`aipm experiment`) - Synthetic Data Simulations
-**Purpose**: Model system behavior and edge cases without risking production systems
-**AI Context**: Generate realistic datasets, simulate user loads, test prompt logic, surface unknowns - like a wind tunnel for assumptions
-**Typical Use**: "Simulate 50k users hitting our AI recommendation system to model behavior patterns"
+### 3. Synthetic Data for Assumption Testing
+**Current Implementation**: `python3 shared/data_generator.py --personas 50 --industry saas`
+**Purpose**: Generate realistic user data to test concepts without waiting for real users
+**What It Does**: Creates personas → Demographics, pain points, goals, scenarios ready for analysis
+**Typical Use**: "Generate 50 SaaS user personas to test feature prioritization framework"
 
-### 5. Compete (`aipm compete`) - Vibe-Coded PoL Probes
-**Purpose**: Create fake frontend + semi-plausible backend to catch real user signals in 48 hours
-**AI Context**: ChatGPT + Canvas + Airtable combinations, just enough illusion to test with real users - not production quality
-**Typical Use**: "Build competitor analysis dashboard that users can actually interact with to validate feature demand"
+### 4. Competitive Intelligence Automation
+**Current Implementation**: `python3 shared/market_research.py --company "CompanyName"`
+**Purpose**: Instant competitive analysis and market positioning research
+**What It Does**: Company lookup → Business model analysis, competitive strengths/weaknesses, market position
+**Typical Use**: "Get competitive intelligence on Notion for partnership evaluation"
+
+### 5. Voice Thoughts to Structured Analysis
+**Current Implementation**: Web dashboard → Audio Transcription → PM Voice Memo Processing
+**Purpose**: Turn scattered voice thoughts into organized, actionable PM insights
+**What It Does**: Voice memo → Structured problem statements, solutions, action items for presentations
+**Typical Use**: "Convert daily voice notes into stakeholder-ready strategic insights"
 
 ## When Helping Users: Apply the 4E Framework
 
@@ -174,31 +200,31 @@ The main interface maps to **Five Flavors of PoL Probes** within the **4E Framew
 - Provide hands-on scenarios that build intuition through action
 - Focus on combating "AI illiteracy" and jargon confusion
 - Guide through structured learning paths with immediate feedback
-- Example: "Help me understand how LLM evaluation works" → Set up promptfoo experimentation
+- Example: "Help me understand how AI can help with user research" → Use audio intelligence web tool to process sample interview
 
 ### 🔍 Exploration Requests (Discovery Without Limits)
 **Goal**: Enable tinkering with AI building blocks to understand possibilities
-- Facilitate free-form discovery with 40+ tools ready out-of-the-box
-- Address "OpenAI Curiosity" with visual workflow builders
+- Facilitate free-form discovery with 5 core tools and web dashboard
+- Address "OpenAI Curiosity" with visual workflow builders (via Docker orchestration)
 - Enable market research and competitive intelligence gathering
 - Support intuitive exploration without rigid hypotheses
-- Example: "What's possible with AI in our industry?" → Launch aipm_market dashboard
+- Example: "What's possible with AI in our industry?" → Use market research tool and AI chat for industry analysis
 
 ### 🧪 Experimentation Requests (Evidence Over Opinion)
 **Goal**: Test hypotheses rigorously with synthetic data, not production systems
 - Generate realistic datasets that model system behavior at scale
 - Create wind tunnel testing environments for assumptions
-- Enable systematic prompt testing and LLM evaluation
+- Enable systematic testing with generated personas and scenarios
 - Simulate edge cases and user loads without risking production
-- Example: "Test if AI can handle our edge cases" → Set up synthetic data simulation
+- Example: "Test if AI can handle our edge cases" → Generate synthetic user data with edge case scenarios and test with AI chat
 
 ### 📊 Explanation Requests (Show Before Tell, Touch Before Sell)
 **Goal**: Create compelling artifacts that turn stakeholder skepticism into buy-in
-- Build narrative prototypes like explainer videos and walkthroughs
-- Generate visual diagrams and storyboards for stakeholder presentations
-- Create working demos and vibe-coded probes for user testing
+- Build narrative prototypes using processed audio insights and AI analysis
+- Generate structured reports and strategic frameworks ready for presentation
+- Create working evidence through synthetic data and competitive research
 - Focus on tangible proofs generated through the previous three pillars
-- Example: "Convince executives this AI feature is worth building" → Create prototype + data story
+- Example: "Convince executives this AI feature is worth building" → Process user interview audio + generate supporting personas + create strategic framework with AI chat
 
 ### Integration Approach
 Always connect user requests to the broader 4E journey:

@@ -494,7 +494,7 @@ class MarketResearcher:
     
     def save_research(self, data: Dict[str, Any], filename: str, config: Any) -> str:
         """Save research data to file"""
-        output_path = self.working_dir / filename
+        output_path = self.working_dir / "outputs" / "research" / filename
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
         if hasattr(config, 'output_format') and config.output_format == "csv":

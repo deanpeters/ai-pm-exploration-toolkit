@@ -1,2 +1,94 @@
+# AI PM Exploration Toolkit - Git Ignore
+# Keep root clean and organized
+
+# Claude/GitHub
 .claude/
 .github/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Output files - these go in outputs/ directory to prevent root clutter
+*.json
+!core/toolkit.json
+!package.json
+
+# Audio files (usually large)
+*.mp3
+*.wav
+*.m4a
+*.flac
+*.aac
+*.ogg
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Docker
+.dockerignore
+
+# Node modules (if any)
+node_modules/
+
+# Auth tokens and keys
+*.key
+*.pem
+auth/tokens/
+auth/keys/
+
+# Archive directory (cleaned up old files)
+archive/
+
+# Keep outputs directory structure but not content
+!outputs/.gitkeep
+outputs/*
+!outputs/research/.gitkeep
+!outputs/transcripts/.gitkeep
+!outputs/personas/.gitkeep
+!outputs/conversations/.gitkeep
+!outputs/reports/.gitkeep

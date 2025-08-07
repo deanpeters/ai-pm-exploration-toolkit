@@ -374,8 +374,8 @@ Provide structured, data-driven analysis with clear recommendations."""
             filename = f"ai_chat_{session_prefix}conversation_{timestamp}.json"
         
         # Create conversations directory
-        conversations_dir = self.working_dir / "conversations"
-        conversations_dir.mkdir(exist_ok=True)
+        conversations_dir = self.working_dir / "outputs" / "conversations"
+        conversations_dir.mkdir(parents=True, exist_ok=True)
         
         output_path = conversations_dir / filename
         

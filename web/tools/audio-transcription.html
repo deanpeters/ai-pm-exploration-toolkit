@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎙️ Audio Transcription - AI PM Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .upload-area {
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .upload-area.dragover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: scale(1.02);
+        }
+        
+        .model-selector, .usecase-selector {
+            margin: 1rem 0;
+        }
+        
+        .model-selector select, .usecase-selector select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .transcription-status {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .transcription-result {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .pm-insights {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .insight-category {
+            margin: 1rem 0;
+        }
+        
+        .insight-items {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .insight-items li {
+            background: white;
+            margin: 0.5rem 0;
+            padding: 0.75rem;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .transcription-text {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: Georgia, serif;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .history-section {
+            margin: 2rem 0;
+        }
+        
+        .history-item {
+            background: white;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .history-item:hover {
+            border-color: #3498db;
+            box-shadow: 0 2px 4px rgba(52, 152, 219, 0.1);
+        }
+        
+        .file-formats {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        .processing-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>🎙️ Audio Transcription</h1>
+            <p>Transform audio into actionable PM insights with AI-powered transcription</p>
+            <a href="/" class="back-link">← Back to Dashboard</a>
+        </header>
+
+        <!-- Audio Upload Section -->
+        <section class="tool-section">
+            <h2>Upload Audio File</h2>
+            
+            <div class="upload-area" id="uploadArea">
+                <div>
+                    <h3>📁 Drop audio file here or click to browse</h3>
+                    <p>Supported formats: MP3, WAV, M4A, FLAC, AAC, OGG</p>
+                    <div class="file-formats">
+                        Maximum file size: 500MB | Languages: Auto-detect or 90+ languages supported
+                    </div>
+                </div>
+                <input type="file" id="audioFile" accept="audio/*" style="display: none;">
+            </div>
+            
+            <div class="model-selector">
+                <label for="modelSelect">🤖 Whisper Model:</label>
+                <select id="modelSelect">
+                    <option value="turbo">Turbo - Fastest (~80MB) - Good for voice memos</option>
+                    <option value="base">Base - Fast (~120MB) - General transcription</option>
+                    <option value="small" selected>Small - Balanced (~240MB) - User interviews</option>
+                    <option value="medium">Medium - Accurate (~770MB) - Important meetings</option>
+                    <option value="large">Large - Best quality (~3GB) - Critical transcriptions</option>
+                </select>
+            </div>
+            
+            <div class="usecase-selector">
+                <label for="usecaseSelect">🎯 PM Use Case:</label>
+                <select id="usecaseSelect">
+                    <option value="general">General - Basic transcription</option>
+                    <option value="user_interviews" selected>User Interviews - Extract pain points & requests</option>
+                    <option value="stakeholder_meetings">Stakeholder Meetings - Find decisions & action items</option>
+                    <option value="demo_feedback">Demo Feedback - Capture reactions & suggestions</option>
+                    <option value="competitive_research">Competitive Research - Analyze competitor content</option>
+                    <option value="voice_memos">Voice Memos - Quick PM thoughts & ideas</option>
+                </select>
+            </div>
+            
+            <button id="transcribeBtn" class="primary-btn" disabled>
+                🎙️ Transcribe Audio
+            </button>
+        </section>
+
+        <!-- Transcription Status -->
+        <div id="transcriptionStatus" class="transcription-status">
+            <div class="processing-spinner"></div>
+            <span id="statusText">Processing audio...</span>
+        </div>
+
+        <!-- Transcription Results -->
+        <div id="transcriptionResult" class="transcription-result">
+            <div class="result-header">
+                <h2>📄 Transcription Complete</h2>
+                <button id="downloadBtn" class="secondary-btn">💾 Download Results</button>
+            </div>
+            
+            <div class="result-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="durationStat">-</div>
+                    <div class="stat-label">Duration (min)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="wordsStat">-</div>
+                    <div class="stat-label">Words</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="speedStat">-</div>
+                    <div class="stat-label">Words/min</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="languageStat">-</div>
+                    <div class="stat-label">Language</div>
+                </div>
+            </div>
+            
+            <div class="pm-insights" id="pmInsights">
+                <h3>🔍 PM Insights</h3>
+                <div id="insightContent">
+                    <!-- PM-specific insights will be populated here -->
+                </div>
+            </div>
+            
+            <div>
+                <h3>📝 Full Transcription</h3>
+                <div class="transcription-text" id="transcriptionText">
+                    <!-- Transcription text will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Transcription History -->
+        <section class="tool-section history-section">
+            <h2>📋 Recent Transcriptions</h2>
+            <div id="historyList">
+                <p>Loading transcription history...</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Global variables
+        let currentTranscription = null;
+        
+        // DOM elements
+        const uploadArea = document.getElementById('uploadArea');
+        const audioFile = document.getElementById('audioFile');
+        const transcribeBtn = document.getElementById('transcribeBtn');
+        const transcriptionStatus = document.getElementById('transcriptionStatus');
+        const statusText = document.getElementById('statusText');
+        const transcriptionResult = document.getElementById('transcriptionResult');
+        
+        // Upload area interactions
+        uploadArea.addEventListener('click', () => audioFile.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                audioFile.files = files;
+                handleFileSelection();
+            }
+        });
+        
+        audioFile.addEventListener('change', handleFileSelection);
+        
+        function handleFileSelection() {
+            const file = audioFile.files[0];
+            if (file) {
+                transcribeBtn.disabled = false;
+                uploadArea.innerHTML = `
+                    <div>
+                        <h3>📁 ${file.name}</h3>
+                        <p>Size: ${(file.size / 1024 / 1024).toFixed(1)} MB</p>
+                        <p>Type: ${file.type}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Transcription process
+        transcribeBtn.addEventListener('click', async () => {
+            if (!audioFile.files[0]) return;
+            
+            const file = audioFile.files[0];
+            const model = document.getElementById('modelSelect').value;
+            const useCase = document.getElementById('usecaseSelect').value;
+            
+            // Show processing status
+            transcriptionStatus.style.display = 'block';
+            transcriptionStatus.className = 'transcription-status status-processing';
+            statusText.textContent = 'Uploading and processing audio...';
+            transcribeBtn.disabled = true;
+            transcriptionResult.style.display = 'none';
+            
+            try {
+                const formData = new FormData();
+                formData.append('audio_file', file);
+                formData.append('model', model);
+                formData.append('use_case', useCase);
+                
+                const response = await fetch('/api/audio-transcription', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayTranscriptionResult(result);
+                    transcriptionStatus.style.display = 'none';
+                    loadTranscriptionHistory(); // Refresh history
+                } else {
+                    showError(result.error || 'Transcription failed');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            } finally {
+                transcribeBtn.disabled = false;
+            }
+        });
+        
+        function displayTranscriptionResult(result) {
+            currentTranscription = result;
+            const transcription = result.transcription;
+            const pmInsights = transcription.pm_insights || {};
+            
+            // Update stats
+            document.getElementById('durationStat').textContent = (transcription.duration / 60).toFixed(1);
+            document.getElementById('wordsStat').textContent = pmInsights.word_count || 0;
+            document.getElementById('speedStat').textContent = pmInsights.speaking_rate || 0;
+            document.getElementById('languageStat').textContent = transcription.language || 'Unknown';
+            
+            // Display PM insights
+            const insightContent = document.getElementById('insightContent');
+            const pmAnalysis = pmInsights.pm_specific_analysis || {};
+            
+            let insightHtml = '';
+            for (const [category, items] of Object.entries(pmAnalysis)) {
+                if (items && items.length > 0) {
+                    insightHtml += `
+                        <div class="insight-category">
+                            <h4>${category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h4>
+                            <ul class="insight-items">
+                                ${items.map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                }
+            }
+            
+            if (insightHtml === '') {
+                insightHtml = '<p>No specific PM insights extracted for this use case.</p>';
+            }
+            
+            insightContent.innerHTML = insightHtml;
+            
+            // Display transcription text
+            document.getElementById('transcriptionText').textContent = transcription.text;
+            
+            // Show result section
+            transcriptionResult.style.display = 'block';
+            transcriptionResult.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showError(message) {
+            transcriptionStatus.style.display = 'block';
+            transcriptionStatus.className = 'transcription-status status-error';
+            statusText.innerHTML = `❌ Error: ${message}`;
+        }
+        
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            if (!currentTranscription) return;
+            
+            const data = {
+                transcription: currentTranscription.transcription,
+                summary: currentTranscription.summary,
+                generated_at: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transcription_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+        
+        // Load transcription history
+        async function loadTranscriptionHistory() {
+            try {
+                const response = await fetch('/api/audio-transcription-history');
+                const result = await response.json();
+                
+                const historyList = document.getElementById('historyList');
+                
+                if (result.success && result.history.length > 0) {
+                    historyList.innerHTML = result.history.map(item => `
+                        <div class="history-item" onclick="loadHistoryItem('${item.path}')">
+                            <h4>📄 ${item.file}</h4>
+                            <p><strong>Use Case:</strong> ${item.use_case} | <strong>Duration:</strong> ${item.duration}s | <strong>Words:</strong> ${item.word_count}</p>
+                            <p><strong>Model:</strong> ${item.model_used} | <strong>Created:</strong> ${item.created_at.split('T')[0]}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    historyList.innerHTML = '<p>No transcription history found. Upload an audio file to get started!</p>';
+                }
+            } catch (error) {
+                document.getElementById('historyList').innerHTML = '<p>Error loading transcription history.</p>';
+            }
+        }
+        
+        function loadHistoryItem(path) {
+            // Could implement loading historical transcriptions
+            alert(`Loading transcription from: ${path}`);
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTranscriptionHistory();
+        });
+    </script>
+</body>
+</html>

@@ -145,7 +145,8 @@ class DataGenerator:
 
     def save_personas(self, personas: List[Persona], filename: str, config: PersonaConfig) -> str:
         """Save personas to file in specified format"""
-        output_path = self.working_dir / filename
+        output_path = self.working_dir / "outputs" / "personas" / filename
+        output_path.parent.mkdir(parents=True, exist_ok=True)
         
         if config.output_format == "json":
             data = {

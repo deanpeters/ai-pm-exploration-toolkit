@@ -54,9 +54,22 @@
       "interfaces": {
         "web": "web/tools/workflows.html",
         "cli": "cli/tools/workflows.py",
-        "script": "workflow-tools/orchestrate-workflows.sh"
+        "script": "workflows/orchestrate-workflows.sh"
       },
       "dependencies": ["docker", "docker-compose"],
+      "experiences": ["just_do_it", "learn_and_do"]
+    },
+    {
+      "id": "audio-transcription",
+      "name": "Audio Transcription",
+      "description": "AI-powered speech-to-text with PM-specific insights extraction",
+      "status": "working",
+      "interfaces": {
+        "web": "web/tools/audio-transcription.html",
+        "cli": "cli/tools/audio_transcription.py",
+        "script": "src/audio_transcription.py"
+      },
+      "dependencies": ["openai-whisper", "python3"],
       "experiences": ["just_do_it", "learn_and_do"]
     }
   ],
@@ -99,7 +112,8 @@
   "paths": {
     "web_root": "web/",
     "cli_root": "cli/",
-    "scripts_root": "scripts/",
+    "src_root": "src/",
+    "outputs_root": "outputs/",
     "configs_root": "configs/",
     "symlink_target": "~/aipm-toolkit"
   }

@@ -13,8 +13,8 @@ from dataclasses import asdict
 from pathlib import Path
 from flask import Flask, render_template, jsonify, request, make_response, g
 
-# Add shared modules to path
-sys.path.append(str(Path(__file__).parent.parent / 'shared'))
+# Add src modules to path
+sys.path.append(str(Path(__file__).parent.parent / 'src'))
 from auth_manager import AuthenticationManager, require_auth, require_role
 
 # Initialize Flask app
@@ -26,7 +26,7 @@ auth_manager = AuthenticationManager(str(Path(__file__).parent.parent))
 
 # Load toolkit configuration
 TOOLKIT_ROOT = Path(__file__).parent.parent
-CONFIG_PATH = TOOLKIT_ROOT / "toolkit.json"
+CONFIG_PATH = TOOLKIT_ROOT / "core" / "toolkit.json"
 
 def load_config():
     """Load toolkit configuration"""
@@ -828,6 +828,109 @@ def api_langflow():
             'success': False,
             'error': str(e)
         }), 500
+
+@app.route('/api/audio-transcription', methods=['POST'])
+@require_auth
+def api_audio_transcription():
+    """API endpoint for audio transcription"""
+    try:
+        # Import the shared audio transcription engine
+        import sys
+        import os
+        shared_path = os.path.join(os.path.dirname(__file__), '..', 'shared')
+        if shared_path not in sys.path:
+            sys.path.append(shared_path)
+            
+        from audio_transcription import start_audio_transcription
+        
+        # Check if file was uploaded
+        if 'audio_file' not in request.files:
+            return jsonify({"success": False, "error": "No audio file uploaded"}), 400
+            
+        file = request.files['audio_file']
+        if file.filename == '':
+            return jsonify({"success": False, "error": "No file selected"}), 400
+            
+        # Get parameters
+        model = request.form.get('model', 'turbo')
+        use_case = request.form.get('use_case', 'general')
+        
+        # Save uploaded file temporarily
+        import tempfile
+        import uuid
+        from pathlib import Path
+        
+        # Create temp directory for audio files
+        temp_dir = Path(tempfile.gettempdir()) / "aipm_audio"
+        temp_dir.mkdir(exist_ok=True)
+        
+        # Save file with unique name
+        file_extension = Path(file.filename).suffix
+        temp_filename = f"upload_{uuid.uuid4()}{file_extension}"
+        temp_filepath = temp_dir / temp_filename
+        
+        file.save(str(temp_filepath))
+        
+        try:
+            # Perform transcription
+            result = start_audio_transcription(
+                str(temp_filepath),
+                model=model,
+                pm_use_case=use_case,
+                working_dir=str(TOOLKIT_ROOT)
+            )
+            
+            # Clean up temp file
+            if temp_filepath.exists():
+                temp_filepath.unlink()
+                
+            return jsonify(result)
+            
+        except Exception as e:
+            # Clean up temp file on error
+            if temp_filepath.exists():
+                temp_filepath.unlink()
+            raise e
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+@app.route('/api/audio-transcription-history')
+@require_auth  
+def api_audio_transcription_history():
+    """API endpoint for transcription history"""
+    try:
+        # Import the shared audio transcription engine
+        import sys
+        import os
+        shared_path = os.path.join(os.path.dirname(__file__), '..', 'shared')
+        if shared_path not in sys.path:
+            sys.path.append(shared_path)
+            
+        from audio_transcription import AudioTranscriptionEngine
+        
+        engine = AudioTranscriptionEngine(str(TOOLKIT_ROOT))
+        history = engine.get_transcription_history()
+        
+        return jsonify({
+            "success": True,
+            "history": history
+        })
+        
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+@app.route('/tool/audio-transcription')
+@require_auth
+def audio_transcription_tool():
+    """Audio transcription tool page"""
+    return render_template('tools/audio-transcription.html')
 
 @app.route('/cli-bridge')
 def cli_bridge():
