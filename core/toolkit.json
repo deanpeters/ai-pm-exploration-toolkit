@@ -1,6 +1,7 @@
 {
   "name": "AI PM Exploration Toolkit",
   "version": "1.0.0-phase3",
+  "manifest_version": 1.0,
   "description": "Proof-of-Life Probes framework for product managers",
   "architecture": {
     "interfaces": ["web", "cli"],

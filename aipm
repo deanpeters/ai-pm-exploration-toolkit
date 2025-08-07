@@ -1,0 +1,223 @@
+#!/bin/bash
+
+# AI PM Exploration Toolkit - Main CLI Interface
+# Usage: aipm <command> [options]
+
+set -e
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TOOLKIT_DIR="$SCRIPT_DIR"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+print_usage() {
+    echo "🤖 AI PM Toolkit - Proof-of-Life Probes Framework"
+    echo ""
+    echo "Usage: aipm <command> [options]"
+    echo ""
+    echo "DATA GENERATION:"
+    echo "  data-gen --count=N --type=INDUSTRY [--interactive]"
+    echo "    Generate synthetic user personas for testing"
+    echo "    Examples:"
+    echo "      aipm data-gen --count=10 --type=b2b_saas"
+    echo "      aipm data-gen --count=25 --type=ecommerce --interactive"
+    echo ""
+    echo "AUDIO INTELLIGENCE:"
+    echo "  transcribe <file> --use-case=TYPE"
+    echo "    Extract PM insights from audio recordings"
+    echo "    Example: aipm transcribe interview.mp3 --use-case=user_interviews"
+    echo ""
+    echo "AI COLLABORATION:"
+    echo "  chat --mode=MODE [--interactive]"
+    echo "    Strategic AI assistance for product decisions"
+    echo "    Example: aipm chat --mode=pm_assistant --interactive"
+    echo ""
+    echo "RESEARCH:"
+    echo "  research --company=NAME [--depth=LEVEL]"
+    echo "    Market research and competitive intelligence"
+    echo "    Example: aipm research --company='Notion' --depth=detailed"
+    echo ""
+    echo "SYSTEM:"
+    echo "  help     Show this help message"
+    echo "  version  Show version information"
+    echo ""
+    echo "For more details: https://github.com/deanpeters/ai-pm-exploration-toolkit"
+}
+
+print_version() {
+    echo "AI PM Toolkit v1.0.0"
+    echo "Proof-of-Life Probes Framework by Dean Peters"
+}
+
+# Check if we're in the right directory or if toolkit is properly set up
+check_toolkit() {
+    if [[ ! -f "$TOOLKIT_DIR/src/data_generator.py" ]]; then
+        echo -e "${RED}Error: AI PM Toolkit not found in expected location${NC}"
+        echo "Expected: $TOOLKIT_DIR"
+        echo "Make sure you're running aipm from the toolkit directory or it's properly installed."
+        exit 1
+    fi
+}
+
+cmd_data_gen() {
+    local count=""
+    local type=""
+    local interactive=false
+    local role=""
+    
+    # Parse arguments
+    for arg in "$@"; do
+        case $arg in
+            --count=*)
+                count="${arg#*=}"
+                ;;
+            --type=*)
+                type="${arg#*=}"
+                ;;
+            --role=*)
+                role="${arg#*=}"
+                ;;
+            --interactive)
+                interactive=true
+                ;;
+            -h|--help)
+                echo "Usage: aipm data-gen --count=N --type=INDUSTRY [--role=ROLE] [--interactive]"
+                echo ""
+                echo "Generate synthetic user personas for testing assumptions"
+                echo ""
+                echo "Required:"
+                echo "  --count=N        Number of personas to generate (e.g., 10, 50, 100)"
+                echo "  --type=INDUSTRY  Industry type (b2b_saas, ecommerce, fintech, healthcare)"
+                echo ""
+                echo "Optional:"
+                echo "  --role=ROLE      User role (product_manager, developer, end_user)"
+                echo "  --interactive    Enable interactive mode for customization"
+                echo ""
+                echo "Examples:"
+                echo "  aipm data-gen --count=10 --type=b2b_saas"
+                echo "  aipm data-gen --count=25 --type=ecommerce --role=end_user"
+                echo "  aipm data-gen --count=50 --type=fintech --interactive"
+                return 0
+                ;;
+            *)
+                echo -e "${RED}Unknown argument: $arg${NC}"
+                echo "Use --help for usage information"
+                exit 1
+                ;;
+        esac
+    done
+    
+    # Validate required arguments
+    if [[ -z "$count" ]]; then
+        echo -e "${RED}Error: --count is required${NC}"
+        echo "Example: aipm data-gen --count=10 --type=b2b_saas"
+        exit 1
+    fi
+    
+    if [[ -z "$type" ]]; then
+        echo -e "${RED}Error: --type is required${NC}"
+        echo "Available types: b2b_saas, ecommerce, fintech, healthcare"
+        echo "Example: aipm data-gen --count=10 --type=b2b_saas"
+        exit 1
+    fi
+    
+    echo -e "${GREEN}🎯 Generating $count synthetic personas for $type industry...${NC}"
+    
+    # Build the command
+    local cmd="python3 '$TOOLKIT_DIR/src/data_generator.py' --count $count --type $type"
+    
+    if [[ -n "$role" ]]; then
+        cmd="$cmd --role $role"
+    fi
+    
+    if [[ "$interactive" == true ]]; then
+        echo -e "${YELLOW}⚠️  Interactive mode not yet implemented in Python script${NC}"
+        echo -e "${YELLOW}    Running in standard mode instead${NC}"
+        # Note: The Python script doesn't support interactive mode yet
+        # cmd="$cmd --interactive"
+    fi
+    
+    echo -e "${YELLOW}Running: $cmd${NC}"
+    eval "$cmd"
+}
+
+cmd_transcribe() {
+    if [[ $# -eq 0 ]] || [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+        echo "Usage: aipm transcribe <audio_file> --use-case=TYPE"
+        echo ""
+        echo "Extract structured PM insights from audio recordings"
+        echo ""
+        echo "Arguments:"
+        echo "  audio_file       Path to MP3/WAV audio file"
+        echo "  --use-case=TYPE  Type of analysis (user_interviews, strategy_sessions, feedback_calls)"
+        echo ""
+        echo "Examples:"
+        echo "  aipm transcribe interview.mp3 --use-case=user_interviews"
+        echo "  aipm transcribe meeting.wav --use-case=strategy_sessions"
+        return 0
+    fi
+    
+    local audio_file="$1"
+    shift
+    
+    echo -e "${GREEN}🎙️ Processing audio file: $audio_file${NC}"
+    python3 "$TOOLKIT_DIR/src/audio_transcription.py" "$audio_file" "$@"
+}
+
+cmd_chat() {
+    echo -e "${GREEN}💬 Starting AI strategic thinking partner...${NC}"
+    python3 "$TOOLKIT_DIR/src/ai_chat.py" "$@"
+}
+
+cmd_research() {
+    echo -e "${GREEN}🔍 Starting market research...${NC}"
+    python3 "$TOOLKIT_DIR/src/market_research.py" "$@"
+}
+
+# Main command routing
+main() {
+    if [[ $# -eq 0 ]]; then
+        print_usage
+        exit 0
+    fi
+    
+    check_toolkit
+    
+    local command="$1"
+    shift
+    
+    case "$command" in
+        "data-gen")
+            cmd_data_gen "$@"
+            ;;
+        "transcribe")
+            cmd_transcribe "$@"
+            ;;
+        "chat")
+            cmd_chat "$@"
+            ;;
+        "research")
+            cmd_research "$@"
+            ;;
+        "help"|"-h"|"--help")
+            print_usage
+            ;;
+        "version"|"-v"|"--version")
+            print_version
+            ;;
+        *)
+            echo -e "${RED}Unknown command: $command${NC}"
+            echo ""
+            print_usage
+            exit 1
+            ;;
+    esac
+}
+
+main "$@"

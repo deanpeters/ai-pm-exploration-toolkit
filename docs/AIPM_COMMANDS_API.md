@@ -1,50 +1,112 @@
-# 🤖 AIPM Commands API Reference
+# 🤖 AI PM Toolkit Commands Reference
 
-Complete reference for all AI PM Toolkit commands, structured like an API documentation.
+Complete reference for working AI PM Toolkit commands and consultation methods.
 
 ---
 
-## 🎯 Core Framework Commands
+## 🚀 AI Consultation Methods
 
-### Proof-of-Life (PoL) Probe Framework
+### Multi-Modal AI Integration
 
-The five flavors of PoL Probes for de-risking product decisions:
+The toolkit provides **three consultation pathways** to match your technical comfort level:
 
-#### `aipm learn [description]`
-**Purpose:** Feasibility Checks - 1-2 day spike-and-delete tests  
-**Parameters:**
-- `description` (string): Description of technical assumption to validate
+#### 1. External AI Systems (Drag & Drop Context)
+**Purpose:** Strategic consultation using Claude, ChatGPT, or Gemini  
+**Setup:** Upload 6 context files for immediate AI assistance
 **Usage:**
 ```bash
-aipm learn "GenAI prompt chains for customer support automation"
-aipm learn "Evaluate if local embedding-based search is feasible"
+# Files to drag into AI conversation:
+AI_CONSULTATION_CONTEXT.md          # Strategic overview
+TECHNICAL_SPECIFICATION.md          # Architecture details  
+CONSULTATION_TEMPLATES.md           # Ready-to-use prompts
+TOOLKIT_CONFIG_REFERENCE.json       # System configuration
+SAMPLE_OUTPUTS.md                   # Real examples
+QUICK_CONTEXT_SETUP.md              # 30-second setup
 ```
-**Returns:** Technical feasibility assessment with implementation guidance  
-**Status:** 🚨 **BROKEN** - Currently just echoes description
 
-#### `aipm fast [description]`
-**Purpose:** Task-Focused Tests - Validate specific user friction points  
-**Parameters:**
-- `description` (string): User experience scenario to test
+#### 2. Native Goose CLI Integration (Local AI Agent)
+**Purpose:** Autonomous AI analysis with direct toolkit access  
 **Usage:**
 ```bash
-aipm fast "test this checkout flow field label for conversion"
-aipm fast "validate onboarding step for friction points"
+# Strategic analysis sessions
+goose session --name pm_strategy_analysis
+goose session --name feasibility_check
+goose session --name competitor_analysis
+goose session --name feature_prioritization
+goose session --name user_research_analysis
 ```
-**Returns:** User friction analysis with specific recommendations  
-**Status:** 🚨 **BROKEN** - Currently just echoes description
 
-#### `aipm show [description]`
-**Purpose:** Narrative Prototypes - Create explainer demos for stakeholders  
-**Parameters:**
-- `description` (string): Demo scenario to create
+#### 3. VS Code + Continue Integration (Developer-Friendly)
+**Purpose:** AI assistance directly in development environment  
 **Usage:**
 ```bash
-aipm show "Loom-style walkthrough of AI-powered dashboard"
-aipm show "explainer video of smart notification workflow"
+# Open toolkit in VS Code
+code /Users/deanpeters/ai-pm-exploration-toolkit
+
+# Continue shortcuts:
+# Ctrl+I: Implementation questions
+# Ctrl+L: Strategic discussions
+# Ctrl+K: Documentation generation
 ```
-**Returns:** Visual prototype or demonstration artifact  
-**Status:** 🚨 **BROKEN** - Currently just echoes description
+
+---
+
+## 🎯 Working Toolkit Commands
+
+### Audio Intelligence Processing
+#### `python3 shared/audio_transcription.py [audio_file] [options]`
+**Purpose:** Extract structured PM insights from audio recordings  
+**Parameters:**
+- `audio_file` (string): Path to MP3/WAV file
+- `--use-case` (string): user_interviews, strategy_sessions, feedback_calls
+**Usage:**
+```bash
+python3 shared/audio_transcription.py interview.mp3 --use-case user_interviews
+python3 shared/audio_transcription.py --status  # Check system status
+```
+**Returns:** Structured insights with pain points, feature requests, action items
+
+### AI Strategic Thinking Partner
+#### `python3 shared/ai_chat.py [options]`
+**Purpose:** Interactive strategic guidance for product decisions  
+**Parameters:**
+- `--mode` (string): pm_assistant, analysis, planning
+- `--interactive` (flag): Enable interactive chat mode
+- `--model` (string): qwen2.5, deepseek-r1 (AI model selection)
+**Usage:**
+```bash
+python3 shared/ai_chat.py --mode pm_assistant --interactive
+python3 shared/ai_chat.py --mode analysis --model qwen2.5
+```
+**Returns:** Strategic frameworks, decision structures, investigation approaches
+
+### Synthetic Data Generation
+#### `python3 shared/data_generator.py [options]`
+**Purpose:** Create realistic user data for assumption testing  
+**Parameters:**
+- `--personas` (int): Number of personas to generate
+- `--industry` (string): saas, ecommerce, fintech, healthcare
+- `--role` (string): product_manager, developer, end_user
+**Usage:**
+```bash
+python3 shared/data_generator.py --personas 50 --industry saas
+python3 shared/data_generator.py --personas 25 --industry ecommerce --role end_user
+```
+**Returns:** JSON/CSV files with demographics, pain points, goals, scenarios
+
+### Market Research Automation
+#### `python3 shared/market_research.py [options]`
+**Purpose:** Competitive intelligence and market analysis  
+**Parameters:**
+- `--company` (string): Company name to research
+- `--industry` (string): Industry sector focus
+- `--depth` (string): basic, detailed, comprehensive
+**Usage:**
+```bash
+python3 shared/market_research.py --company "Notion"
+python3 shared/market_research.py --industry "project_management" --depth detailed
+```
+**Returns:** Business model analysis, competitive positioning, strategic insights
 
 #### `aipm experiment [description]`
 **Purpose:** Synthetic Data Simulations - Model system behavior at scale  

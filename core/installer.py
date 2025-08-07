@@ -69,14 +69,14 @@ class ToolkitInstaller:
 
     def _load_manifest(self) -> None:
         """Load and validate the toolkit manifest"""
-        manifest_path = self.script_dir / "toolkit.yaml"
+        manifest_path = self.script_dir / "toolkit.json"
         
         if not manifest_path.exists():
             raise InstallationError(f"Manifest file not found: {manifest_path}")
         
         try:
             with open(manifest_path, 'r') as f:
-                self.manifest = yaml.safe_load(f)
+                self.manifest = json.load(f)
         except Exception as e:
             raise InstallationError(f"Failed to load manifest: {e}")
         
@@ -87,6 +87,152 @@ class ToolkitInstaller:
         
         if self.verbose:
             print(f"{Colors.GREEN}✅ Loaded manifest with {len(self.manifest.get('tools', []))} tools{Colors.END}")
+
+    def _start_web_dashboard(self) -> bool:
+        """Start the web dashboard"""
+        if self.dry_run:
+            print(f"{Colors.YELLOW}[DRY RUN] Would start web dashboard at http://localhost:3000{Colors.END}")
+            return True
+        
+        try:
+            import subprocess
+            import os
+            import sys
+            
+            # Check if web app exists (go up one level from core/)
+            toolkit_root = self.script_dir.parent if self.script_dir.name == "core" else self.script_dir
+            web_app_path = toolkit_root / "web" / "app.py"
+            if not web_app_path.exists():
+                print(f"{Colors.RED}❌ Web app not found at {web_app_path}{Colors.END}")
+                return False
+            
+            # Start web dashboard in background using Popen (non-blocking)
+            web_process = subprocess.Popen(
+                ["python3", "web/app.py"],
+                cwd=toolkit_root,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True  # Detach from parent process
+            )
+            
+            # Save the PID for later cleanup if needed
+            pid_file = toolkit_root / "web_dashboard.pid"
+            with open(pid_file, 'w') as f:
+                f.write(str(web_process.pid))
+            
+            # Give it a moment to start
+            import time
+            time.sleep(2)  # Quick check, don't hold up installer
+            
+            # Quick port check (non-blocking)
+            try:
+                import socket
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.settimeout(1)  # 1 second timeout
+                result = sock.connect_ex(('localhost', 3000))
+                sock.close()
+                
+                if result == 0:
+                    print(f"{Colors.GREEN}✅ Web dashboard started at http://localhost:3000{Colors.END}")
+                else:
+                    print(f"{Colors.GREEN}✅ Web dashboard starting in background (PID: {web_process.pid}){Colors.END}")
+                    print(f"{Colors.CYAN}   → http://localhost:3000 (may take a few seconds){Colors.END}")
+                return True
+            except Exception:
+                print(f"{Colors.GREEN}✅ Web dashboard starting in background (PID: {web_process.pid}){Colors.END}")
+                print(f"{Colors.CYAN}   → http://localhost:3000 (may take a few seconds){Colors.END}")
+                return True
+            
+        except Exception as e:
+            print(f"{Colors.RED}❌ Failed to start web dashboard: {e}{Colors.END}")
+            print(f"{Colors.YELLOW}💡 Manual start: python3 web/app.py{Colors.END}")
+            return False
+
+    def _start_workflow_services(self) -> bool:
+        """Start workflow services using docker-compose"""
+        if self.dry_run:
+            print(f"{Colors.YELLOW}[DRY RUN] Would start workflow services{Colors.END}")
+            return True
+        
+        try:
+            # Fix path - workflows dir is at toolkit root, not in core/
+            toolkit_root = self.script_dir.parent if self.script_dir.name == "core" else self.script_dir
+            workflows_dir = toolkit_root / "workflows"
+            if not workflows_dir.exists():
+                print(f"{Colors.YELLOW}⚠️  Workflows directory not found at {workflows_dir}{Colors.END}")
+                return True
+            
+            # Start essential services including Langflow and Jupyter
+            services = ["n8n", "langflow", "tooljet"]
+            
+            for service in services:
+                compose_file = workflows_dir / f"docker-compose.{service}.yml"
+                if compose_file.exists():
+                    try:
+                        # Use subprocess.run with timeout for better feedback
+                        result = subprocess.run(
+                            ["docker-compose", "-f", str(compose_file), "up", "-d"],
+                            cwd=workflows_dir,
+                            capture_output=True,
+                            text=True,
+                            timeout=45  # Allow time for Docker to pull images
+                        )
+                        
+                        if result.returncode == 0:
+                            print(f"{Colors.GREEN}✅ Started {service} service{Colors.END}")
+                        else:
+                            print(f"{Colors.RED}❌ Failed to start {service}: {result.stderr.strip()}{Colors.END}")
+                            
+                    except subprocess.TimeoutExpired:
+                        print(f"{Colors.YELLOW}⚠️  {service} starting in background (taking longer than expected){Colors.END}")
+                    except Exception as e:
+                        print(f"{Colors.RED}❌ Error starting {service}: {e}{Colors.END}")
+                        print(f"{Colors.YELLOW}💡 Manual start: cd workflows && docker-compose -f docker-compose.{service}.yml up -d{Colors.END}")
+                else:
+                    print(f"{Colors.YELLOW}⚠️  {service} compose file not found at {compose_file}{Colors.END}")
+            
+            return True
+            
+        except Exception as e:
+            print(f"{Colors.YELLOW}⚠️  Workflow services may need manual start: {e}{Colors.END}")
+            return True
+
+    def _start_jupyter_lab(self) -> bool:
+        """Start Jupyter Lab"""
+        if self.dry_run:
+            print(f"{Colors.YELLOW}[DRY RUN] Would start Jupyter Lab at http://localhost:8888{Colors.END}")
+            return True
+        
+        try:
+            # Check if jupyter-lab is available
+            result = subprocess.run(["which", "jupyter-lab"], capture_output=True)
+            if result.returncode != 0:
+                print(f"{Colors.YELLOW}⚠️  Jupyter Lab not found, skipping{Colors.END}")
+                return True
+            
+            # Start Jupyter Lab in background
+            toolkit_root = self.script_dir.parent if self.script_dir.name == "core" else self.script_dir
+            
+            jupyter_process = subprocess.Popen(
+                ["jupyter-lab", "--port=8888", "--no-browser", "--allow-root"],
+                cwd=toolkit_root,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                start_new_session=True
+            )
+            
+            # Save PID
+            pid_file = toolkit_root / "jupyter_lab.pid"
+            with open(pid_file, 'w') as f:
+                f.write(str(jupyter_process.pid))
+            
+            print(f"{Colors.GREEN}✅ Jupyter Lab started (PID: {jupyter_process.pid}){Colors.END}")
+            return True
+            
+        except Exception as e:
+            print(f"{Colors.RED}❌ Failed to start Jupyter Lab: {e}{Colors.END}")
+            print(f"{Colors.YELLOW}💡 Manual start: jupyter-lab --port=8888 --no-browser{Colors.END}")
+            return False
 
     def _run_command(self, command: str, timeout: int = 300) -> Tuple[bool, str]:
         """Execute a command with timeout and error handling"""
@@ -325,7 +471,7 @@ class ToolkitInstaller:
 # Generated by installer.py on {time.strftime('%Y-%m-%d %H:%M:%S')}
 
 export AIPM_TOOLKIT_DIR="{self.toolkit_dir}"
-export AIPM_REPO_DIR="{self.script_dir}"
+export AIPM_REPO_DIR="{self.script_dir.parent if self.script_dir.name == 'core' else self.script_dir}"
 export AIPM_VERSION="1.0"
 
 # Quick AI Research & Analysis
@@ -339,16 +485,16 @@ alias aipm_write='echo "Start AI writing partner: aider [filename.md]"'
 alias aipm_prototype_demo='echo "Create visual demo: aider [filename.html]"'
 
 # Visual Workflow & Automation
-alias aipm_workflows='echo "🚀 Starting visual workflow tools..." && cd "$AIPM_REPO_DIR/workflow-tools" && ./start-workflows.sh'
-alias aipm_workflows_status='cd "$AIPM_REPO_DIR/workflow-tools" && ./status-workflows.sh'
-alias aipm_workflows_stop='cd "$AIPM_REPO_DIR/workflow-tools" && ./stop-workflows.sh'
+alias aipm_workflows='echo "🚀 Starting visual workflow tools..." && cd "$AIPM_REPO_DIR/workflows" && ./start-workflows.sh'
+alias aipm_workflows_status='cd "$AIPM_REPO_DIR/workflows" && ./status-workflows.sh'
+alias aipm_workflows_stop='cd "$AIPM_REPO_DIR/workflows" && ./stop-workflows.sh'
 alias aipm_workflows_restart='aipm_workflows_stop && sleep 3 && aipm_workflows'
-alias aipm_workflows_fix='cd "$AIPM_REPO_DIR/workflow-tools" && ./fix-workflows.sh'
-alias aipm_workflows_cleanup='cd "$AIPM_REPO_DIR/workflow-tools" && ./cleanup-workflows.sh'
-alias aipm_workflows_tooljet='cd "$AIPM_REPO_DIR/workflow-tools" && ./orchestrate-workflows.sh tooljet'
-alias aipm_workflows_typebot='cd "$AIPM_REPO_DIR/workflow-tools" && ./orchestrate-workflows.sh typebot'  
-alias aipm_workflows_penpot='cd "$AIPM_REPO_DIR/workflow-tools" && ./orchestrate-workflows.sh penpot'
-alias aipm_workflows_all='cd "$AIPM_REPO_DIR/workflow-tools" && ./orchestrate-workflows.sh all'
+alias aipm_workflows_fix='cd "$AIPM_REPO_DIR/workflows" && ./fix-workflows.sh'
+alias aipm_workflows_cleanup='cd "$AIPM_REPO_DIR/workflows" && ./cleanup-workflows.sh'
+alias aipm_workflows_tooljet='cd "$AIPM_REPO_DIR/workflows" && ./orchestrate-workflows.sh tooljet'
+alias aipm_workflows_typebot='cd "$AIPM_REPO_DIR/workflows" && ./orchestrate-workflows.sh typebot'  
+alias aipm_workflows_penpot='cd "$AIPM_REPO_DIR/workflows" && ./orchestrate-workflows.sh penpot'
+alias aipm_workflows_all='cd "$AIPM_REPO_DIR/workflows" && ./orchestrate-workflows.sh all'
 alias aipm_automate='echo "🚀 Launching n8n workflow builder..." && aipm_workflows_status | grep -q "n8n - Running" || aipm_workflows && echo "n8n ready at: http://localhost:5678" && open http://localhost:5678'
 alias aipm_demo_builder='echo "🚀 Launching ToolJet dashboard builder..." && aipm_workflows_status | grep -q "ToolJet - Running" || aipm_workflows_tooljet && echo "ToolJet ready at: http://localhost:8082" && open http://localhost:8082'
 
@@ -369,15 +515,20 @@ alias aipm_experiment='echo "🧪 Synthetic Data Simulation: Model user behavior
 alias aipm_compete='echo "🥊 Vibe-Coded Probe: Build convincing fake frontend for testing"'
 
 # Audio Intelligence Tools
-alias aipm_transcribe='python3 "$AIPM_REPO_DIR/shared/audio_transcription.py"'
-alias aipm_audio_workflows='python3 "$AIPM_REPO_DIR/shared/pm_audio_workflows.py" --list'
-alias aipm_user_interview='python3 "$AIPM_REPO_DIR/shared/pm_audio_workflows.py" --workflow user_interview_analysis --audio'
-alias aipm_meeting_summary='python3 "$AIPM_REPO_DIR/shared/pm_audio_workflows.py" --workflow stakeholder_meeting_summary --audio'
-alias aipm_demo_feedback='python3 "$AIPM_REPO_DIR/shared/pm_audio_workflows.py" --workflow demo_feedback_analysis --audio'
+alias aipm_transcribe='python3 "$AIPM_REPO_DIR/src/audio_transcription.py"'
+alias aipm_audio_workflows='python3 "$AIPM_REPO_DIR/src/pm_audio_workflows.py" --list'
+alias aipm_user_interview='python3 "$AIPM_REPO_DIR/src/pm_audio_workflows.py" --workflow user_interview_analysis --audio'
+alias aipm_meeting_summary='python3 "$AIPM_REPO_DIR/src/pm_audio_workflows.py" --workflow stakeholder_meeting_summary --audio'
+alias aipm_demo_feedback='python3 "$AIPM_REPO_DIR/src/pm_audio_workflows.py" --workflow demo_feedback_analysis --audio'
+
+# Web Dashboard & Hub
+alias aipm_dashboard='echo "🚀 Starting AI PM Toolkit Web Dashboard..." && cd "$AIPM_REPO_DIR" && python3 web/app.py'
+alias aipm_hub='aipm_dashboard'
+alias aipm_web='aipm_dashboard'
 
 # Help & Status
 alias aipm_status='python3 "$AIPM_REPO_DIR/installer.py" --status'
-alias aipm_help='echo "🧪 AI PM Toolkit - Your AI-Powered Product Management Arsenal" && echo "" && echo "🎯 QUICK START:" && echo "  • Read docs/PM_FIRST_STEPS.md: cat \"$AIPM_REPO_DIR/docs/PM_FIRST_STEPS.md\"" && echo "  • Visit learning-guide: open \"$AIPM_REPO_DIR/learning-guide/index.html\"" && echo "  • Troubleshooting guide: cat \"$AIPM_REPO_DIR/docs/TROUBLESHOOTING_GUIDE.md\"" && echo "" && echo "🔍 RESEARCH & INTELLIGENCE:" && echo "  aipm_research_quick \"question\" - Instant expert analysis" && echo "  aipm_company_lookup TICKER - Financial intelligence on any public company" && echo "  aipm_market_research - Launch comprehensive research tools" && echo "" && echo "✍️ AI COLLABORATION:" && echo "  aipm_brainstorm - Start AI pair programming session" && echo "  aipm_write filename.md - Co-create documents with AI" && echo "  aipm_prototype_demo - Build interactive demos with AI" && echo "" && echo "🎙️ AUDIO INTELLIGENCE:" && echo "  aipm_transcribe audio_file.mp3 - Transform audio into PM insights" && echo "  aipm_audio_workflows - List available PM audio processing workflows" && echo "  aipm_user_interview audio.mp3 - Extract user pain points & requests" && echo "  aipm_meeting_summary audio.wav - Generate executive meeting summaries" && echo "" && echo "🔧 VISUAL BUILDERS:" && echo "  aipm_workflows - Start essential tools (n8n)" && echo "  aipm_workflows_tooljet - Start ToolJet low-code platform" && echo "  aipm_workflows_typebot - Start Typebot conversational forms" && echo "  aipm_workflows_penpot - Start Penpot design platform" && echo "  aipm_workflows_all - Start all workflow tools" && echo "  aipm_workflows_status - Check service status" && echo "  aipm_workflows_fix - Fix common issues" && echo "    → n8n automation: http://localhost:5678" && echo "    → ToolJet dashboards: http://localhost:8082" && echo "    → Typebot forms: http://localhost:8083" && echo "    → Penpot design: http://localhost:8085" && echo "" && echo "📊 DATA & ANALYSIS:" && echo "  aipm_lab - Jupyter Lab data environment (http://localhost:8888)" && echo "  aipm_data_generator - Create synthetic test data" && echo "  • OpenBB Terminal - Financial data (openbb-terminal)" && echo "" && echo "🎨 DESIGN & KNOWLEDGE:" && echo "  aipm_design - Create diagrams (opens Excalidraw)" && echo "  aipm_knowledge - Knowledge management (opens Obsidian vault)" && echo "" && echo "⚡ POL PROBE FRAMEWORK:" && echo "  aipm_learn - Feasibility checks (1-2 day technical spikes)" && echo "  aipm_fast - Task-focused tests (validate specific user friction)" && echo "  aipm_show - Narrative prototypes (stakeholder demo creation)" && echo "  aipm_experiment - Synthetic data simulations (wind tunnel testing)" && echo "  aipm_compete - Vibe-coded probes (fake frontend + backend)" && echo "" && echo "📚 LEARNING RESOURCES:" && echo "  • Interactive Guide: open \"$AIPM_REPO_DIR/learning-guide/index.html\"" && echo "  • PM Playbooks: ls \"$AIPM_REPO_DIR/playbooks/\"" && echo "  • Tool Documentation: Each tool has help flags (-h, --help)" && echo "  • API Reference: cat \"$AIPM_REPO_DIR/docs/AIPM_COMMANDS_API.md\"" && echo "" && echo "🚨 TROUBLESHOOTING:" && echo "  • Workflow tools not starting? Run: aipm_workflows_fix" && echo "  • Container conflicts? Nuclear option: aipm_workflows_cleanup" && echo "  • Audio transcription issues? Check: aipm_transcribe --status" && echo "  • Port conflicts? Kill processes: sudo lsof -ti:PORT | xargs kill" && echo "  • Tool not found? Check installation: aipm_status" && echo "  • Full troubleshooting: cat \"$AIPM_REPO_DIR/docs/TROUBLESHOOTING_GUIDE.md\"" && echo "" && echo "💡 NEXT STEPS:" && echo "  cat \"$AIPM_REPO_DIR/docs/PM_FIRST_STEPS.md\"" && echo "  open \"$AIPM_REPO_DIR/learning-guide/index.html\""'
+alias aipm_help='echo "🧪 AI PM Toolkit - Your AI-Powered Product Management Arsenal" && echo "" && echo "🎯 NEW UNIFIED CLI:" && echo "  aipm data-gen --count=10 --type=b2b_saas - Generate synthetic personas" && echo "  aipm transcribe audio.mp3 --use-case=user_interviews - Audio analysis" && echo "  aipm chat --mode=pm_assistant --interactive - AI strategic partner" && echo "  aipm research --company=\"CompanyName\" - Market intelligence" && echo "  aipm help - Show this help" && echo "" && echo "🌐 QUICK START:" && echo "  aipm_dashboard - Launch web interface (http://localhost:3000)" && echo "  • Read docs: open -a MarkText \"$AIPM_REPO_DIR/docs/PM_FIRST_STEPS.md\"" && echo "  • Learning guide: open \"$AIPM_REPO_DIR/learning-guide/index.html\"" && echo "  • Troubleshooting: open -a MarkText \"$AIPM_REPO_DIR/docs/TROUBLESHOOTING_GUIDE.md\"" && echo "" && echo "🎙️ AUDIO INTELLIGENCE (Working):" && echo "  python3 \"$AIPM_REPO_DIR/src/audio_transcription.py\" audio.mp3 --use-case=user_interviews" && echo "  python3 \"$AIPM_REPO_DIR/src/pm_audio_workflows.py\" --list" && echo "" && echo "📊 DATA GENERATION (Working):" && echo "  python3 \"$AIPM_REPO_DIR/src/data_generator.py\" --count=10 --type=b2b_saas" && echo "  python3 \"$AIPM_REPO_DIR/src/ai_chat.py\" --mode=pm_assistant --interactive" && echo "" && echo "🔧 VISUAL BUILDERS (Working):" && echo "  aipm_workflows - Start workflow tools (n8n, etc)" && echo "  aipm_workflows_status - Check service status" && echo "  aipm_workflows_fix - Fix common issues" && echo "  aipm_lab - Jupyter Lab environment" && echo "    → n8n automation: http://localhost:5678" && echo "    → ToolJet dashboards: http://localhost:8082" && echo "    → Typebot forms: http://localhost:8083" && echo "" && echo "📚 LEARNING RESOURCES:" && echo "  • Interactive Guide: open \"$AIPM_REPO_DIR/learning-guide/index.html\"" && echo "  • PM Playbooks: open \"$AIPM_REPO_DIR/playbooks/\"" && echo "  • API Reference: open -a MarkText \"$AIPM_REPO_DIR/docs/AIPM_COMMANDS_API.md\"" && echo "" && echo "⚠️ BROKEN COMMANDS (Use alternatives above):" && echo "  aipm_research_quick, aipm_company_lookup, aipm_transcribe (old paths)" && echo "  aipm_brainstorm, aipm_write, aipm_prototype_demo (not implemented)" && echo "  All PoL probe commands (aipm_learn, aipm_fast, etc.) - use new aipm CLI" && echo "" && echo "💡 NEXT STEPS:" && echo "  1. Try: aipm data-gen --count=5 --type=b2b_saas" && echo "  2. Read: open -a MarkText \"$AIPM_REPO_DIR/docs/PM_FIRST_STEPS.md\"" && echo "  3. Explore: open \"$AIPM_REPO_DIR/learning-guide/index.html\""'
 
 echo "🧪 AI PM Toolkit environment loaded"
 echo "Type 'aipm_help' for available commands"
@@ -510,26 +661,45 @@ echo "Type 'aipm_help' for available commands"
             for tool in failed_tools:
                 print(f"  • {tool['name']}: {tool['message']}")
         
+        # Start services after installation
+        print(f"\n{Colors.CYAN}{Colors.BOLD}🚀 Starting Services{Colors.END}")
+        print(f"{Colors.CYAN}{'=' * 50}{Colors.END}")
+        
+        # Start web dashboard
+        print("Starting web dashboard...")
+        self._start_web_dashboard()
+        
+        # Start Jupyter Lab
+        print("Starting Jupyter Lab...")
+        self._start_jupyter_lab()
+        
+        # Start workflow services
+        print("Starting workflow services...")
+        self._start_workflow_services()
+        
         print(f"\n{Colors.GREEN}{Colors.BOLD}🎉 Welcome to the AI PM Toolkit!{Colors.END}")
         print(f"{Colors.GREEN}{'=' * 50}{Colors.END}")
-        print(f"{Colors.CYAN}✨ Installation complete! Here's how to get started:{Colors.END}")
+        print(f"{Colors.CYAN}✨ Installation complete! Services are starting up:{Colors.END}")
         print()
         print(f"{Colors.BOLD}1. Restart your terminal{Colors.END} or run: {Colors.YELLOW}source ~/.zshrc{Colors.END}")
         print(f"{Colors.BOLD}2. Try your first command:{Colors.END} {Colors.YELLOW}aipm_help{Colors.END}")
         print(f"{Colors.BOLD}3. Start learning:{Colors.END}")
         print(f"   • {Colors.CYAN}Interactive Guide:{Colors.END} open learning-guide/index.html")
-        print(f"   • {Colors.CYAN}First Steps:{Colors.END} cat docs/PM_FIRST_STEPS.md")
+        print(f"   • {Colors.CYAN}First Steps:{Colors.END} open -a MarkText docs/PM_FIRST_STEPS.md")
         print()
         print(f"{Colors.BOLD}🚀 Quick wins to try right now:{Colors.END}")
         print(f"   • {Colors.YELLOW}aipm_research_quick \"AI trends in product management\"{Colors.END}")
         print(f"   • {Colors.YELLOW}aipm_lab{Colors.END} - Launch data analysis environment")
         print(f"   • {Colors.YELLOW}aipm_workflows{Colors.END} - Start visual workflow builders")
         print()
-        print(f"{Colors.BOLD}🔗 Direct tool access:{Colors.END}")
-        print(f"   • Jupyter Lab: {Colors.BLUE}http://localhost:8888{Colors.END}")
-        print(f"   • n8n Workflows: {Colors.BLUE}http://localhost:5678{Colors.END}")
-        print(f"   • Langflow AI: {Colors.BLUE}http://localhost:7860{Colors.END}")
-        print(f"   • ToolJet Dashboards: {Colors.BLUE}http://localhost:8082{Colors.END}")
+        print(f"{Colors.BOLD}🔗 Services available:{Colors.END}")
+        print(f"   • Web Dashboard: {Colors.GREEN}http://localhost:3000{Colors.END} ✅")
+        print(f"   • Jupyter Lab: {Colors.GREEN}http://localhost:8888{Colors.END} ✅") 
+        print(f"   • n8n Workflows: {Colors.GREEN}http://localhost:5678{Colors.END} ✅")
+        print(f"   • Langflow AI: {Colors.GREEN}http://localhost:7860{Colors.END} ✅")
+        print(f"   • ToolJet Dashboards: {Colors.YELLOW}http://localhost:8082{Colors.END} (may need manual start)")
+        print()
+        print(f"{Colors.GREEN}💡 To manually start missing services: cd workflows && ./start-workflows.sh{Colors.END}")
         print()
         print(f"{Colors.YELLOW}💡 Tip: Run {Colors.BOLD}aipm_help{Colors.END}{Colors.YELLOW} anytime for the complete command reference!{Colors.END}")
 

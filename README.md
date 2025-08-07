@@ -48,6 +48,58 @@ python3 core/installer.py
 - **Workflow Automation** - Access to Docker-based workflow tools
 
 ### 💻 **Command Line Tools**
+- **Audio Processing**: `python3 shared/audio_transcription.py interview.mp3 --use-case user_interviews`
+- **AI Strategic Chat**: `python3 shared/ai_chat.py --mode pm_assistant --interactive`
+- **Data Generation**: `python3 shared/data_generator.py --personas 50 --industry saas`
+- **Market Research**: `python3 shared/market_research.py --company "CompanyName"`
+
+### 🚀 **AI Consultation Methods** (Multiple Options)
+
+#### External AI Systems (Drag & Drop Context)
+Perfect for strategic consultation using Claude, ChatGPT, or Gemini:
+1. Upload these 6 context files to your AI project:
+   - `AI_CONSULTATION_CONTEXT.md`
+   - `TECHNICAL_SPECIFICATION.md` 
+   - `CONSULTATION_TEMPLATES.md`
+   - `TOOLKIT_CONFIG_REFERENCE.json`
+   - `SAMPLE_OUTPUTS.md`
+   - `QUICK_CONTEXT_SETUP.md`
+2. Use ready-made templates for common PM scenarios
+3. Get strategic guidance with full toolkit context
+
+#### Native Goose CLI Integration (Local AI Agent)
+Autonomous AI analysis with direct toolkit access:
+```bash
+# Start strategic analysis session
+goose session --name pm_strategy_analysis
+
+# Pre-built workflows for common PM challenges
+goose session --name feasibility_check
+goose session --name competitor_analysis
+goose session --name feature_prioritization
+```
+
+#### VS Code + Continue Integration (Developer-Friendly)
+AI assistance directly in your development environment:
+```bash
+# Open toolkit in VS Code
+code /Users/deanpeters/ai-pm-exploration-toolkit
+
+# Use Continue shortcuts:
+# Ctrl+I: Ask about implementation
+# Ctrl+L: Strategic AI discussions
+# Ctrl+K: Generate PM documentation
+```
+
+#### Visual Documentation (All Users)
+Beautiful markdown reading experience with MarkText:
+```bash
+# Enhanced documentation viewing (requires MarkText installation)
+open -a MarkText AI_CONSULTATION_CONTEXT.md
+
+# Or use the aipm_marktext alias if setup.sh was run
+aipm_marktext AI_CONSULTATION_CONTEXT.md
+```
 - **`python3 shared/audio_transcription.py`** - Speech-to-text with PM insights
 - **`python3 shared/ai_chat.py`** - Interactive AI conversations
 - **`python3 shared/market_research.py`** - Company research automation
