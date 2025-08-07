@@ -1,0 +1,464 @@
+/* AI PM Toolkit - Clean, Simple Styling */
+
+:root {
+    --primary-blue: #2563eb;
+    --primary-cyan: #06b6d4; 
+    --success-green: #10b981;
+    --warning-yellow: #f59e0b;
+    --error-red: #ef4444;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-600: #4b5563;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--gray-800);
+    background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--primary-blue) 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
+
+.version {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Main Content */
+main {
+    background: white;
+    margin: 2rem auto;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.intro h2 {
+    color: var(--gray-900);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.intro p {
+    color: var(--gray-600);
+    font-size: 1.1rem;
+}
+
+/* Interface Toggle */
+.interface-toggle {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.toggle-buttons {
+    display: inline-flex;
+    background: var(--gray-100);
+    border-radius: 12px;
+    padding: 4px;
+}
+
+.toggle-buttons button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--gray-600);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toggle-buttons button.active {
+    background: white;
+    color: var(--primary-blue);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-buttons button:hover:not(.active) {
+    color: var(--gray-800);
+}
+
+/* Tools Grid */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.tool-card {
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.2s;
+}
+
+.tool-card:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.tool-header {
+    display: flex;
+    justify-content: between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.tool-header h3 {
+    color: var(--gray-900);
+    font-size: 1.3rem;
+    flex: 1;
+}
+
+.status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-left: 1rem;
+}
+
+.status-working {
+    background: var(--success-green);
+    color: white;
+}
+
+.status-planned {
+    background: var(--warning-yellow);
+    color: white;
+}
+
+.tool-description {
+    color: var(--gray-600);
+    margin-bottom: 1.5rem;
+}
+
+.experiences h4 {
+    color: var(--gray-800);
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.experience-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    background: white;
+    color: var(--gray-800);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.experience-btn:hover:not(:disabled) {
+    border-color: var(--primary-blue);
+    background: var(--gray-50);
+}
+
+.experience-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.experience-btn small {
+    display: block;
+    color: var(--gray-600);
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+.quick-actions {
+    margin-top: 1rem;
+}
+
+.btn-primary {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-secondary {
+    background: var(--gray-100);
+    color: var(--gray-800);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: var(--gray-200);
+}
+
+.coming-soon {
+    text-align: center;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 8px;
+    color: var(--gray-600);
+    margin-top: 1rem;
+}
+
+/* Quick Access */
+.quick-access {
+    border-top: 1px solid var(--gray-200);
+    padding-top: 2rem;
+    text-align: center;
+}
+
+.quick-access h3 {
+    margin-bottom: 1rem;
+    color: var(--gray-900);
+}
+
+.quick-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.quick-link {
+    background: var(--gray-100);
+    color: var(--gray-800);
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quick-link:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+/* CLI Bridge Styles */
+.cli-instructions {
+    margin-bottom: 2rem;
+}
+
+.cli-instructions h2 {
+    color: var(--gray-900);
+    margin-bottom: 1rem;
+}
+
+.method-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.method-card h3 {
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+}
+
+.command-box {
+    display: flex;
+    align-items: center;
+    background: var(--gray-900);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    margin: 1rem 0;
+}
+
+.command-box code {
+    flex: 1;
+    font-size: 1.1rem;
+}
+
+.copy-btn {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: 1rem;
+}
+
+.copy-btn:hover {
+    background: #1d4ed8;
+}
+
+.context-info {
+    background: var(--primary-cyan);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.context-info h3 {
+    margin-bottom: 1rem;
+}
+
+.context-info ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.context-info li {
+    margin-bottom: 0.5rem;
+}
+
+.step-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.step-number {
+    background: var(--primary-blue);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+}
+
+.step-content p {
+    color: var(--gray-600);
+}
+
+.step-content code {
+    background: var(--gray-100);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'SF Mono', Consolas, monospace;
+}
+
+.back-option {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+/* Footer */
+.footer {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 0;
+    margin-top: 2rem;
+}
+
+.footer p {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .toggle-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .command-box {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .copy-btn {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+}

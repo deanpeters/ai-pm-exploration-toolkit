@@ -1,0 +1,45 @@
+services:
+  langflow:
+    image: langflowai/langflow:latest
+    container_name: aipm-langflow
+    restart: unless-stopped
+    networks:
+      - aipm_workflow_network
+    ports:
+      - "7860:7860"
+    environment:
+      # Basic Langflow configuration
+      - LANGFLOW_HOST=0.0.0.0
+      - LANGFLOW_PORT=7860
+      - LANGFLOW_DATABASE_URL=sqlite:///./langflow.db
+      
+      # Ollama integration for local AI models
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      
+    volumes:
+      # Persist Langflow data
+      - aipm_langflow_data:/app/langflow
+      
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7860/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+      
+    labels:
+      - "ai-pm-toolkit.service=langflow"
+      - "ai-pm-toolkit.category=visual-workflows" 
+      - "ai-pm-toolkit.tier=essential"
+      - "ai-pm-toolkit.description=Visual AI workflow builder for Product Managers"
+      - "ai-pm-toolkit.url=http://localhost:7860"
+
+networks:
+  aipm_workflow_network:
+    external: true
+
+volumes:
+  aipm_langflow_data:
+    driver: local
+    labels:
+      - "ai-pm-toolkit.component=langflow-data"

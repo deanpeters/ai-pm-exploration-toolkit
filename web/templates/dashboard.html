@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI PM Toolkit - Learning Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🧪 AI PM Toolkit</h1>
+            <p class="subtitle">Proof-of-Life Probes for Product Managers</p>
+            <div class="version">v{{ toolkit.version or '1.0.0' }}</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h2>Choose Your Learning Experience</h2>
+            <p>Use the <strong>cheapest prototype that tells the harshest truth</strong>. 
+               Start with simple tools, progress to advanced AI-powered workflows.</p>
+        </section>
+
+        <section class="interface-toggle">
+            <div class="toggle-buttons">
+                <button class="active" id="web-mode">🌐 Web Interface</button>
+                <button id="cli-mode">💻 CLI Dashboard</button>
+            </div>
+        </section>
+
+        <section class="tools-grid">
+            {% for tool in tools %}
+            <div class="tool-card" data-tool-id="{{ tool.id }}">
+                <div class="tool-header">
+                    <h3>{{ tool.name }}</h3>
+                    <span class="status status-{{ tool.status }}">{{ tool.status }}</span>
+                </div>
+                <p class="tool-description">{{ tool.description }}</p>
+                
+                <div class="experiences">
+                    <h4>Choose Experience:</h4>
+                    {% for exp_id in tool.experiences %}
+                        {% set exp = experiences[exp_id] %}
+                        <button class="experience-btn" 
+                                data-tool="{{ tool.id }}" 
+                                data-experience="{{ exp_id }}"
+                                {% if tool.status != 'working' %}disabled{% endif %}>
+                            {{ exp.name }}
+                            <small>{{ exp.description }}</small>
+                        </button>
+                    {% endfor %}
+                </div>
+
+                {% if tool.status == 'working' %}
+                    <div class="quick-actions">
+                        <a href="/tool/{{ tool.id }}" class="btn-primary">
+                            🚀 Quick Start
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="coming-soon">
+                        <span>🚧 Coming in Phase {{ '2' if tool.status == 'planned' else '3' }}</span>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+
+        <section class="quick-access">
+            <h3>Quick Access</h3>
+            <div class="quick-links">
+                <a href="/cli-bridge" class="quick-link">
+                    💻 Launch CLI Dashboard
+                </a>
+                <button onclick="checkStatus()" class="quick-link">
+                    ❤️ System Status
+                </button>
+                <a href="https://github.com/yourusername/ai-pm-exploration-toolkit" 
+                   target="_blank" class="quick-link">
+                    📚 Documentation
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>💡 <strong>Remember:</strong> These are Proof-of-Life Probes - reconnaissance missions, not production builds.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Interface toggle
+        document.getElementById('cli-mode').addEventListener('click', function() {
+            window.location.href = '/cli-bridge';
+        });
+
+        // Tool launch function (for experience buttons)
+        function launchTool(toolId, experience) {
+            window.location.href = `/tool/${toolId}?experience=${experience}`;
+        }
+
+        // System status check
+        function checkStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    alert(`✅ System Status: ${data.status}\n📦 Version: ${data.version}\n🛠️ Tools: ${data.tools_count}\n🖥️ Interfaces: ${data.interfaces.join(', ')}`);
+                })
+                .catch(error => {
+                    alert('❌ Error checking status: ' + error);
+                });
+        }
+
+        // Experience button handling
+        document.querySelectorAll('.experience-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tool = this.dataset.tool;
+                const experience = this.dataset.experience;
+                launchTool(tool, experience);
+            });
+        });
+    </script>
+</body>
+</html>

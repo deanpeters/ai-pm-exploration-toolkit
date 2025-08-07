@@ -1,0 +1,627 @@
+<!-- Data Generation Tool - Web Interface -->
+<div class="data-gen-tool">
+    <section class="experience-selector">
+        <h2>🎭 Synthetic Data Generation</h2>
+        <p>Generate realistic user personas for product validation and testing</p>
+        
+        <div class="experience-grid">
+            <div class="experience-card" id="just-do-it">
+                <div class="experience-header">
+                    <h3>🚀 Just Do It</h3>
+                    <span class="complexity">Simple</span>
+                </div>
+                <p>Generate personas right now in current directory</p>
+                <div class="quick-form">
+                    <div class="form-row">
+                        <label>Count:</label>
+                        <select id="quick-count">
+                            <option value="5">5 personas</option>
+                            <option value="10" selected>10 personas</option>
+                            <option value="25">25 personas</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>Type:</label>
+                        <select id="quick-type">
+                            <option value="b2b_saas" selected>B2B SaaS</option>
+                            <option value="b2c_consumer">B2C Consumer</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="generateQuick()">Generate Now</button>
+                </div>
+            </div>
+
+            <div class="experience-card" id="learn-and-do">
+                <div class="experience-header">
+                    <h3>🎓 Learn & Do</h3>
+                    <span class="complexity">Educational</span>
+                </div>
+                <p>Understand persona generation while creating data</p>
+                <div class="learn-form">
+                    <div class="form-section">
+                        <h4>📊 Data Configuration</h4>
+                        <div class="form-row">
+                            <label>Number of personas:</label>
+                            <input type="range" id="learn-count" min="1" max="50" value="10" oninput="updateCount(this.value)">
+                            <span id="count-display">10</span>
+                        </div>
+                        
+                        <div class="form-row">
+                            <label>Persona type:</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="learn-type" value="b2b_saas" checked> B2B SaaS Professionals</label>
+                                <label><input type="radio" name="learn-type" value="b2c_consumer"> B2C Consumers</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Include data fields:</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="include-demo" checked> Demographics (age, location, company size)</label>
+                                <label><input type="checkbox" name="include-psycho" checked> Psychographics (personality, decision style)</label>
+                                <label><input type="checkbox" name="include-pain" checked> Pain points & challenges</label>
+                                <label><input type="checkbox" name="include-goals" checked> Goals & objectives</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>📁 Output Configuration</h4>
+                        <div class="form-row">
+                            <label>Working directory:</label>
+                            <input type="text" id="learn-dir" placeholder="Current directory" value="">
+                            <button type="button" onclick="selectDirectory()" class="btn-secondary">Choose</button>
+                        </div>
+                        
+                        <div class="form-row">
+                            <label>Output format:</label>
+                            <select id="learn-format">
+                                <option value="json" selected>JSON (structured data)</option>
+                                <option value="csv">CSV (spreadsheet)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="learning-preview">
+                        <h4>🔍 What You'll Learn</h4>
+                        <ul>
+                            <li>How synthetic data helps validate assumptions</li>
+                            <li>Persona structure for product research</li>
+                            <li>Data generation best practices</li>
+                            <li>File formats for different use cases</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn-primary" onclick="generateLearn()">Generate & Learn</button>
+                </div>
+            </div>
+
+            <div class="experience-card" id="cli-deep-dive">
+                <div class="experience-header">
+                    <h3>🔧 CLI Deep Dive</h3>
+                    <span class="complexity">Advanced</span>
+                </div>
+                <p>Master command-line data generation tools</p>
+                <div class="cli-bridge">
+                    <div class="cli-preview">
+                        <h4>📟 Command Preview</h4>
+                        <div class="command-box">
+                            <code id="cli-command">aipm data-gen --count=10 --type=b2b_saas --interactive</code>
+                            <button class="copy-btn" onclick="copyCommand()">📋 Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="cli-options">
+                        <h4>⚙️ Quick Configuration</h4>
+                        <div class="form-row">
+                            <label>Count:</label>
+                            <input type="number" id="cli-count" value="10" min="1" max="100" onchange="updateCliCommand()">
+                        </div>
+                        <div class="form-row">
+                            <label>Type:</label>
+                            <select id="cli-type" onchange="updateCliCommand()">
+                                <option value="b2b_saas">B2B SaaS</option>
+                                <option value="b2c_consumer">B2C Consumer</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Working Directory:</label>
+                            <input type="text" id="cli-dir" placeholder="." onchange="updateCliCommand()">
+                        </div>
+                    </div>
+
+                    <div class="cli-instructions">
+                        <h4>🚀 Next Steps</h4>
+                        <ol>
+                            <li>Copy the command above</li>
+                            <li>Open your terminal</li>
+                            <li>Navigate to your project directory</li>
+                            <li>Paste and run the command</li>
+                        </ol>
+                    </div>
+
+                    <button class="btn-secondary" onclick="launchCliDashboard()">Launch CLI Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results section (hidden initially) -->
+    <section class="results-section" id="results" style="display: none;">
+        <h3>📊 Generation Results</h3>
+        <div class="results-content">
+            <div class="result-summary" id="result-summary"></div>
+            <div class="result-stats" id="result-stats"></div>
+            <div class="result-sample" id="result-sample"></div>
+            <div class="result-actions">
+                <button class="btn-secondary" onclick="hideResults()">Generate More</button>
+                <button class="btn-primary" onclick="downloadResults()">Download File</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+/* Data Generation Tool Specific Styles */
+.data-gen-tool {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.experience-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+.experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.experience-header h3 {
+    margin: 0;
+    color: var(--gray-900);
+}
+
+.complexity {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 1rem;
+}
+
+.form-section h4 {
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.form-row label {
+    min-width: 120px;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.form-row input, .form-row select {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.form-row input[type="range"] {
+    flex: 1;
+}
+
+.radio-group, .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.radio-group label, .checkbox-group label {
+    min-width: auto;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.learning-preview {
+    background: var(--primary-cyan);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+}
+
+.learning-preview h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.learning-preview ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.learning-preview li {
+    margin-bottom: 0.5rem;
+}
+
+.cli-preview {
+    margin-bottom: 1.5rem;
+}
+
+.cli-preview h4 {
+    margin-bottom: 0.5rem;
+}
+
+.command-box {
+    display: flex;
+    align-items: center;
+    background: var(--gray-900);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    margin: 0.5rem 0;
+}
+
+.command-box code {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.copy-btn {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+}
+
+.copy-btn:hover {
+    background: #1d4ed8;
+}
+
+.cli-instructions {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.cli-instructions ol {
+    margin: 0.5rem 0 0 1rem;
+    padding: 0;
+}
+
+.cli-instructions li {
+    margin-bottom: 0.5rem;
+}
+
+.results-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--gray-200);
+}
+
+.results-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.result-summary, .result-stats {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.result-sample {
+    grid-column: 1 / -1;
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.result-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .experience-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .form-row label {
+        min-width: auto;
+        margin-bottom: 0.5rem;
+    }
+    
+    .results-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .command-box {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .copy-btn {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+}
+</style>
+
+<script>
+// Global variables for data generation
+let lastGenerationResult = null;
+
+// Update count display for learn mode
+function updateCount(value) {
+    document.getElementById('count-display').textContent = value;
+}
+
+// Update CLI command preview
+function updateCliCommand() {
+    const count = document.getElementById('cli-count').value;
+    const type = document.getElementById('cli-type').value;
+    const dir = document.getElementById('cli-dir').value;
+    
+    let command = `aipm data-gen --count=${count} --type=${type}`;
+    if (dir && dir !== '.') {
+        command += ` --dir="${dir}"`;
+    }
+    command += ' --interactive';
+    
+    document.getElementById('cli-command').textContent = command;
+}
+
+// Copy CLI command to clipboard
+function copyCommand() {
+    const command = document.getElementById('cli-command').textContent;
+    navigator.clipboard.writeText(command).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 2000);
+    });
+}
+
+// Directory selection (placeholder - would need file API)
+function selectDirectory() {
+    // In a real implementation, this would use the File System Access API
+    // For now, just prompt for directory path
+    const dir = prompt('Enter directory path (or leave empty for current directory):', '');
+    if (dir !== null) {
+        document.getElementById('learn-dir').value = dir;
+    }
+}
+
+// Quick generation (Just Do It)
+async function generateQuick() {
+    const count = document.getElementById('quick-count').value;
+    const type = document.getElementById('quick-type').value;
+    
+    showLoading('Generating ' + count + ' ' + type + ' personas...');
+    
+    try {
+        const result = await callDataGenerator({
+            experience_type: 'just_do_it',
+            count: parseInt(count),
+            persona_type: type,
+            working_dir: '.'
+        });
+        
+        showResults(result);
+    } catch (error) {
+        showError('Generation failed: ' + error.message);
+    }
+}
+
+// Learn and do generation
+async function generateLearn() {
+    const count = document.getElementById('learn-count').value;
+    const type = document.querySelector('input[name="learn-type"]:checked').value;
+    const dir = document.getElementById('learn-dir').value || '.';
+    const format = document.getElementById('learn-format').value;
+    
+    // Get checkbox values
+    const includeDemographics = document.querySelector('input[name="include-demo"]').checked;
+    const includePsychographics = document.querySelector('input[name="include-psycho"]').checked;
+    const includePainPoints = document.querySelector('input[name="include-pain"]').checked;
+    const includeGoals = document.querySelector('input[name="include-goals"]').checked;
+    
+    showLoading('Generating detailed personas with learning explanations...');
+    
+    try {
+        const result = await callDataGenerator({
+            experience_type: 'learn_and_do',
+            count: parseInt(count),
+            persona_type: type,
+            working_dir: dir,
+            output_format: format,
+            include_demographics: includeDemographics,
+            include_psychographics: includePsychographics,
+            include_pain_points: includePainPoints,
+            include_goals: includeGoals
+        });
+        
+        showResults(result, true); // true for learning mode
+    } catch (error) {
+        showError('Generation failed: ' + error.message);
+    }
+}
+
+// Launch CLI dashboard
+function launchCliDashboard() {
+    // Show instructions for CLI
+    alert('Open your terminal and run:\n\naipm dashboard\n\nThen select "Synthetic Data Generation" from the menu.');
+}
+
+// Call the data generator API
+async function callDataGenerator(params) {
+    const response = await fetch('/api/generate-data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params)
+    });
+    
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+        throw new Error(result.error || 'Unknown error occurred');
+    }
+    
+    return result;
+}
+
+// Show loading state
+function showLoading(message) {
+    // Hide experience selector
+    document.querySelector('.experience-selector').style.opacity = '0.5';
+    
+    // Show loading message (you could create a proper loading overlay)
+    console.log('Loading:', message);
+}
+
+// Show results
+function showResults(result, isLearningMode = false) {
+    lastGenerationResult = result;
+    
+    // Restore experience selector
+    document.querySelector('.experience-selector').style.opacity = '1';
+    
+    // Populate results
+    document.getElementById('result-summary').innerHTML = `
+        <h4>✅ Generation Complete</h4>
+        <p><strong>File:</strong> ${result.output_file}</p>
+        <p><strong>Count:</strong> ${result.stats.total_personas} personas</p>
+        <p><strong>Type:</strong> ${result.config.persona_type}</p>
+    `;
+    
+    document.getElementById('result-stats').innerHTML = `
+        <h4>📊 Statistics</h4>
+        <p><strong>Average Age:</strong> ${result.stats.average_age}</p>
+        <p><strong>Unique Companies:</strong> ${result.stats.unique_companies}</p>
+        <p><strong>Top Title:</strong> ${Object.keys(result.stats.title_distribution)[0]}</p>
+    `;
+    
+    document.getElementById('result-sample').innerHTML = `
+        <h4>👤 Sample Persona</h4>
+        <pre>${JSON.stringify(result.sample_persona, null, 2)}</pre>
+    `;
+    
+    // Show results section
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    
+    if (isLearningMode) {
+        showLearningInsights(result);
+    }
+}
+
+// Show learning insights for learn mode
+function showLearningInsights(result) {
+    const insights = `
+        <div class="learning-insights">
+            <h4>🎓 What You Just Learned</h4>
+            <ul>
+                <li><strong>Data Structure:</strong> Each persona has demographics, psychographics, pain points, and goals</li>
+                <li><strong>Statistical Distribution:</strong> Data follows realistic patterns (company sizes, age ranges)</li>
+                <li><strong>Use Cases:</strong> This data can validate product assumptions and guide user research</li>
+                <li><strong>File Format:</strong> ${result.config.output_format.toUpperCase()} format chosen for ${result.config.output_format === 'json' ? 'structured analysis' : 'spreadsheet compatibility'}</li>
+            </ul>
+        </div>
+    `;
+    
+    document.getElementById('result-sample').innerHTML += insights;
+}
+
+// Show error message
+function showError(message) {
+    document.querySelector('.experience-selector').style.opacity = '1';
+    alert('Error: ' + message);
+}
+
+// Hide results and return to generation
+function hideResults() {
+    document.getElementById('results').style.display = 'none';
+}
+
+// Download results (placeholder)
+function downloadResults() {
+    if (lastGenerationResult) {
+        alert('In a real implementation, this would download: ' + lastGenerationResult.output_file);
+    }
+}
+
+// Initialize CLI command on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateCliCommand();
+});
+</script>

@@ -20,15 +20,19 @@ NETWORK_NAME="aipm_workflow_network"
 # Service definitions (service_name:compose_file:port:health_path)
 SERVICES=(
     "n8n:docker-compose.n8n.yml:5678:/"
+    "langflow:docker-compose.langflow.yml:7860:/health"
     "tooljet:docker-compose.tooljet.yml:8082:/"
     "typebot:docker-compose.typebot.yml:8083:/"
     "penpot:docker-compose.penpot.yml:8085:/"
 )
 
 # Service tiers
-TIER1_SERVICES=("n8n")                    # Essential - always started
-TIER2_SERVICES=("tooljet")                # Advanced - on-demand
+TIER1_SERVICES=("n8n" "langflow")        # Essential - always started
+TIER2_SERVICES=()                         # Advanced - on-demand (tooljet disabled on Apple Silicon)
 TIER3_SERVICES=("typebot" "penpot")       # Optional - on-demand
+
+# Services with known issues
+PROBLEMATIC_SERVICES=("tooljet")          # Skip these on Apple Silicon
 
 # Logging function
 log() {
@@ -362,8 +366,8 @@ start_all() {
     
     log INFO "=== QUICK ACCESS ==="
     echo "   • n8n Workflows: http://localhost:5678"
-    echo "   • ToolJet Dashboards: http://localhost:8082"
-    echo "   • Langflow AI: http://localhost:7860 (if started)"
+    echo "   • Langflow Visual AI: http://localhost:7860"
+    echo "   • ToolJet Dashboards: http://localhost:8082 (on-demand)"
     echo ""
     log INFO "Run 'aipm_workflows_status' to check service health"
     echo
@@ -452,7 +456,28 @@ main() {
             "$SCRIPT_DIR/manage-network.sh" remove || true
             log SUCCESS "Complete cleanup finished"
             ;;
-        tooljet|typebot|penpot)
+        tooljet)
+            check_docker || exit 1
+            setup_network || exit 1
+            log WARN "ToolJet has known compatibility issues on Apple Silicon"
+            log WARN "This may fail due to platform architecture mismatch"
+            log INFO "Attempting to start anyway..."
+            start_specific_service "$command" || {
+                log ERROR "ToolJet failed as expected on Apple Silicon"
+                log ERROR "Consider using alternatives:"
+                log ERROR "  • n8n for workflow automation"  
+                log ERROR "  • Typebot for form building"
+                log ERROR "  • Web-based tools for low-code development"
+                exit 1
+            }
+            ;;
+        langflow)
+            check_docker || exit 1
+            setup_network || exit 1
+            log INFO "Starting Langflow Visual AI Workflow Builder..."
+            start_specific_service "$command"
+            ;;
+        typebot|penpot)
             check_docker || exit 1
             setup_network || exit 1
             start_specific_service "$command"
@@ -462,11 +487,94 @@ main() {
             setup_network || exit 1
             cleanup_existing
             
-            # Start all services
+            log INFO "Starting all available services (fault-tolerant mode)..."
+            
+            # Start all services with fault tolerance
             local all_services=("${TIER1_SERVICES[@]}" "${TIER2_SERVICES[@]}" "${TIER3_SERVICES[@]}")
+            local started_services=()
+            local failed_services=()
+            local skipped_services=()
+            
             for service in "${all_services[@]}"; do
-                start_specific_service "$service"
+                # Skip problematic services on Apple Silicon
+                local skip_service=false
+                for problematic in "${PROBLEMATIC_SERVICES[@]}"; do
+                    if [ "$service" = "$problematic" ]; then
+                        skip_service=true
+                        break
+                    fi
+                done
+                
+                if [ "$skip_service" = true ]; then
+                    log WARN "Skipping $service (known compatibility issues on Apple Silicon)"
+                    skipped_services+=("$service")
+                    continue
+                fi
+                
+                # Try to start service but don't abort on failure
+                log INFO "Attempting to start $service..."
+                if start_specific_service "$service"; then
+                    started_services+=("$service")
+                    log SUCCESS "$service started successfully"
+                else
+                    failed_services+=("$service")
+                    log WARN "$service failed to start - continuing with other services"
+                fi
             done
+            
+            # Try Langflow as standalone
+            if docker images --format "{{.Repository}}" | grep -q "langflow"; then
+                log INFO "Attempting to start Langflow..."
+                if docker run -d --name aipm-langflow \
+                    --network "$NETWORK_NAME" \
+                    -p 7860:7860 \
+                    --label "ai-pm-toolkit.service=langflow" \
+                    langflow/langflow:latest >/dev/null 2>&1; then
+                    
+                    if wait_for_http "7860" "/" "Langflow" 60; then
+                        started_services+=("Langflow")
+                        log SUCCESS "Langflow started successfully"
+                    else
+                        failed_services+=("Langflow")
+                        docker stop aipm-langflow >/dev/null 2>&1 && docker rm aipm-langflow >/dev/null 2>&1 || true
+                    fi
+                else
+                    log WARN "Langflow failed to start"
+                    failed_services+=("Langflow")
+                fi
+            fi
+            
+            # Summary report
+            echo
+            log INFO "=== FAULT-TOLERANT STARTUP SUMMARY ==="
+            
+            if [ ${#started_services[@]} -gt 0 ]; then
+                log SUCCESS "Successfully started services:"
+                for service in "${started_services[@]}"; do
+                    echo "   ✅ $service"
+                done
+            fi
+            
+            if [ ${#skipped_services[@]} -gt 0 ]; then
+                log WARN "Skipped services (compatibility issues):"
+                for service in "${skipped_services[@]}"; do
+                    echo "   ⏭️  $service"
+                done
+            fi
+            
+            if [ ${#failed_services[@]} -gt 0 ]; then
+                log WARN "Failed services (check logs for details):"
+                for service in "${failed_services[@]}"; do
+                    echo "   ❌ $service"
+                done
+            fi
+            
+            echo
+            log INFO "=== AVAILABLE SERVICES ==="
+            echo "   • n8n Workflows: http://localhost:5678"
+            echo "   • Langflow Visual AI: http://localhost:7860"
+            echo "   • Typebot Forms: http://localhost:8083"
+            echo "   • Penpot Design: http://localhost:8085"
             ;;
         help|*)
             echo "Usage: $0 {start|stop|restart|status|cleanup|SERVICE|all|help}"
@@ -480,7 +588,7 @@ main() {
             echo "  all      - Start all available services"
             echo ""
             echo "Individual Services:"
-            echo "  tooljet  - Start ToolJet low-code platform"
+            echo "  tooljet  - Start ToolJet (⚠️  Apple Silicon compatibility issues)"
             echo "  typebot  - Start Typebot conversational forms"
             echo "  penpot   - Start Penpot design platform"
             echo ""

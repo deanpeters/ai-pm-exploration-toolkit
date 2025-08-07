@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tool.name }} - AI PM Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>{{ tool.name }}</h1>
+            <p class="subtitle">{{ tool.description }}</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <nav class="breadcrumb">
+            <a href="/">← Back to Dashboard</a>
+        </nav>
+
+        <div class="tool-content">
+            {% if tool.id == 'data-generation' %}
+                {% include 'tools/data-gen.html' %}
+            {% elif tool.id == 'market-research' %}
+                {% include 'tools/market-research.html' %}
+            {% elif tool.id == 'ai-chat' %}
+                {% include 'tools/ai-chat.html' %}
+            {% elif tool.id == 'n8n-workflows' %}
+                {% include 'tools/workflows.html' %}
+            {% else %}
+                <div class="unknown-tool">
+                    <h2>❓ Tool Not Found</h2>
+                    <p>Tool "{{ tool.id }}" is not yet implemented.</p>
+                    <p><strong>Available tools:</strong> data-generation, market-research, ai-chat, n8n-workflows</p>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,689 @@
+<!-- n8n Workflow Tools - Web Interface -->
+<div class="workflow-tools">
+    <section class="experience-selector">
+        <h2>🔧 n8n Workflow Automation</h2>
+        <p>Build and manage automated workflows for product management tasks</p>
+        
+        <div class="workflow-status" id="workflow-status">
+            <h3>📊 Workflow Status</h3>
+            <div class="status-grid">
+                <div class="status-card">
+                    <h4>n8n Server</h4>
+                    <div class="status-indicator" id="n8n-status">⏳ Checking...</div>
+                </div>
+                <div class="status-card">
+                    <h4>Docker</h4>
+                    <div class="status-indicator" id="docker-status">⏳ Checking...</div>
+                </div>
+                <div class="status-card">
+                    <h4>Network</h4>
+                    <div class="status-indicator" id="network-status">⏳ Checking...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="experience-grid">
+            <div class="experience-card" id="workflow-just-do-it">
+                <div class="experience-header">
+                    <h3>🚀 Quick Start n8n</h3>
+                    <span class="complexity">Simple</span>
+                </div>
+                <p>Launch n8n with default configuration and start building workflows</p>
+                <div class="quick-actions">
+                    <button class="btn-primary" onclick="quickStartN8n()" id="quick-start-btn">
+                        Launch n8n
+                    </button>
+                    <button class="btn-secondary" onclick="openN8n()" id="open-n8n-btn" disabled>
+                        Open n8n
+                    </button>
+                </div>
+                <div class="quick-info">
+                    <p><strong>Default URL:</strong> http://localhost:5678</p>
+                    <p><strong>Setup:</strong> Automatic Docker configuration</p>
+                </div>
+            </div>
+
+            <div class="experience-card" id="workflow-learn-and-do">
+                <div class="experience-header">
+                    <h3>🎓 Guided Workflow Setup</h3>
+                    <span class="complexity">Educational</span>
+                </div>
+                <p>Learn workflow automation while setting up your first PM workflows</p>
+                <div class="learn-form">
+                    <div class="form-section">
+                        <h4>🎯 Workflow Use Cases</h4>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="usecase-research" checked> Market research automation</label>
+                            <label><input type="checkbox" name="usecase-data" checked> Data collection and analysis</label>
+                            <label><input type="checkbox" name="usecase-reports" checked> Automated reporting</label>
+                            <label><input type="checkbox" name="usecase-notifications" checked> Stakeholder notifications</label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>🔧 Configuration Options</h4>
+                        <div class="form-row">
+                            <label>n8n Port:</label>
+                            <input type="number" id="n8n-port" value="5678" min="3000" max="9999">
+                        </div>
+                        <div class="form-row">
+                            <label>Environment:</label>
+                            <select id="n8n-env">
+                                <option value="development" selected>Development</option>
+                                <option value="production">Production</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Data Persistence:</label>
+                            <select id="data-persistence">
+                                <option value="enabled" selected>Enabled (Docker volumes)</option>
+                                <option value="disabled">Disabled (temporary)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="learning-preview">
+                        <h4>🎓 What You'll Learn</h4>
+                        <ul>
+                            <li>Setting up workflow automation for PM tasks</li>
+                            <li>Connecting APIs and data sources</li>
+                            <li>Building automated research pipelines</li>
+                            <li>Creating notification and reporting workflows</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn-primary" onclick="guidedSetup()">Start Guided Setup</button>
+                </div>
+            </div>
+
+            <div class="experience-card" id="workflow-cli-deep-dive">
+                <div class="experience-header">
+                    <h3>🔧 Advanced Workflow Management</h3>
+                    <span class="complexity">Advanced</span>
+                </div>
+                <p>Master Docker orchestration and workflow deployment</p>
+                <div class="cli-bridge">
+                    <div class="cli-preview">
+                        <h4>📟 Docker Commands</h4>
+                        <div class="command-box">
+                            <code id="docker-command">cd workflow-tools && ./orchestrate-workflows.sh start</code>
+                            <button class="copy-btn" onclick="copyDockerCommand()">📋 Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="cli-options">
+                        <h4>⚙️ Orchestration Options</h4>
+                        <div class="form-row">
+                            <label>Action:</label>
+                            <select id="docker-action" onchange="updateDockerCommand()">
+                                <option value="start">Start n8n</option>
+                                <option value="stop">Stop n8n</option>
+                                <option value="restart">Restart n8n</option>
+                                <option value="status">Check Status</option>
+                                <option value="cleanup">Clean Up</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Service:</label>
+                            <select id="docker-service" onchange="updateDockerCommand()">
+                                <option value="">All Services</option>
+                                <option value="n8n">n8n Only</option>
+                                <option value="tooljet">ToolJet</option>
+                                <option value="typebot">Typebot</option>
+                                <option value="penpot">Penpot</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="cli-instructions">
+                        <h4>🚀 Advanced Features</h4>
+                        <ul>
+                            <li>Multi-service orchestration</li>
+                            <li>Custom Docker configurations</li>
+                            <li>Network isolation and security</li>
+                            <li>Backup and restore workflows</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn-secondary" onclick="launchCLIWorkflows()">Launch CLI Management</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results section -->
+    <section class="results-section" id="workflow-results" style="display: none;">
+        <h3>🔧 Workflow Setup Results</h3>
+        <div class="results-content">
+            <div class="result-summary" id="workflow-result-summary"></div>
+            <div class="result-status" id="workflow-result-status"></div>
+            <div class="result-actions">
+                <button class="btn-secondary" onclick="hideWorkflowResults()">Configure More</button>
+                <button class="btn-primary" onclick="openN8n()">Open n8n Dashboard</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+/* Workflow Tools Specific Styles */
+.workflow-tools {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.workflow-status {
+    background: var(--gray-50);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.workflow-status h3 {
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.status-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.status-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+    font-size: 1rem;
+}
+
+.status-indicator {
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.status-indicator.healthy {
+    background: var(--success-green);
+    color: white;
+}
+
+.status-indicator.unhealthy {
+    background: var(--error-red);
+    color: white;
+}
+
+.status-indicator.unknown {
+    background: var(--gray-300);
+    color: var(--gray-700);
+}
+
+.experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+/* Inherit common styles from other tools */
+.experience-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+.experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.experience-header h3 {
+    margin: 0;
+    color: var(--gray-900);
+}
+
+.complexity {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.quick-info {
+    background: var(--gray-50);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.quick-info p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 1rem;
+}
+
+.form-section h4 {
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.form-row label {
+    min-width: 120px;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.form-row input, .form-row select {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.checkbox-group label {
+    min-width: auto;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.learning-preview {
+    background: var(--warning-yellow);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+}
+
+.learning-preview h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.learning-preview ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.learning-preview li {
+    margin-bottom: 0.5rem;
+}
+
+.cli-preview {
+    margin-bottom: 1.5rem;
+}
+
+.cli-preview h4 {
+    margin-bottom: 0.5rem;
+}
+
+.command-box {
+    display: flex;
+    align-items: center;
+    background: var(--gray-900);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    margin: 0.5rem 0;
+    word-break: break-all;
+}
+
+.command-box code {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.copy-btn {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+.copy-btn:hover {
+    background: #1d4ed8;
+}
+
+.cli-instructions {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.cli-instructions ul {
+    margin: 0.5rem 0 0 1rem;
+    padding: 0;
+}
+
+.cli-instructions li {
+    margin-bottom: 0.5rem;
+}
+
+.results-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--gray-200);
+}
+
+.results-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.result-summary, .result-status {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.result-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .experience-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .form-row label {
+        min-width: auto;
+        margin-bottom: 0.5rem;
+    }
+    
+    .results-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .command-box {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .copy-btn {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+}
+</style>
+
+<script>
+// Global variables for workflow management
+let workflowState = {
+    n8nRunning: false,
+    dockerAvailable: false,
+    networkReady: false
+};
+
+// Check workflow status on page load
+document.addEventListener('DOMContentLoaded', function() {
+    checkWorkflowStatus();
+    updateDockerCommand();
+});
+
+// Check the status of workflow services
+async function checkWorkflowStatus() {
+    try {
+        // Check n8n status
+        const n8nResponse = await fetch('/api/workflow-status');
+        const status = await n8nResponse.json();
+        
+        updateStatusIndicator('n8n-status', status.n8n ? 'healthy' : 'unhealthy', 
+                            status.n8n ? '✅ Running' : '❌ Stopped');
+        updateStatusIndicator('docker-status', status.docker ? 'healthy' : 'unhealthy',
+                            status.docker ? '✅ Available' : '❌ Not Available');
+        updateStatusIndicator('network-status', status.network ? 'healthy' : 'unknown',
+                            status.network ? '✅ Ready' : '⏳ Checking');
+        
+        workflowState = status;
+        
+        // Update button states
+        document.getElementById('open-n8n-btn').disabled = !status.n8n;
+        
+    } catch (error) {
+        console.error('Status check failed:', error);
+        updateStatusIndicator('n8n-status', 'unknown', '❓ Unknown');
+        updateStatusIndicator('docker-status', 'unknown', '❓ Unknown');
+        updateStatusIndicator('network-status', 'unknown', '❓ Unknown');
+    }
+}
+
+// Update status indicator
+function updateStatusIndicator(elementId, status, text) {
+    const element = document.getElementById(elementId);
+    element.className = `status-indicator ${status}`;
+    element.textContent = text;
+}
+
+// Quick start n8n
+async function quickStartN8n() {
+    const btn = document.getElementById('quick-start-btn');
+    const originalText = btn.textContent;
+    
+    btn.textContent = '🚀 Starting...';
+    btn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/workflow-control', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'start', service: 'n8n' })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showWorkflowResults({
+                action: 'start',
+                service: 'n8n',
+                result: result,
+                url: 'http://localhost:5678'
+            });
+            
+            // Update status
+            setTimeout(checkWorkflowStatus, 2000);
+        } else {
+            alert('Failed to start n8n: ' + result.error);
+        }
+        
+    } catch (error) {
+        alert('Error starting n8n: ' + error.message);
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+// Guided setup
+async function guidedSetup() {
+    const port = document.getElementById('n8n-port').value;
+    const env = document.getElementById('n8n-env').value;
+    const persistence = document.getElementById('data-persistence').value;
+    
+    // Get selected use cases
+    const usecases = [];
+    document.querySelectorAll('input[name^="usecase-"]:checked').forEach(cb => {
+        usecases.push(cb.name.replace('usecase-', ''));
+    });
+    
+    const btn = event.target;
+    const originalText = btn.textContent;
+    
+    btn.textContent = '🔧 Setting up...';
+    btn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/workflow-setup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                port: port,
+                environment: env,
+                persistence: persistence === 'enabled',
+                usecases: usecases
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showWorkflowResults({
+                action: 'guided-setup',
+                result: result,
+                config: { port, env, persistence, usecases }
+            });
+            
+            setTimeout(checkWorkflowStatus, 3000);
+        } else {
+            alert('Setup failed: ' + result.error);
+        }
+        
+    } catch (error) {
+        alert('Setup error: ' + error.message);
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+// Update Docker command
+function updateDockerCommand() {
+    const action = document.getElementById('docker-action')?.value || 'start';
+    const service = document.getElementById('docker-service')?.value || '';
+    
+    let command = 'cd workflow-tools && ./orchestrate-workflows.sh ' + action;
+    if (service) {
+        command += ' ' + service;
+    }
+    
+    document.getElementById('docker-command').textContent = command;
+}
+
+// Copy Docker command
+function copyDockerCommand() {
+    const command = document.getElementById('docker-command').textContent;
+    navigator.clipboard.writeText(command).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 2000);
+    });
+}
+
+// Launch CLI workflows
+function launchCLIWorkflows() {
+    alert('Open your terminal and run:\n\naipm dashboard\n\nThen select "Workflow Automation" from the menu.');
+}
+
+// Open n8n dashboard
+function openN8n() {
+    window.open('http://localhost:5678', '_blank');
+}
+
+// Show workflow results
+function showWorkflowResults(data) {
+    document.getElementById('workflow-result-summary').innerHTML = `
+        <h4>🔧 ${data.action === 'start' ? 'n8n Started' : 'Setup Complete'}</h4>
+        <p><strong>Service:</strong> ${data.service || 'n8n'}</p>
+        <p><strong>Status:</strong> ${data.result.success ? 'Success' : 'Failed'}</p>
+        ${data.url ? `<p><strong>URL:</strong> <a href="${data.url}" target="_blank">${data.url}</a></p>` : ''}
+    `;
+    
+    document.getElementById('workflow-result-status').innerHTML = `
+        <h4>📊 Configuration</h4>
+        ${data.config ? `
+            <p><strong>Port:</strong> ${data.config.port}</p>
+            <p><strong>Environment:</strong> ${data.config.env}</p>
+            <p><strong>Use Cases:</strong> ${data.config.usecases.join(', ')}</p>
+        ` : '<p>Default configuration applied</p>'}
+    `;
+    
+    document.getElementById('workflow-results').style.display = 'block';
+    document.getElementById('workflow-results').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Hide workflow results
+function hideWorkflowResults() {
+    document.getElementById('workflow-results').style.display = 'none';
+}
+
+// Refresh status every 30 seconds
+setInterval(checkWorkflowStatus, 30000);
+</script>

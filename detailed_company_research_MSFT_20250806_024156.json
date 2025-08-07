@@ -1,0 +1,176 @@
+{
+  "config": {
+    "ticker": "MSFT",
+    "company_name": "Microsoft Corporation",
+    "research_depth": "detailed",
+    "include_financials": true,
+    "include_news": true,
+    "include_competitors": true,
+    "output_format": "json"
+  },
+  "research_date": "2025-08-06T02:41:56.561707",
+  "data_sources_used": [
+    "basic_lookup",
+    "yfinance",
+    "news_synthesis",
+    "competitive_analysis"
+  ],
+  "company_info": {
+    "name": "Microsoft Corporation",
+    "ticker": "MSFT",
+    "sector": "Technology",
+    "industry": "Software - Infrastructure",
+    "description": "Microsoft Corporation develops and supports software, services, devices, and solutions worldwide. The company's Productivity and Business Processes segment offers Microsoft 365 Commercial, Enterprise Mobility + Security, Windows Commercial, Power BI, Exchange, SharePoint, Microsoft Teams, Security a...",
+    "founded": "Unknown",
+    "headquarters": "Redmond, United States",
+    "employees": 228000,
+    "website": "https://www.microsoft.com",
+    "data_source": "yfinance_real"
+  },
+  "financials": {
+    "market_cap": 3922855460864,
+    "revenue": 281723994112,
+    "profit_margin": 0.36146,
+    "pe_ratio": 38.748165,
+    "price": 527.75,
+    "52_week_high": 555.45,
+    "52_week_low": 344.79,
+    "volume": 18767826,
+    "avg_volume": 19735712,
+    "price_change_3m_pct": 22.02,
+    "volatility": 26.48,
+    "dividend_yield": 0.63,
+    "beta": 1.055,
+    "enterprise_value": 3940754653184,
+    "forward_pe": 35.301003,
+    "price_to_book": 11.422172,
+    "debt_to_equity": 32.661,
+    "return_on_equity": 0.33280998,
+    "sector": "Technology",
+    "industry": "Software - Infrastructure",
+    "country": "United States",
+    "employee_count": 228000,
+    "business_summary": "Microsoft Corporation develops and supports software, services, devices, and solutions worldwide. The company's Productivity and Business Processes segment offers Microsoft 365 Commercial, Enterprise ...",
+    "last_updated": "2025-08-06T02:41:57.091133",
+    "data_source": "yfinance_real"
+  },
+  "news": [
+    {
+      "title": "Microsoft Corporation announces new product features to enhance user experience",
+      "date": "2025-08-06T02:41:57.091249",
+      "source": "Industry Report 1",
+      "sentiment": "positive",
+      "relevance": "high"
+    },
+    {
+      "title": "Microsoft Corporation reports strong quarterly growth in key markets",
+      "date": "2025-07-30T02:41:57.091259",
+      "source": "Industry Report 2",
+      "sentiment": "neutral",
+      "relevance": "high"
+    },
+    {
+      "title": "Microsoft Corporation expands partnerships to accelerate market penetration",
+      "date": "2025-07-23T02:41:57.091265",
+      "source": "Industry Report 3",
+      "sentiment": "positive",
+      "relevance": "high"
+    }
+  ],
+  "competitors": [
+    {
+      "name": "Salesforce",
+      "relationship": "direct",
+      "market_share": "20%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "HubSpot",
+      "relationship": "direct",
+      "market_share": "17%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "Zoom",
+      "relationship": "indirect",
+      "market_share": "14%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "Slack",
+      "relationship": "indirect",
+      "market_share": "11%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "Notion",
+      "relationship": "indirect",
+      "market_share": "8%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    }
+  ],
+  "analysis": {
+    "strengths": [
+      "Strong market position",
+      "Diversified revenue streams",
+      "Experienced leadership team"
+    ],
+    "weaknesses": [
+      "Limited international presence",
+      "Dependence on key customers",
+      "Aging technology infrastructure"
+    ],
+    "opportunities": [
+      "Expand into adjacent markets",
+      "Leverage partnerships for growth",
+      "Invest in emerging technologies"
+    ],
+    "threats": [
+      "Intense competition",
+      "Economic uncertainty",
+      "Regulatory changes"
+    ],
+    "investment_thesis": "Strong fundamentals with growth potential in key markets",
+    "risk_factors": [
+      "Market volatility",
+      "Competitive pressure",
+      "Execution risk"
+    ],
+    "valuation_summary": "Fairly valued with upside potential"
+  }
+}

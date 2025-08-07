@@ -1,0 +1,158 @@
+{
+  "config": {
+    "ticker": "AAPL",
+    "company_name": "Apple Inc.",
+    "research_depth": "basic",
+    "include_financials": true,
+    "include_news": true,
+    "include_competitors": true,
+    "output_format": "json"
+  },
+  "research_date": "2025-08-06T02:34:21.239765",
+  "data_sources_used": [
+    "basic_lookup",
+    "yfinance",
+    "news_synthesis",
+    "competitive_analysis"
+  ],
+  "company_info": {
+    "name": "Apple Inc.",
+    "ticker": "AAPL",
+    "sector": "Technology",
+    "description": "Leading company in the Technology sector",
+    "founded": "2004",
+    "headquarters": "United States",
+    "employees": "46456",
+    "website": "https://appleinc..com"
+  },
+  "financials": {
+    "market_cap": 3011413803008,
+    "revenue": 408624988160,
+    "profit_margin": 0.24295999,
+    "pe_ratio": 30.792109,
+    "price": 202.92,
+    "52_week_high": 260.1,
+    "52_week_low": 169.21,
+    "volume": 42535446,
+    "last_updated": "2025-08-06T02:34:21.590745"
+  },
+  "news": [
+    {
+      "title": "Apple Inc. announces new product features to enhance user experience",
+      "date": "2025-08-06T02:34:21.590940",
+      "source": "Industry Report 1",
+      "sentiment": "positive",
+      "relevance": "high"
+    },
+    {
+      "title": "Apple Inc. reports strong quarterly growth in key markets",
+      "date": "2025-07-30T02:34:21.590973",
+      "source": "Industry Report 2",
+      "sentiment": "neutral",
+      "relevance": "high"
+    },
+    {
+      "title": "Apple Inc. expands partnerships to accelerate market penetration",
+      "date": "2025-07-23T02:34:21.590984",
+      "source": "Industry Report 3",
+      "sentiment": "positive",
+      "relevance": "high"
+    }
+  ],
+  "competitors": [
+    {
+      "name": "Salesforce",
+      "relationship": "direct",
+      "market_share": "20%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "HubSpot",
+      "relationship": "direct",
+      "market_share": "17%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "Zoom",
+      "relationship": "indirect",
+      "market_share": "14%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "Slack",
+      "relationship": "indirect",
+      "market_share": "11%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    },
+    {
+      "name": "Notion",
+      "relationship": "indirect",
+      "market_share": "8%",
+      "strengths": [
+        "AI-powered automation",
+        "No-code/low-code platforms"
+      ],
+      "weaknesses": [
+        "Integration complexity",
+        "Data silos"
+      ]
+    }
+  ],
+  "analysis": {
+    "strengths": [
+      "Strong market position",
+      "Diversified revenue streams",
+      "Experienced leadership team"
+    ],
+    "weaknesses": [
+      "Limited international presence",
+      "Dependence on key customers",
+      "Aging technology infrastructure"
+    ],
+    "opportunities": [
+      "Expand into adjacent markets",
+      "Leverage partnerships for growth",
+      "Invest in emerging technologies"
+    ],
+    "threats": [
+      "Intense competition",
+      "Economic uncertainty",
+      "Regulatory changes"
+    ],
+    "investment_thesis": "Strong fundamentals with growth potential in key markets",
+    "risk_factors": [
+      "Market volatility",
+      "Competitive pressure",
+      "Execution risk"
+    ],
+    "valuation_summary": "Fairly valued with upside potential"
+  }
+}

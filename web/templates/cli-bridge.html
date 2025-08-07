@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI Bridge - AI PM Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🚀 Launching CLI Dashboard</h1>
+            <p class="subtitle">Switching to Command-Line Interface</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="cli-instructions">
+            <h2>Access CLI Dashboard</h2>
+            <p>You have two ways to access the command-line interface:</p>
+
+            <div class="method-card">
+                <h3>Method 1: Interactive Dashboard</h3>
+                <div class="command-box">
+                    <code>aipm dashboard</code>
+                    <button class="copy-btn" onclick="copyCommand('aipm dashboard')">📋 Copy</button>
+                </div>
+                <p>Launches a menu-driven interface with arrow key navigation</p>
+            </div>
+
+            <div class="method-card">
+                <h3>Method 2: Direct Commands</h3>
+                <div class="command-box">
+                    <code>aipm hub</code>
+                    <button class="copy-btn" onclick="copyCommand('aipm hub')">📋 Copy</button>
+                </div>
+                <p>Returns to this web interface</p>
+            </div>
+        </section>
+
+        <section class="context-info">
+            <h3>🔗 Context Handoff</h3>
+            <p>Your web session preferences have been noted. The CLI tools will:</p>
+            <ul>
+                <li>✅ Respect your working directory choices</li>
+                <li>✅ Remember your experience level preferences</li>
+                <li>✅ Provide the same tools in command-line format</li>
+            </ul>
+        </section>
+
+        <section class="next-steps">
+            <h3>What's Next?</h3>
+            <div class="step-list">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <strong>Open Terminal</strong>
+                        <p>Open Terminal (macOS), Command Prompt (Windows), or your preferred terminal</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <strong>Run Command</strong>
+                        <p>Paste and run: <code>aipm dashboard</code></p>
+                    </div>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <strong>Navigate Menu</strong>
+                        <p>Use arrow keys to select tools, Enter to choose</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="back-option">
+            <a href="/" class="btn-secondary">← Back to Web Dashboard</a>
+        </section>
+    </main>
+
+    <script>
+        function copyCommand(command) {
+            navigator.clipboard.writeText(command).then(function() {
+                // Show feedback
+                event.target.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    event.target.textContent = '📋 Copy';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+                // Fallback: show the command prominently
+                alert('Copy this command: ' + command);
+            });
+        }
+
+        // Auto-copy the first command for convenience
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                copyCommand('aipm dashboard');
+                console.log('Auto-copied aipm dashboard command');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

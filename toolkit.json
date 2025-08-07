@@ -1,0 +1,106 @@
+{
+  "name": "AI PM Exploration Toolkit",
+  "version": "1.0.0-phase3",
+  "description": "Proof-of-Life Probes framework for product managers",
+  "architecture": {
+    "interfaces": ["web", "cli"],
+    "principle": "Simple, modular, community-ready"
+  },
+  "tools": [
+    {
+      "id": "data-generation",
+      "name": "Synthetic Data Generation",
+      "description": "Generate synthetic personas, survey data, and test datasets",
+      "status": "working",
+      "interfaces": {
+        "web": "web/tools/data-gen.html",
+        "cli": "cli/tools/data_gen.py",
+        "script": "scripts/data-gen.py"
+      },
+      "dependencies": ["faker", "pandas", "json"],
+      "experiences": ["just_do_it", "learn_and_do", "cli_deep_dive"]
+    },
+    {
+      "id": "market-research", 
+      "name": "Market Research Tools",
+      "description": "OpenBB Terminal integration and competitive analysis",
+      "status": "working",
+      "interfaces": {
+        "web": "web/tools/market-research.html",
+        "cli": "cli/tools/market_research.py", 
+        "script": "scripts/market-research.py"
+      },
+      "dependencies": ["openbb", "requests"],
+      "experiences": ["just_do_it", "learn_and_do", "cli_deep_dive"]
+    },
+    {
+      "id": "ai-chat",
+      "name": "AI Product Assistant",
+      "description": "Local LLM integration for PM brainstorming and analysis",
+      "status": "working",
+      "interfaces": {
+        "web": "web/tools/ai-chat.html",
+        "cli": "cli/tools/ai_chat.py",
+        "script": "scripts/ai-chat.py"
+      },
+      "dependencies": ["requests"],
+      "experiences": ["just_do_it", "learn_and_do", "cli_deep_dive"]
+    },
+    {
+      "id": "n8n-workflows",
+      "name": "Workflow Automation",
+      "description": "n8n workflow builder and automation tools",
+      "status": "working",
+      "interfaces": {
+        "web": "web/tools/workflows.html",
+        "cli": "cli/tools/workflows.py",
+        "script": "workflow-tools/orchestrate-workflows.sh"
+      },
+      "dependencies": ["docker", "docker-compose"],
+      "experiences": ["just_do_it", "learn_and_do"]
+    }
+  ],
+  "experiences": {
+    "just_do_it": {
+      "name": "🚀 Just Do It",
+      "description": "Generate results right now, current directory",
+      "complexity": "low",
+      "timeout": 30,
+      "show_commands": false
+    },
+    "learn_and_do": {
+      "name": "🎓 Learn & Do", 
+      "description": "Understand the process while doing it",
+      "complexity": "medium",
+      "tutorial_mode": true,
+      "explain_steps": true,
+      "show_commands": true
+    },
+    "cli_deep_dive": {
+      "name": "🔧 CLI Deep Dive",
+      "description": "Master the command-line tools",
+      "complexity": "high",
+      "interactive": true,
+      "show_commands": true,
+      "build_scripts": true
+    }
+  },
+  "interfaces": {
+    "web": {
+      "port": 3000,
+      "host": "localhost",
+      "entry_point": "web/app.py"
+    },
+    "cli": {
+      "entry_point": "cli/dashboard.py",
+      "menu_system": "rich"
+    }
+  },
+  "paths": {
+    "web_root": "web/",
+    "cli_root": "cli/",
+    "scripts_root": "scripts/",
+    "configs_root": "configs/",
+    "symlink_target": "~/aipm-toolkit"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "session_timeout_hours": 24,
+  "max_sessions_per_user": 5,
+  "require_strong_passwords": false,
+  "allow_registration": true,
+  "default_role": "pm",
+  "enable_guest_mode": true,
+  "secret_key": "dTZFmcHgq2bY6ViqxoiyXGrfXVts5vlGf3wN_t9pRaU"
+}

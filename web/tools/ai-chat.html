@@ -1,0 +1,1262 @@
+<!-- AI Chat Tool - Web Interface -->
+<div class="ai-chat-tools">
+    <section class="experience-selector">
+        <h2>🤖 AI Product Management Assistant</h2>
+        <p>Chat with AI for product strategy, brainstorming, and analysis</p>
+        
+        <div class="chat-status" id="chat-status">
+            <h3>🤖 AI Assistant Status</h3>
+            <div class="status-grid">
+                <div class="status-card">
+                    <h4>Local LLM</h4>
+                    <div class="status-indicator" id="llm-status">⏳ Checking...</div>
+                </div>
+                <div class="status-card">
+                    <h4>Chat Session</h4>
+                    <div class="status-indicator" id="session-status">❌ Not Started</div>
+                </div>
+                <div class="status-card">
+                    <h4>Model</h4>
+                    <div class="status-indicator" id="model-status">⏳ Detecting...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="experience-grid">
+            <div class="experience-card" id="chat-just-do-it">
+                <div class="experience-header">
+                    <h3>🚀 Quick Chat</h3>
+                    <span class="complexity">Simple</span>
+                </div>
+                <p>Get quick AI responses for immediate product management questions</p>
+                
+                <div class="chat-mode-selector">
+                    <h4>🎯 Chat Mode</h4>
+                    <div class="mode-options">
+                        <label><input type="radio" name="quick-mode" value="pm_assistant" checked> PM Assistant</label>
+                        <label><input type="radio" name="quick-mode" value="brainstorm"> Creative Brainstorm</label>
+                        <label><input type="radio" name="quick-mode" value="analysis"> Data Analysis</label>
+                    </div>
+                </div>
+                
+                <div class="quick-chat-area" id="quick-chat-area" style="display: none;">
+                    <div class="chat-messages" id="quick-messages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="quick-chat-input" placeholder="Ask me anything about product management..." />
+                        <button onclick="sendQuickMessage()" id="quick-send-btn">Send</button>
+                    </div>
+                </div>
+                
+                <button class="btn-primary" onclick="startQuickChat()" id="start-quick-btn">
+                    Start Quick Chat
+                </button>
+            </div>
+
+            <div class="experience-card" id="chat-learn-and-do">
+                <div class="experience-header">
+                    <h3>🎓 Learning Chat Session</h3>
+                    <span class="complexity">Educational</span>
+                </div>
+                <p>Interactive chat with explanations and educational context</p>
+                
+                <div class="learning-config">
+                    <div class="config-section">
+                        <h4>🎯 Learning Focus</h4>
+                        <div class="focus-options">
+                            <label><input type="checkbox" name="focus-strategy" checked> Product Strategy</label>
+                            <label><input type="checkbox" name="focus-research" checked> User Research</label>
+                            <label><input type="checkbox" name="focus-metrics" checked> Metrics & Analytics</label>
+                            <label><input type="checkbox" name="focus-roadmap" checked> Roadmap Planning</label>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h4>🤖 Assistant Mode</h4>
+                        <select id="learning-chat-mode">
+                            <option value="pm_assistant">PM Assistant - Strategic guidance and best practices</option>
+                            <option value="brainstorm">Creative Partner - Idea generation and innovation</option>
+                            <option value="analysis">Data Analyst - Research interpretation and insights</option>
+                        </select>
+                    </div>
+
+                    <div class="config-section">
+                        <h4>📚 Session Settings</h4>
+                        <div class="form-row">
+                            <label>Response Detail:</label>
+                            <select id="response-detail">
+                                <option value="detailed" selected>Detailed with examples</option>
+                                <option value="concise">Concise and focused</option>
+                                <option value="comprehensive">Comprehensive analysis</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Save Conversation:</label>
+                            <input type="checkbox" id="save-conversation" checked>
+                            <span class="help-text">Automatically save chat history for later review</span>
+                        </div>
+                    </div>
+
+                    <div class="learning-preview">
+                        <h4>🎓 What You'll Learn</h4>
+                        <ul>
+                            <li>Product management frameworks and methodologies</li>
+                            <li>Strategic decision-making approaches</li>
+                            <li>User research and validation techniques</li>
+                            <li>Metrics definition and analysis methods</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="learning-chat-area" id="learning-chat-area" style="display: none;">
+                    <div class="chat-messages" id="learning-messages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="learning-chat-input" placeholder="What would you like to learn about product management?" />
+                        <button onclick="sendLearningMessage()" id="learning-send-btn">Send</button>
+                    </div>
+                    <div class="chat-actions">
+                        <button onclick="saveConversation()">💾 Save</button>
+                        <button onclick="clearChat()">🗑️ Clear</button>
+                        <button onclick="getHelp()">❓ Help</button>
+                    </div>
+                </div>
+
+                <button class="btn-primary" onclick="startLearningChat()">Start Learning Session</button>
+            </div>
+
+            <div class="experience-card" id="chat-cli-deep-dive">
+                <div class="experience-header">
+                    <h3>🔧 Advanced AI Chat</h3>
+                    <span class="complexity">Advanced</span>
+                </div>
+                <p>Full-featured chat with session management and CLI integration</p>
+                
+                <div class="cli-bridge">
+                    <div class="cli-preview">
+                        <h4>📟 CLI Command</h4>
+                        <div class="command-box">
+                            <code id="chat-command">cd ~/aipm-toolkit && python cli/tools/ai_chat.py --experience=cli_deep_dive</code>
+                            <button class="copy-btn" onclick="copyChatCommand()">📋 Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="advanced-options">
+                        <h4>⚙️ Advanced Features</h4>
+                        <div class="form-row">
+                            <label>Chat Mode:</label>
+                            <select id="advanced-chat-mode" onchange="updateChatCommand()">
+                                <option value="pm_assistant">PM Assistant</option>
+                                <option value="brainstorm">Creative Brainstorm</option>
+                                <option value="analysis">Data Analysis</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>AI Model:</label>
+                            <select id="ai-model" onchange="updateChatCommand()">
+                                <option value="ollama">🤖 Auto-Select Best Model</option>
+                                <option value="deepseek-r1">🧠 DeepSeek R1 7B (Analysis & Strategy)</option>
+                                <option value="llama3.2">⚡ Llama 3.2 Latest (Balanced)</option>
+                                <option value="llama3.2-3b">🚀 Llama 3.2 3B (Fast Response)</option>
+                                <option value="local">📝 Mock Responses (Fallback)</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Session Management:</label>
+                            <select id="session-mode">
+                                <option value="new">Start New Session</option>
+                                <option value="resume">Resume Previous Session</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="advanced-chat-area" id="advanced-chat-area" style="display: none;">
+                        <div class="chat-header">
+                            <span id="session-info">Session: Not Started</span>
+                            <div class="chat-controls">
+                                <button onclick="exportChat()">📤 Export</button>
+                                <button onclick="loadSession()">📂 Load</button>
+                                <button onclick="showStats()">📊 Stats</button>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="advanced-messages"></div>
+                        <div class="chat-input">
+                            <input type="text" id="advanced-chat-input" placeholder="Enter your product management question or idea..." />
+                            <button onclick="sendAdvancedMessage()" id="advanced-send-btn">Send</button>
+                        </div>
+                        <div class="chat-status-bar">
+                            <span id="token-count">Tokens: 0</span>
+                            <span id="message-count">Messages: 0</span>
+                            <span id="model-info">Model: Local</span>
+                        </div>
+                    </div>
+
+                    <div class="cli-instructions">
+                        <h4>🚀 Advanced Features</h4>
+                        <ul>
+                            <li>Session persistence and conversation history</li>
+                            <li>Multiple AI model support (Ollama integration)</li>
+                            <li>Export conversations in multiple formats</li>
+                            <li>Advanced prompt engineering and customization</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-buttons">
+                        <button class="btn-primary" onclick="startAdvancedChat()">Start Advanced Chat</button>
+                        <button class="btn-secondary" onclick="launchCLIChat()">Launch CLI Chat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results section -->
+    <section class="results-section" id="chat-results" style="display: none;">
+        <h3>🤖 Chat Session Results</h3>
+        <div class="results-content">
+            <div class="result-summary" id="chat-result-summary"></div>
+            <div class="result-status" id="chat-result-status"></div>
+            <div class="result-actions">
+                <button class="btn-secondary" onclick="hideChatResults()">Start New Chat</button>
+                <button class="btn-primary" onclick="downloadConversation()">📥 Download</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+/* AI Chat Tools Specific Styles */
+.ai-chat-tools {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.chat-status {
+    background: var(--gray-50);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chat-status h3 {
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.status-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.status-card h4 {
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+    font-size: 1rem;
+}
+
+.status-indicator {
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.status-indicator.healthy {
+    background: var(--success-green);
+    color: white;
+}
+
+.status-indicator.unhealthy {
+    background: var(--error-red);
+    color: white;
+}
+
+.status-indicator.unknown {
+    background: var(--gray-300);
+    color: var(--gray-700);
+}
+
+.experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.experience-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+.experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.experience-header h3 {
+    margin: 0;
+    color: var(--gray-900);
+}
+
+.complexity {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.chat-mode-selector, .learning-config, .cli-bridge {
+    margin: 1.5rem 0;
+}
+
+.chat-mode-selector h4, .config-section h4 {
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.mode-options, .focus-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mode-options label, .focus-options label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--gray-700);
+}
+
+.config-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.config-section:last-child {
+    border-bottom: none;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.form-row label {
+    min-width: 120px;
+    font-weight: 500;
+    color: var(--gray-700);
+    font-size: 0.9rem;
+}
+
+.form-row select, .form-row input[type="text"] {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.help-text {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    margin-left: 0.5rem;
+}
+
+.learning-preview {
+    background: var(--warning-yellow);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+}
+
+.learning-preview h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.learning-preview ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.learning-preview li {
+    margin-bottom: 0.5rem;
+}
+
+.chat-messages {
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    height: 300px;
+    overflow-y: auto;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: white;
+}
+
+.chat-input {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.chat-input button {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.chat-input button:hover {
+    background: #1d4ed8;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.chat-actions button {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-300);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.chat-actions button:hover {
+    background: var(--gray-200);
+}
+
+.cli-preview {
+    margin-bottom: 1.5rem;
+}
+
+.cli-preview h4 {
+    margin-bottom: 0.5rem;
+}
+
+.command-box {
+    display: flex;
+    align-items: center;
+    background: var(--gray-900);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    margin: 0.5rem 0;
+    word-break: break-all;
+}
+
+.command-box code {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.copy-btn {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+.copy-btn:hover {
+    background: #1d4ed8;
+}
+
+.advanced-options {
+    margin: 1.5rem 0;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--gray-50);
+    border-radius: 8px 8px 0 0;
+    border: 1px solid var(--gray-200);
+    border-bottom: none;
+}
+
+.chat-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-controls button {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-300);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.chat-status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: var(--gray-50);
+    border-radius: 0 0 8px 8px;
+    border: 1px solid var(--gray-200);
+    border-top: none;
+    font-size: 0.8rem;
+    color: var(--gray-600);
+}
+
+.cli-instructions {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.cli-instructions ul {
+    margin: 0.5rem 0 0 1rem;
+    padding: 0;
+}
+
+.cli-instructions li {
+    margin-bottom: 0.5rem;
+}
+
+.feature-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.results-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--gray-200);
+}
+
+.results-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.result-summary, .result-status {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.result-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+.message.user {
+    background: var(--primary-blue);
+    color: white;
+    margin-left: 2rem;
+    text-align: right;
+}
+
+.message.assistant {
+    background: var(--gray-100);
+    color: var(--gray-800);
+    margin-right: 2rem;
+}
+
+.message .timestamp {
+    font-size: 0.7rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .experience-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mode-options, .focus-options {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .form-row label {
+        min-width: auto;
+        margin-bottom: 0.5rem;
+    }
+    
+    .results-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .command-box {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .copy-btn {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+    
+    .chat-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .feature-buttons {
+        flex-direction: column;
+    }
+    
+    .chat-status-bar {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+</style>
+
+<script>
+// Global variables for chat management
+let chatState = {
+    sessionActive: false,
+    chatMode: 'pm_assistant',
+    model: 'local',
+    sessionId: null,
+    messageCount: 0,
+    tokenCount: 0
+};
+
+// Error handling utility
+function handleApiError(error, userMessage = "Something went wrong. Please try again.") {
+    console.error('API Error:', error);
+    
+    let errorMessage = userMessage;
+    if (error.message) {
+        if (error.message.includes('fetch')) {
+            errorMessage = "Unable to connect to the server. Please check your connection.";
+        } else if (error.message.includes('timeout')) {
+            errorMessage = "Request timed out. Please try again.";
+        }
+    }
+    
+    // Show user-friendly error message
+    showErrorNotification(errorMessage);
+    return errorMessage;
+}
+
+// Show error notification
+function showErrorNotification(message) {
+    // Create error notification if it doesn't exist
+    let notification = document.getElementById('error-notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'error-notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        `;
+        document.body.appendChild(notification);
+    }
+    
+    notification.textContent = `❌ ${message}`;
+    notification.style.display = 'block';
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        if (notification) {
+            notification.style.display = 'none';
+        }
+    }, 5000);
+}
+
+// Show success notification
+function showSuccessNotification(message) {
+    let notification = document.getElementById('success-notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'success-notification';
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        `;
+        document.body.appendChild(notification);
+    }
+    
+    notification.textContent = `✅ ${message}`;
+    notification.style.display = 'block';
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+        if (notification) {
+            notification.style.display = 'none';
+        }
+    }, 3000);
+}
+
+// Check chat status on page load
+document.addEventListener('DOMContentLoaded', function() {
+    checkChatStatus();
+    updateChatCommand();
+});
+
+// Check the status of AI chat services
+async function checkChatStatus() {
+    try {
+        // Check AI chat status with timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        
+        const response = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'status' }),
+            signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (response.ok) {
+            const status = await response.json();
+            updateStatusIndicator('llm-status', 'healthy', '✅ Available');
+            
+            // Count available models
+            const modelCount = status.models ? status.models.length : 0;
+            const modelText = modelCount > 0 ? `✅ ${modelCount} Models Ready` : '✅ Mock Ready';
+            updateStatusIndicator('model-status', 'healthy', modelText);
+            
+            // Update model selector based on availability
+            updateModelSelector(status.models || []);
+        } else {
+            const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+            updateStatusIndicator('llm-status', 'unhealthy', '❌ Unavailable');
+            updateStatusIndicator('model-status', 'unhealthy', '❌ No Model');
+            console.warn('Chat status check failed:', errorData.error);
+        }
+        
+    } catch (error) {
+        console.error('Chat status check failed:', error);
+        
+        if (error.name === 'AbortError') {
+            updateStatusIndicator('llm-status', 'unknown', '⏳ Timeout');
+            updateStatusIndicator('model-status', 'unknown', '⏳ Timeout');
+        } else {
+            updateStatusIndicator('llm-status', 'unknown', '❓ Connection Error');
+            updateStatusIndicator('model-status', 'unknown', '❓ Connection Error');
+        }
+        
+        updateStatusIndicator('session-status', 'unknown', '❓ Unknown');
+    }
+}
+
+// Update status indicator
+function updateStatusIndicator(elementId, status, text) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.className = `status-indicator ${status}`;
+        element.textContent = text;
+    }
+}
+
+// Update model selector based on available models
+function updateModelSelector(availableModels) {
+    const modelSelect = document.getElementById('ai-model');
+    if (!modelSelect) return;
+    
+    // Enable/disable options based on availability
+    const options = modelSelect.querySelectorAll('option');
+    options.forEach(option => {
+        const value = option.value;
+        
+        if (value === 'ollama' || value === 'local') {
+            // These are always available
+            option.disabled = false;
+        } else if (value === 'deepseek-r1') {
+            option.disabled = !availableModels.includes('deepseek-r1');
+        } else if (value === 'llama3.2') {
+            option.disabled = !availableModels.includes('llama3.2');
+        } else if (value === 'llama3.2-3b') {
+            option.disabled = !availableModels.includes('llama3.2-3b');
+        }
+        
+        // Update option text to show availability
+        if (option.disabled && !option.textContent.includes('❌')) {
+            option.textContent += ' ❌ Not Available';
+        }
+    });
+    
+    // Add model availability info
+    const availabilityText = availableModels.length > 0 
+        ? `Local models: ${availableModels.join(', ')}` 
+        : 'No local models available - using fallback';
+    
+    console.log(availabilityText);
+}
+
+// Start quick chat
+async function startQuickChat() {
+    const mode = document.querySelector('input[name="quick-mode"]:checked').value;
+    const btn = document.getElementById('start-quick-btn');
+    const originalText = btn.textContent;
+    
+    btn.textContent = '🤖 Starting...';
+    btn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'start',
+                chat_mode: mode,
+                experience_type: 'just_do_it',
+                model: 'local'
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            chatState.sessionActive = true;
+            chatState.chatMode = mode;
+            chatState.sessionId = result.session_info.session_id;
+            
+            updateStatusIndicator('session-status', 'healthy', '✅ Active');
+            
+            // Show chat area
+            document.getElementById('quick-chat-area').style.display = 'block';
+            btn.textContent = '✅ Chat Active';
+            
+            // Add welcome message
+            addMessage('quick-messages', 'assistant', 'Hi! I\'m your AI product management assistant. What would you like to discuss?');
+            
+        } else {
+            handleApiError(new Error(result.error || 'Unknown error'), 'Failed to start chat session');
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+        
+    } catch (error) {
+        handleApiError(error, 'Unable to start chat session');
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+// Send quick message
+async function sendQuickMessage() {
+    const input = document.getElementById('quick-chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    // Add user message to chat
+    addMessage('quick-messages', 'user', message);
+    input.value = '';
+    
+    // Send to AI
+    try {
+        const response = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'send',
+                message: message,
+                chat_mode: chatState.chatMode
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            addMessage('quick-messages', 'assistant', result.response);
+            chatState.messageCount += 2;
+            chatState.tokenCount += result.tokens_used || 0;
+        } else {
+            const errorMsg = 'Sorry, I encountered an error: ' + (result.error || 'Unknown error');
+            addMessage('quick-messages', 'assistant', errorMsg);
+            handleApiError(new Error(result.error), 'Chat message failed');
+        }
+        
+    } catch (error) {
+        const errorMsg = 'Sorry, I couldn\'t process your message. Please try again.';
+        addMessage('quick-messages', 'assistant', errorMsg);
+        handleApiError(error, 'Unable to send message');
+    }
+}
+
+// Start learning chat
+async function startLearningChat() {
+    const mode = document.getElementById('learning-chat-mode').value;
+    const detail = document.getElementById('response-detail').value;
+    const saveConv = document.getElementById('save-conversation').checked;
+    
+    try {
+        const response = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'start',
+                chat_mode: mode,
+                experience_type: 'learn_and_do',
+                model: 'local',
+                settings: {
+                    detail: detail,
+                    save_conversation: saveConv
+                }
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            chatState.sessionActive = true;
+            chatState.chatMode = mode;
+            chatState.sessionId = result.session_info.session_id;
+            
+            updateStatusIndicator('session-status', 'healthy', '✅ Learning Active');
+            
+            // Show chat area
+            document.getElementById('learning-chat-area').style.display = 'block';
+            
+            // Add welcome message
+            addMessage('learning-messages', 'assistant', 
+                'Welcome to your learning chat session! I\'ll provide detailed explanations and examples. What would you like to explore?');
+            
+        } else {
+            handleApiError(new Error(result.error || 'Unknown error'), 'Failed to start learning chat');
+        }
+        
+    } catch (error) {
+        handleApiError(error, 'Unable to start learning chat session');
+    }
+}
+
+// Send learning message
+async function sendLearningMessage() {
+    const input = document.getElementById('learning-chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    addMessage('learning-messages', 'user', message);
+    input.value = '';
+    
+    try {
+        const response = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'send',
+                message: message,
+                chat_mode: chatState.chatMode
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            addMessage('learning-messages', 'assistant', result.response);
+            chatState.messageCount += 2;
+            chatState.tokenCount += result.tokens_used || 0;
+        } else {
+            addMessage('learning-messages', 'assistant', 'Error: ' + result.error);
+        }
+        
+    } catch (error) {
+        addMessage('learning-messages', 'assistant', 'Error: ' + error.message);
+    }
+}
+
+// Start advanced chat
+async function startAdvancedChat() {
+    const mode = document.getElementById('advanced-chat-mode').value;
+    const model = document.getElementById('ai-model').value;
+    
+    try {
+        const response = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'start',
+                chat_mode: mode,
+                experience_type: 'cli_deep_dive',
+                model: model
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            chatState.sessionActive = true;
+            chatState.chatMode = mode;
+            chatState.model = model;
+            chatState.sessionId = result.session_info.session_id;
+            
+            updateStatusIndicator('session-status', 'healthy', '✅ Advanced Active');
+            
+            // Show chat area
+            document.getElementById('advanced-chat-area').style.display = 'block';
+            
+            // Update session info
+            document.getElementById('session-info').textContent = `Session: ${result.session_info.session_id}`;
+            document.getElementById('model-info').textContent = `Model: ${model}`;
+            
+            // Add welcome message
+            addMessage('advanced-messages', 'assistant', 
+                'Advanced chat session started! I have access to full features including session management and detailed analytics.');
+            
+        } else {
+            alert('Failed to start advanced chat: ' + result.error);
+        }
+        
+    } catch (error) {
+        alert('Error starting advanced chat: ' + error.message);
+    }
+}
+
+// Send advanced message
+async function sendAdvancedMessage() {
+    const input = document.getElementById('advanced-chat-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+    
+    addMessage('advanced-messages', 'user', message);
+    input.value = '';
+    
+    try {
+        const response = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'send',
+                message: message,
+                chat_mode: chatState.chatMode
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            addMessage('advanced-messages', 'assistant', result.response);
+            chatState.messageCount += 2;
+            chatState.tokenCount += result.tokens_used || 0;
+            
+            // Update status bar
+            document.getElementById('token-count').textContent = `Tokens: ${chatState.tokenCount}`;
+            document.getElementById('message-count').textContent = `Messages: ${chatState.messageCount}`;
+        } else {
+            addMessage('advanced-messages', 'assistant', 'Error: ' + result.error);
+        }
+        
+    } catch (error) {
+        addMessage('advanced-messages', 'assistant', 'Error: ' + error.message);
+    }
+}
+
+// Add message to chat area
+function addMessage(containerId, role, content) {
+    const container = document.getElementById(containerId);
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${role}`;
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.textContent = content;
+    
+    const timestampDiv = document.createElement('div');
+    timestampDiv.className = 'timestamp';
+    timestampDiv.textContent = new Date().toLocaleTimeString();
+    
+    messageDiv.appendChild(contentDiv);
+    messageDiv.appendChild(timestampDiv);
+    
+    container.appendChild(messageDiv);
+    container.scrollTop = container.scrollHeight;
+}
+
+// Update chat command
+function updateChatCommand() {
+    const mode = document.getElementById('advanced-chat-mode')?.value || 'pm_assistant';
+    const model = document.getElementById('ai-model')?.value || 'local';
+    
+    let command = `cd ~/aipm-toolkit && python cli/tools/ai_chat.py --experience=cli_deep_dive --mode=${mode}`;
+    if (model !== 'local') {
+        command += ` --model=${model}`;
+    }
+    
+    const commandElement = document.getElementById('chat-command');
+    if (commandElement) {
+        commandElement.textContent = command;
+    }
+}
+
+// Copy chat command
+function copyChatCommand() {
+    const command = document.getElementById('chat-command').textContent;
+    navigator.clipboard.writeText(command).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 2000);
+    });
+}
+
+// Launch CLI chat
+function launchCLIChat() {
+    alert('Open your terminal and run:\n\naipm dashboard\n\nThen select "AI Product Assistant" from the menu.');
+}
+
+// Chat utility functions
+function saveConversation() {
+    alert('Conversation will be saved automatically when you end the session.');
+}
+
+function clearChat() {
+    if (confirm('Clear current chat history?')) {
+        const activeChat = document.querySelector('.chat-messages[style*="display: block"], .chat-messages:not([style*="display: none"])');
+        if (activeChat) {
+            activeChat.innerHTML = '';
+        }
+        chatState.messageCount = 0;
+        chatState.tokenCount = 0;
+        updateStatusIndicator('session-status', 'unhealthy', '❌ Cleared');
+    }
+}
+
+function getHelp() {
+    const helpMessage = `AI Chat Help:
+    
+🤖 Available Chat Modes:
+• PM Assistant - Product strategy and best practices
+• Creative Brainstorm - Idea generation and innovation  
+• Data Analysis - Research interpretation and insights
+
+💬 Tips:
+• Ask specific questions for better responses
+• Request examples and case studies
+• Use "explain why" for deeper insights
+• Ask for frameworks and methodologies`;
+    
+    alert(helpMessage);
+}
+
+function exportChat() {
+    alert('Chat export feature will be available in the full version.');
+}
+
+function loadSession() {
+    alert('Session loading feature will be available in the full version.');
+}
+
+function showStats() {
+    alert(`Chat Session Statistics:
+    
+Messages: ${chatState.messageCount}
+Tokens Used: ${chatState.tokenCount}
+Mode: ${chatState.chatMode}
+Model: ${chatState.model}
+Session ID: ${chatState.sessionId || 'Not started'}`);
+}
+
+function downloadConversation() {
+    alert('Conversation download feature will be available in the full version.');
+}
+
+function hideChatResults() {
+    document.getElementById('chat-results').style.display = 'none';
+}
+
+// Handle Enter key in chat inputs
+document.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        if (e.target.id === 'quick-chat-input') {
+            sendQuickMessage();
+        } else if (e.target.id === 'learning-chat-input') {
+            sendLearningMessage();
+        } else if (e.target.id === 'advanced-chat-input') {
+            sendAdvancedMessage();
+        }
+    }
+});
+
+// Refresh status every 30 seconds
+setInterval(checkChatStatus, 30000);
+</script>

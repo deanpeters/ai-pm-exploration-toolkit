@@ -1,0 +1,862 @@
+<!-- Market Research Tool - Web Interface -->
+<div class="market-research-tool">
+    <section class="experience-selector">
+        <h2>📊 Market Research & Competitive Intelligence</h2>
+        <p>Research companies, markets, and competitive landscapes for strategic insights</p>
+        
+        <div class="research-type-selector">
+            <h3>Choose Research Type</h3>
+            <div class="type-buttons">
+                <button class="type-btn active" id="company-research" onclick="selectResearchType('company')">
+                    🏢 Company Research
+                </button>
+                <button class="type-btn" id="market-research" onclick="selectResearchType('market')">
+                    📈 Market Analysis
+                </button>
+            </div>
+        </div>
+
+        <div class="experience-grid">
+            <!-- Company Research Section -->
+            <div class="research-section" id="company-section">
+                <div class="experience-card" id="company-just-do-it">
+                    <div class="experience-header">
+                        <h3>🚀 Quick Company Lookup</h3>
+                        <span class="complexity">Simple</span>
+                    </div>
+                    <p>Get basic company information and key insights</p>
+                    <div class="quick-form">
+                        <div class="form-row">
+                            <label>Company:</label>
+                            <input type="text" id="quick-company" placeholder="Apple, Microsoft, Tesla..." />
+                        </div>
+                        <div class="form-row">
+                            <label>Or Ticker:</label>
+                            <input type="text" id="quick-ticker" placeholder="AAPL, MSFT, TSLA..." maxlength="10" />
+                        </div>
+                        <button class="btn-primary" onclick="quickCompanyResearch()">Research Now</button>
+                    </div>
+                </div>
+
+                <div class="experience-card" id="company-learn-and-do">
+                    <div class="experience-header">
+                        <h3>🎓 Detailed Company Analysis</h3>
+                        <span class="complexity">Educational</span>
+                    </div>
+                    <p>Deep dive into company fundamentals, competitors, and market position</p>
+                    <div class="learn-form">
+                        <div class="form-section">
+                            <h4>🎯 Research Target</h4>
+                            <div class="form-row">
+                                <label>Company Name:</label>
+                                <input type="text" id="detailed-company" placeholder="Full company name" />
+                            </div>
+                            <div class="form-row">
+                                <label>Stock Ticker (optional):</label>
+                                <input type="text" id="detailed-ticker" placeholder="e.g., AAPL" maxlength="10" />
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>📊 Research Scope</h4>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="include-financials" checked> Financial performance & metrics</label>
+                                <label><input type="checkbox" name="include-news" checked> Recent news & developments</label>
+                                <label><input type="checkbox" name="include-competitors" checked> Competitive landscape analysis</label>
+                                <label><input type="checkbox" name="include-analysis" checked> SWOT analysis & insights</label>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>📁 Output Settings</h4>
+                            <div class="form-row">
+                                <label>Working directory:</label>
+                                <input type="text" id="company-dir" placeholder="Current directory" />
+                                <button type="button" onclick="selectDirectory('company')" class="btn-secondary">Choose</button>
+                            </div>
+                            <div class="form-row">
+                                <label>Format:</label>
+                                <select id="company-format">
+                                    <option value="json" selected>JSON (structured analysis)</option>
+                                    <option value="csv">CSV (spreadsheet format)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="learning-preview">
+                            <h4>🎓 What You'll Learn</h4>
+                            <ul>
+                                <li>Company financial health assessment</li>
+                                <li>Competitive positioning analysis</li>
+                                <li>Market trends and opportunities</li>
+                                <li>Strategic recommendations for PMs</li>
+                            </ul>
+                        </div>
+
+                        <button class="btn-primary" onclick="detailedCompanyResearch()">Start Analysis</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Research Section -->
+            <div class="research-section" id="market-section" style="display: none;">
+                <div class="experience-card" id="market-just-do-it">
+                    <div class="experience-header">
+                        <h3>🚀 Quick Market Overview</h3>
+                        <span class="complexity">Simple</span>
+                    </div>
+                    <p>Get key market trends and competitive landscape</p>
+                    <div class="quick-form">
+                        <div class="form-row">
+                            <label>Market Type:</label>
+                            <select id="quick-market-type">
+                                <option value="b2b_saas" selected>B2B SaaS</option>
+                                <option value="b2c_consumer">B2C Consumer</option>
+                                <option value="fintech">FinTech</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Industry:</label>
+                            <input type="text" id="quick-industry" placeholder="technology, healthcare, finance..." value="technology" />
+                        </div>
+                        <button class="btn-primary" onclick="quickMarketResearch()">Research Market</button>
+                    </div>
+                </div>
+
+                <div class="experience-card" id="market-learn-and-do">
+                    <div class="experience-header">
+                        <h3>🎓 Comprehensive Market Analysis</h3>
+                        <span class="complexity">Educational</span>
+                    </div>
+                    <p>Deep market intelligence with trends, opportunities, and strategic insights</p>
+                    <div class="learn-form">
+                        <div class="form-section">
+                            <h4>🎯 Market Definition</h4>
+                            <div class="form-row">
+                                <label>Market Type:</label>
+                                <select id="detailed-market-type">
+                                    <option value="b2b_saas" selected>B2B SaaS</option>
+                                    <option value="b2c_consumer">B2C Consumer</option>
+                                    <option value="fintech">FinTech</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label>Industry Focus:</label>
+                                <input type="text" id="detailed-industry" placeholder="Specific industry or vertical" value="technology" />
+                            </div>
+                            <div class="form-row">
+                                <label>Research Scope:</label>
+                                <select id="research-scope">
+                                    <option value="trends" selected>Market Trends</option>
+                                    <option value="competitors">Competitive Analysis</option>
+                                    <option value="sizing">Market Sizing</option>
+                                    <option value="analysis">Full Analysis</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>⏰ Time Frame</h4>
+                            <div class="radio-group">
+                                <label><input type="radio" name="time-period" value="recent" checked> Recent trends (last 6 months)</label>
+                                <label><input type="radio" name="time-period" value="historical"> Historical analysis (2+ years)</label>
+                                <label><input type="radio" name="time-period" value="forecast"> Future outlook (next 12 months)</label>
+                            </div>
+                        </div>
+
+                        <div class="learning-preview">
+                            <h4>📈 Market Intelligence You'll Get</h4>
+                            <ul>
+                                <li>Market size and growth projections</li>
+                                <li>Key trends and disruption signals</li>
+                                <li>Competitive landscape mapping</li>
+                                <li>Strategic opportunities and threats</li>
+                                <li>PM-focused recommendations</li>
+                            </ul>
+                        </div>
+
+                        <button class="btn-primary" onclick="detailedMarketResearch()">Start Market Analysis</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLI Deep Dive Card (shared between both types) -->
+            <div class="experience-card" id="cli-deep-dive">
+                <div class="experience-header">
+                    <h3>🔧 CLI Research Tools</h3>
+                    <span class="complexity">Advanced</span>
+                </div>
+                <p>Master command-line market research tools and data analysis</p>
+                <div class="cli-bridge">
+                    <div class="cli-preview">
+                        <h4>📟 Command Preview</h4>
+                        <div class="command-box">
+                            <code id="research-cli-command">aipm research --type=company --company="Apple Inc" --detailed</code>
+                            <button class="copy-btn" onclick="copyResearchCommand()">📋 Copy</button>
+                        </div>
+                    </div>
+
+                    <div class="cli-options">
+                        <h4>⚙️ Quick Configuration</h4>
+                        <div class="form-row">
+                            <label>Research Type:</label>
+                            <select id="cli-research-type" onchange="updateResearchCliCommand()">
+                                <option value="company">Company Research</option>
+                                <option value="market">Market Analysis</option>
+                            </select>
+                        </div>
+                        <div class="form-row" id="cli-company-row">
+                            <label>Company/Ticker:</label>
+                            <input type="text" id="cli-company" placeholder="Apple Inc or AAPL" onchange="updateResearchCliCommand()">
+                        </div>
+                        <div class="form-row" id="cli-market-row" style="display: none;">
+                            <label>Market Type:</label>
+                            <select id="cli-market" onchange="updateResearchCliCommand()">
+                                <option value="b2b_saas">B2B SaaS</option>
+                                <option value="b2c_consumer">B2C Consumer</option>
+                                <option value="fintech">FinTech</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="cli-instructions">
+                        <h4>🚀 Advanced Research Features</h4>
+                        <ul>
+                            <li>Real-time financial data integration</li>
+                            <li>Automated competitive intelligence</li>
+                            <li>Custom report generation</li>
+                            <li>Data export and visualization</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn-secondary" onclick="launchResearchCLI()">Launch CLI Research</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results section (hidden initially) -->
+    <section class="results-section" id="research-results" style="display: none;">
+        <h3>📊 Research Results</h3>
+        <div class="results-content">
+            <div class="result-summary" id="research-result-summary"></div>
+            <div class="result-insights" id="research-result-insights"></div>
+            <div class="result-data" id="research-result-data"></div>
+            <div class="result-actions">
+                <button class="btn-secondary" onclick="hideResearchResults()">Research More</button>
+                <button class="btn-primary" onclick="downloadResearchResults()">Download Report</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+/* Market Research Tool Specific Styles */
+.market-research-tool {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.research-type-selector {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.research-type-selector h3 {
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+.type-buttons {
+    display: inline-flex;
+    background: var(--gray-100);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.type-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--gray-600);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.type-btn.active {
+    background: white;
+    color: var(--primary-blue);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.type-btn:hover:not(.active) {
+    color: var(--gray-800);
+}
+
+.research-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+/* Inherit styles from data generation tool */
+.experience-card {
+    border: 2px solid var(--gray-200);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+    border-color: var(--primary-blue);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+}
+
+.experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.experience-header h3 {
+    margin: 0;
+    color: var(--gray-900);
+}
+
+.complexity {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 1rem;
+}
+
+.form-section h4 {
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.form-row label {
+    min-width: 120px;
+    font-weight: 500;
+    color: var(--gray-700);
+}
+
+.form-row input, .form-row select {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--gray-300);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.radio-group, .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.radio-group label, .checkbox-group label {
+    min-width: auto;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.learning-preview {
+    background: var(--success-green);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 1.5rem 0;
+}
+
+.learning-preview h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.learning-preview ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.learning-preview li {
+    margin-bottom: 0.5rem;
+}
+
+.cli-preview {
+    margin-bottom: 1.5rem;
+}
+
+.cli-preview h4 {
+    margin-bottom: 0.5rem;
+}
+
+.command-box {
+    display: flex;
+    align-items: center;
+    background: var(--gray-900);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    margin: 0.5rem 0;
+    word-break: break-all;
+}
+
+.command-box code {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.copy-btn {
+    background: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    white-space: nowrap;
+}
+
+.copy-btn:hover {
+    background: #1d4ed8;
+}
+
+.cli-instructions {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.cli-instructions ul {
+    margin: 0.5rem 0 0 1rem;
+    padding: 0;
+}
+
+.cli-instructions li {
+    margin-bottom: 0.5rem;
+}
+
+.results-section {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--gray-200);
+}
+
+.results-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.result-summary, .result-insights {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.result-data {
+    grid-column: 1 / -1;
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.result-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .research-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .form-row label {
+        min-width: auto;
+        margin-bottom: 0.5rem;
+    }
+    
+    .results-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .type-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .command-box {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .copy-btn {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+}
+</style>
+
+<script>
+// Global variables for market research
+let lastResearchResult = null;
+let currentResearchType = 'company';
+
+// Switch between company and market research
+function selectResearchType(type) {
+    currentResearchType = type;
+    
+    // Update button states
+    document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`${type}-research`).classList.add('active');
+    
+    // Show/hide sections
+    document.getElementById('company-section').style.display = type === 'company' ? 'grid' : 'none';
+    document.getElementById('market-section').style.display = type === 'market' ? 'grid' : 'none';
+    
+    // Update CLI command
+    updateResearchCliCommand();
+}
+
+// Update CLI command preview
+function updateResearchCliCommand() {
+    const researchType = document.getElementById('cli-research-type')?.value || currentResearchType;
+    let command = `aipm research --type=${researchType}`;
+    
+    if (researchType === 'company') {
+        const company = document.getElementById('cli-company')?.value;
+        if (company) {
+            command += ` --company="${company}"`;
+        }
+        command += ' --detailed';
+        
+        // Show/hide appropriate rows
+        document.getElementById('cli-company-row').style.display = 'flex';
+        document.getElementById('cli-market-row').style.display = 'none';
+    } else {
+        const market = document.getElementById('cli-market')?.value || 'b2b_saas';
+        command += ` --market-type=${market} --industry=technology`;
+        
+        // Show/hide appropriate rows
+        document.getElementById('cli-company-row').style.display = 'none';
+        document.getElementById('cli-market-row').style.display = 'flex';
+    }
+    
+    document.getElementById('research-cli-command').textContent = command;
+}
+
+// Copy CLI command to clipboard
+function copyResearchCommand() {
+    const command = document.getElementById('research-cli-command').textContent;
+    navigator.clipboard.writeText(command).then(() => {
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => {
+            btn.textContent = originalText;
+        }, 2000);
+    });
+}
+
+// Directory selection
+function selectDirectory(type) {
+    const dir = prompt('Enter directory path (or leave empty for current directory):', '');
+    if (dir !== null) {
+        document.getElementById(`${type}-dir`).value = dir;
+    }
+}
+
+// Quick company research
+async function quickCompanyResearch() {
+    const company = document.getElementById('quick-company').value.trim();
+    const ticker = document.getElementById('quick-ticker').value.trim().toUpperCase();
+    
+    if (!company && !ticker) {
+        alert('Please enter either a company name or ticker symbol');
+        return;
+    }
+    
+    showLoading(`Researching ${company || ticker}...`);
+    
+    try {
+        const result = await callResearchAPI({
+            type: 'company',
+            company_name: company,
+            ticker: ticker,
+            experience_type: 'just_do_it'
+        });
+        
+        showResearchResults(result);
+    } catch (error) {
+        showError('Company research failed: ' + error.message);
+    }
+}
+
+// Detailed company research
+async function detailedCompanyResearch() {
+    const company = document.getElementById('detailed-company').value.trim();
+    const ticker = document.getElementById('detailed-ticker').value.trim().toUpperCase();
+    const dir = document.getElementById('company-dir').value || '.';
+    const format = document.getElementById('company-format').value;
+    
+    if (!company && !ticker) {
+        alert('Please enter either a company name or ticker symbol');
+        return;
+    }
+    
+    // Get checkbox values
+    const includeFinancials = document.querySelector('input[name="include-financials"]').checked;
+    const includeNews = document.querySelector('input[name="include-news"]').checked;
+    const includeCompetitors = document.querySelector('input[name="include-competitors"]').checked;
+    const includeAnalysis = document.querySelector('input[name="include-analysis"]').checked;
+    
+    showLoading(`Conducting detailed analysis of ${company || ticker}...`);
+    
+    try {
+        const result = await callResearchAPI({
+            type: 'company',
+            company_name: company,
+            ticker: ticker,
+            experience_type: 'learn_and_do',
+            working_dir: dir,
+            output_format: format,
+            include_financials: includeFinancials,
+            include_news: includeNews,
+            include_competitors: includeCompetitors,
+            include_analysis: includeAnalysis
+        });
+        
+        showResearchResults(result, true);
+    } catch (error) {
+        showError('Detailed company research failed: ' + error.message);
+    }
+}
+
+// Quick market research
+async function quickMarketResearch() {
+    const marketType = document.getElementById('quick-market-type').value;
+    const industry = document.getElementById('quick-industry').value.trim() || 'technology';
+    
+    showLoading(`Researching ${marketType} market in ${industry}...`);
+    
+    try {
+        const result = await callResearchAPI({
+            type: 'market',
+            market_type: marketType,
+            industry: industry,
+            experience_type: 'just_do_it'
+        });
+        
+        showResearchResults(result);
+    } catch (error) {
+        showError('Market research failed: ' + error.message);
+    }
+}
+
+// Detailed market research
+async function detailedMarketResearch() {
+    const marketType = document.getElementById('detailed-market-type').value;
+    const industry = document.getElementById('detailed-industry').value.trim() || 'technology';
+    const scope = document.getElementById('research-scope').value;
+    const timePeriod = document.querySelector('input[name="time-period"]:checked').value;
+    
+    showLoading(`Conducting comprehensive ${marketType} market analysis...`);
+    
+    try {
+        const result = await callResearchAPI({
+            type: 'market',
+            market_type: marketType,
+            industry: industry,
+            research_scope: scope,
+            time_period: timePeriod,
+            experience_type: 'learn_and_do'
+        });
+        
+        showResearchResults(result, true);
+    } catch (error) {
+        showError('Market analysis failed: ' + error.message);
+    }
+}
+
+// Launch CLI research dashboard
+function launchResearchCLI() {
+    alert('Open your terminal and run:\n\naipm dashboard\n\nThen select "Market Research Tools" from the menu.');
+}
+
+// Call the research API
+async function callResearchAPI(params) {
+    const response = await fetch('/api/market-research', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params)
+    });
+    
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    if (!result.success) {
+        throw new Error(result.error || 'Unknown error occurred');
+    }
+    
+    return result;
+}
+
+// Show loading state
+function showLoading(message) {
+    document.querySelector('.experience-selector').style.opacity = '0.5';
+    console.log('Loading:', message);
+}
+
+// Show research results
+function showResearchResults(result, isLearningMode = false) {
+    lastResearchResult = result;
+    
+    // Restore experience selector
+    document.querySelector('.experience-selector').style.opacity = '1';
+    
+    // Populate results
+    if (result.results.company_info) {
+        // Company research results
+        document.getElementById('research-result-summary').innerHTML = `
+            <h4>🏢 Company Research Complete</h4>
+            <p><strong>Company:</strong> ${result.results.company_info.name}</p>
+            <p><strong>Sector:</strong> ${result.results.company_info.sector}</p>
+            <p><strong>File:</strong> ${result.output_file}</p>
+        `;
+        
+        document.getElementById('research-result-insights').innerHTML = `
+            <h4>💡 Key Insights</h4>
+            <p><strong>Employees:</strong> ${result.results.company_info.employees}</p>
+            <p><strong>Founded:</strong> ${result.results.company_info.founded}</p>
+            <p><strong>Competitors:</strong> ${result.results.competitors?.length || 0} identified</p>
+        `;
+        
+        document.getElementById('research-result-data').innerHTML = `
+            <h4>📊 Research Data Preview</h4>
+            <pre>${JSON.stringify(result.results.company_info, null, 2)}</pre>
+        `;
+    } else if (result.results.market_overview) {
+        // Market research results
+        document.getElementById('research-result-summary').innerHTML = `
+            <h4>📈 Market Research Complete</h4>
+            <p><strong>Market:</strong> ${result.results.market_overview.market_type}</p>
+            <p><strong>Industry:</strong> ${result.results.market_overview.industry}</p>
+            <p><strong>File:</strong> ${result.output_file}</p>
+        `;
+        
+        document.getElementById('research-result-insights').innerHTML = `
+            <h4>🎯 Market Intelligence</h4>
+            <p><strong>Maturity:</strong> ${result.results.market_overview.maturity}</p>
+            <p><strong>Top Trend:</strong> ${result.results.trends[0]?.trend || 'N/A'}</p>
+            <p><strong>Opportunities:</strong> ${result.results.opportunities?.length || 0} identified</p>
+        `;
+        
+        document.getElementById('research-result-data').innerHTML = `
+            <h4>📊 Market Overview</h4>
+            <pre>${JSON.stringify(result.results.market_overview, null, 2)}</pre>
+        `;
+    }
+    
+    // Show results section
+    document.getElementById('research-results').style.display = 'block';
+    document.getElementById('research-results').scrollIntoView({ behavior: 'smooth' });
+    
+    if (isLearningMode) {
+        showLearningInsights(result);
+    }
+}
+
+// Show learning insights
+function showLearningInsights(result) {
+    const insights = `
+        <div class="learning-insights">
+            <h4>🎓 Research Intelligence Gained</h4>
+            <ul>
+                <li><strong>Market Context:</strong> Understanding competitive landscape and positioning</li>
+                <li><strong>Strategic Insights:</strong> Identifying opportunities and threats for product decisions</li>
+                <li><strong>Data-Driven Planning:</strong> Using market intelligence for roadmap prioritization</li>
+                <li><strong>Competitive Intelligence:</strong> Benchmarking against industry leaders</li>
+            </ul>
+        </div>
+    `;
+    
+    document.getElementById('research-result-data').innerHTML += insights;
+}
+
+// Show error message
+function showError(message) {
+    document.querySelector('.experience-selector').style.opacity = '1';
+    alert('Error: ' + message);
+}
+
+// Hide results
+function hideResearchResults() {
+    document.getElementById('research-results').style.display = 'none';
+}
+
+// Download research results
+function downloadResearchResults() {
+    if (lastResearchResult) {
+        alert('In a real implementation, this would download: ' + lastResearchResult.output_file);
+    }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    updateResearchCliCommand();
+    
+    // Set up event listeners for CLI command updates
+    document.getElementById('cli-research-type')?.addEventListener('change', function() {
+        updateResearchCliCommand();
+    });
+});
+</script>
