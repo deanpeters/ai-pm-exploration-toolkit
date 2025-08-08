@@ -212,15 +212,15 @@ aipm_prototype_demo
 
 ## 🔧 Visual Builders & Automation
 
-### `aipm_workflows`
-**Purpose:** Start all visual workflow tools with health checks  
+### `aimp_workflows`
+**Purpose:** Start reliable visual workflow tools with health checks  
 **Parameters:** None  
 **Usage:**
 ```bash
 aipm_workflows
 ```
-**Returns:** Running n8n, ToolJet, Langflow with direct access URLs  
-**Status:** ✅ **WORKING** - Actually starts containers and waits for readiness
+**Returns:** Running n8n and Langflow (ToolJet/Typebot/Penpot are broken)  
+**Status:** ⚠️ **PARTIAL** - Only n8n and Langflow work reliably
 
 ### `aipm_workflows_status`
 **Purpose:** Check which workflow tools are running  
@@ -280,7 +280,7 @@ aipm_automate
 aipm_demo_builder
 ```
 **Returns:** Direct access to ToolJet at http://localhost:8082  
-**Status:** 🚨 **BROKEN** - Just echoes URL, doesn't ensure ToolJet is running
+**Status:** 🚨 **BROKEN** - ToolJet has Apple Silicon compatibility issues
 
 ---
 
@@ -360,8 +360,9 @@ aipm_status
 
 | Status | Count | Commands |
 |--------|-------|----------|
-| ✅ **Working** | 8 | `aipm_brainstorm`, `aipm_lab`, `aipm_design`, `aipm_knowledge`, `aipm_workflows*`, `aipm_help` |
-| 🚨 **Broken/Echo Only** | 11 | `aipm_research_quick`, `aipm_company_lookup`, `aimp_market_research`, `aipm_data_generator`, `aipm_automate`, `aipm_demo_builder`, All PoL commands |
+| ✅ **Working** | 6 | `aipm_brainstorm`, `aipm_lab`, `aipm_design`, `aipm_knowledge`, `aipm_help` |
+| ⚠️ **Partial** | 2 | `aipm_workflows` (only n8n+langflow), `aipm_workflows_status` |
+| 🚨 **Broken/Echo Only** | 12 | `aipm_research_quick`, `aipm_company_lookup`, `aimp_market_research`, `aipm_data_generator`, `aipm_automate`, `aipm_demo_builder`, All PoL commands |
 | ⚠️ **Not Implemented** | 1 | `aipm_status` |
 
 ## 🔧 Priority Fixes Needed

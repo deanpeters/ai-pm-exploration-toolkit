@@ -127,7 +127,7 @@ aipm_marktext AI_CONSULTATION_CONTEXT.md
 ### 📊 **Data & Research Tools**
 - **Synthetic Data Generation** - Create realistic user personas and datasets
 - **Market Research Engine** - Company information lookup and analysis
-- **Workflow Automation** - Docker-based n8n, Langflow, ToolJet setup
+- **Workflow Automation** - Docker-based n8n and Langflow (ToolJet, Typebot, Penpot have compatibility issues)
 
 ### 🦢 **Goose CLI Integration** (Phase 7 Complete)
 - **Alternative AI Assistant** - Claude Code-like experience at lower cost
@@ -142,7 +142,7 @@ aipm_marktext AI_CONSULTATION_CONTEXT.md
 | **AI Chat System** | ✅ Production | ✅ Chat Interface | ✅ Full CLI | Local LLM for PM brainstorming |
 | **Data Generation** | ✅ Production | ✅ Web Form | ✅ Full CLI | Synthetic personas and datasets |
 | **Market Research** | ✅ Working | ✅ Company Lookup | ✅ Full CLI | Basic company research |
-| **Workflow Automation** | ✅ Working | ✅ Status Page | ✅ Docker Scripts | n8n and workflow tools |
+| **Workflow Automation** | ⚠️ Partial | ✅ Status Page | ✅ Docker Scripts | n8n and Langflow (others broken) |
 
 ## Real Example Commands
 

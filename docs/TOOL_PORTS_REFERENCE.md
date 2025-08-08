@@ -116,13 +116,20 @@ python3 src/market_research.py --help
 ./orchestrate-workflows.sh start
 ```
 
+### ✅ Reliable Services
 | Tool | Port | Direct Link | Purpose |
 |------|------|-------------|---------|
 | **n8n** | 5678 | http://localhost:5678 | Workflow automation |
 | **Langflow** | 7860 | http://localhost:7860 | Visual AI app builder |
-| **ToolJet** | 8082 | http://localhost:8082 | Low-code app builder |
 
-**Note:** These tools require Docker and must be started via the orchestration script.
+### ❌ Known Broken Services
+| Tool | Port | Status | Issue |
+|------|------|--------|---------|
+| **ToolJet** | 8082 | Broken | Apple Silicon compatibility issues |
+| **Typebot** | 8083 | Unstable | Very slow startup (>5min) |
+| **Penpot** | 8085 | Broken | Backend health check failures |
+
+**Note:** Only n8n and Langflow are currently reliable. Use web-based alternatives for broken services.
 
 ## 🔍 System Status & Testing
 
@@ -206,11 +213,13 @@ docker system prune -f
 **Tools mentioned in old documentation but not yet working:**
 - Most `aipm_*` command aliases (only infrastructure exists)
 - OpenBB Terminal integration
-- Jupyter Lab auto-launch
 - Gemini CLI integration
 - promptfoo/prompttools setup
 - Obsidian vault automation
 - Excalidraw local hosting
+
+**Docker Services with Issues:**
+- ToolJet, Typebot, Penpot (see Known Broken Services above)
 
 **These may be implemented in future phases.**
 

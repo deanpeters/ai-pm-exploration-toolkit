@@ -106,7 +106,7 @@
                     <div class="cli-preview">
                         <h4>📟 Docker Commands</h4>
                         <div class="command-box">
-                            <code id="docker-command">aipm_workflows</code>
+                            <code id="docker-command">/Users/deanpeters/ai-pm-exploration-toolkit/workflows/orchestrate-workflows.sh start</code>
                             <button class="copy-btn" onclick="copyDockerCommand()">📋 Copy</button>
                         </div>
                     </div>
@@ -626,10 +626,10 @@ function updateDockerCommand() {
     const action = document.getElementById('docker-action')?.value || 'start';
     const service = document.getElementById('docker-service')?.value || '';
     
-    // Use working alias commands instead of relative paths
-    let command = `aipm_workflows_${action}`;
+    // Use absolute paths that actually work from any directory
+    let command = `/Users/deanpeters/ai-pm-exploration-toolkit/workflows/orchestrate-workflows.sh ${action}`;
     if (service && service !== 'all') {
-        command = `aipm_workflows_${service}`;
+        command = `/Users/deanpeters/ai-pm-exploration-toolkit/workflows/orchestrate-workflows.sh ${action} ${service}`;
     }
     
     document.getElementById('docker-command').textContent = command;
